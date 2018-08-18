@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/linera1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="330dp"
+                android:background="#e6e4e4">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="230dp"
+                >
+
+
+                <LinearLayout
+                    android:id="@+id/wave"
+                    android:layout_width="match_parent"
+                    android:layout_height="260dp"
+                    android:background="@drawable/contact_img"
+                    android:orientation="vertical"/>
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/imageView"
+                    android:layout_width="80dp"
+                    android:layout_height="100dp"
+                    android:layout_marginTop="35dp"
+                    android:layout_centerHorizontal="true"
+                    app:civ_border_color="@color/white"
+                    android:background="@drawable/cont_logo"
+                    app:civ_border_width="2dp" />
+
+                <TextView
+                    android:id="@+id/tve_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Contact to Pinerria"
+                    android:layout_below="@+id/imageView"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/muli_bold"
+                    android:textSize="20sp"/>
+
+
+        </RelativeLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="240dp"
+                    android:gravity="center"
+                    android:layout_marginTop="150dp"
+                    android:orientation="horizontal">
+
+
+                    <LinearLayout
+                        android:id="@+id/call_now"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <LinearLayout
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:gravity="center"
+                            android:background="@drawable/circle_strock1">
+
+                            <ImageView
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_gravity="center"
+
+                                android:src="@drawable/call_con" />
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Call"
+                            android:textStyle="bold"
+                            android:textColor="@color/p_black"
+                            android:fontFamily="@font/muli"
+                            android:gravity="center"
+                            android:layout_marginTop="5dp"
+                            android:layout_gravity="center"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/message_now"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="40dp"
+                        android:layout_marginLeft="40dp"
+                        android:orientation="vertical">
+                        <LinearLayout
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:gravity="center"
+                            android:background="@drawable/circle_strock">
+
+                            <ImageView
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/msg1" />
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Message"
+                            android:textStyle="bold"
+                            android:fontFamily="@font/muli"
+                            android:textColor="@color/p_black"
+                            android:gravity="center"
+                            android:layout_marginTop="5dp"
+                            android:layout_gravity="center"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/email_now"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:orientation="vertical">
+                        <LinearLayout
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:gravity="center"
+                            android:background="@drawable/circle_strock">
+
+                            <ImageView
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_gravity="center"
+
+                                android:src="@drawable/chat1" />
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Email"
+                            android:textStyle="bold"
+                            android:textColor="@color/p_black"
+                            android:fontFamily="@font/muli"
+                            android:gravity="center"
+                            android:layout_marginTop="5dp"
+                            android:layout_gravity="center"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+
+            </RelativeLayout>
+
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2"
+                android:padding="12dp"
+                android:layout_marginTop="10dp"
+                >
+
+                <TextView
+                    android:id="@+id/tv_user_id"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tv_mobile"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="left"
+                    android:layout_marginRight="15dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/muli_semibold"
+                    android:text="Mobile No"
+                    android:textColor="@color/md_grey_700"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/mobileNo"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tve_mobile"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@+id/tv_user_id"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:fontFamily="@font/muli_bold"
+                    android:text="12345678900"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="16sp" />
+
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/grayText"></View>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2"
+                android:padding="12dp"
+                android:layout_marginTop="5dp"
+                android:background="#fff"
+                >
+
+
+                <TextView
+                    android:id="@+id/tv_city"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tv_user_id"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_weight="1"
+                    android:gravity="left"
+                    android:fontFamily="@font/muli_semibold"
+                    android:text="Email Id"
+                    android:textColor="@color/md_grey_700"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/emailId"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tve_user_id"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@+id/tv_city"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:fontFamily="@font/muli_bold"
+                    android:text="abc@pinerria.com"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="16sp" />
+
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/grayText"></View>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2"
+                android:padding="12dp">
+
+
+                <TextView
+                    android:id="@+id/tv_dob"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tv_city"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/muli_semibold"
+                    android:gravity="left"
+                    android:text="WebSite"
+                    android:textColor="@color/md_grey_700"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/website"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tve_city"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@+id/tv_dob"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:fontFamily="@font/muli_bold"
+                    android:text="www.pinerria.com"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+
+
+
+
+    <LinearLayout
+        android:id="@+id/linera2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:orientation="vertical">
+        <!-- TODO: Update blank fragment layout -->
+        <TextView
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="18dp"
+            android:layout_marginBottom="20dp"
+            android:text="Login to Proceed" />
+
+        <!-- TODO: Update blank fragment layout -->
+        <Button
+            android:id="@+id/loginNow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:background="@color/yellow"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:text="LOGIN NOW" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

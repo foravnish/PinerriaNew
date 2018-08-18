@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/pink">
+
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/TextLabel">
+
+                <EditText
+                    android:id="@+id/pName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Person Name *"
+                    android:textColor="@color/gray5"
+                    android:inputType="textCapSentences"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/TextLabel">
+
+                <EditText
+                    android:id="@+id/cName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Company Name"
+                    android:textColor="@color/gray5"
+                    android:inputType="textCapSentences"/>
+            </android.support.design.widget.TextInputLayout>
+
+
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/TextLabel">
+
+                <EditText
+                    android:id="@+id/mobile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Mobile *"
+                    android:textColor="@color/gray5"
+                    android:inputType="phone"/>
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/TextLabel">
+
+                <EditText
+                    android:id="@+id/email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Email Id *"
+                    android:textColor="@color/gray5"
+                    android:inputType="textEmailAddress"/>
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/TextLabel">
+
+                <EditText
+                    android:id="@+id/require"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Requirement *"
+                    android:textColor="@color/gray5"
+                    android:inputType="textCapSentences"/>
+            </android.support.design.widget.TextInputLayout>
+
+
+
+
+
+
+            <Button
+                android:id="@+id/submitReq"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/strock_btn_login"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="45dp"
+                android:textAllCaps="false"
+                android:layout_gravity="center"
+                android:textSize="20dp"
+                android:paddingLeft="60dp"
+                android:paddingRight="60dp"
+                android:layout_marginRight="10dp"
+                android:text="Submit"
+                android:textColor="@color/blue"
+                android:layout_marginBottom="10dp"/>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/list_bg_color"
+        android:orientation="vertical">
+
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            app:cardElevation="4dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp">
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/white">
+
+
+
+                    <LinearLayout
+                        android:id="@+id/linerlayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:weightSum="2">
+
+
+                        <RelativeLayout
+                            android:id="@+id/layHalf"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <com.android.volley.toolbox.NetworkImageView
+                                android:id="@+id/imgList"
+                                android:layout_width="match_parent"
+                                android:layout_height="135dp"
+                                android:scaleType="fitXY" />
+
+                        </RelativeLayout>
+
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="130dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_weight="1">
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:padding="5dp"
+                                android:layout_marginLeft="20dp"
+                                android:weightSum="5">
+
+                                <TextView
+                                    android:id="@+id/catName"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:textStyle="bold"
+                                    android:textSize="16dp"
+                                    android:layout_weight="1"
+                                    android:gravity="left"
+                                    android:singleLine="true"
+                                    android:text="Shopping Life Style"
+                                    android:textColor="@color/black" />
+
+                                <TextView
+                                    android:id="@+id/subCat1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="1"
+                                    android:gravity="left"
+                                    android:singleLine="true"
+                                    android:textSize="13dp"
+                                    android:text=""
+                                    android:textColor="@color/grayText" />
+
+                                <TextView
+                                    android:id="@+id/subCat2"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="1"
+                                    android:singleLine="true"
+                                    android:gravity="left"
+                                    android:textSize="13dp"
+                                    android:text=""
+                                    android:textColor="@color/grayText" />
+
+                                <TextView
+                                    android:id="@+id/subCat3"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:singleLine="true"
+                                    android:layout_weight="1"
+                                    android:gravity="left"
+                                    android:text=""
+                                    android:textSize="13dp"
+                                    android:textColor="@color/grayText" />
+
+                                <TextView
+                                    android:id="@+id/subCat4"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="1"
+                                    android:gravity="left"
+                                    android:singleLine="true"
+
+                                    android:textSize="13dp"
+                                    android:text=""
+                                    android:textColor="@color/grayText" />
+
+                                <TextView
+                                    android:id="@+id/subCat5"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="1"
+                                    android:gravity="left"
+                                    android:singleLine="true"
+                                    android:textSize="13dp"
+                                    android:visibility="gone"
+                                    android:text="Electronics"
+                                    android:textColor="@color/grayText" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:id="@+id/circlelayout"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:visibility="gone"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="128dp"
+                        android:background="@drawable/stroke_circle"
+                        android:gravity="center">
+
+                        <com.android.volley.toolbox.NetworkImageView
+                            android:id="@+id/catIcon"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:scaleType="fitXY"
+                            android:backgroundTint="@color/white" />
+                    </LinearLayout>
+
+
+                </RelativeLayout>
+
+                    <!--<View-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="1.5dp"-->
+                        <!--android:background="@color/list_bg_color"></View>-->
+
+        </android.support.v7.widget.CardView>
+
+    </LinearLayout>
+</LinearLayout>

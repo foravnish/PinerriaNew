@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="pinerria.business.pinerrianew">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-feature android:name="android.hardware.camera" />
+
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+
+    <application
+        android:name=".Utils.AppController"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".Activites.Splash"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".Activites.HomeAct"
+            android:label="@string/title_activity_home"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activites.ProfilePage"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activites.Registration"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activites.Login"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".CameraAct.CropImageActivity"
+            android:label="Crop Image"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar2" />
+        <activity
+            android:name=".CameraAct.ImagePickerActivity"
+            android:label="Pick Image"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar2" />
+        <activity
+            android:name=".Activites.AddProduct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activites.WebViewOpen"
+            android:screenOrientation="portrait" />
+        <activity android:name=".Activites.SelectZone" />
+        <activity
+            android:name=".Activites.ChatRoomActivity"
+            android:label=""
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activites.EditPhotos"
+            android:screenOrientation="portrait" />
+
+        <service
+            android:name=".gcm.GCMRegistrationIntentService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.gms.iid.InstanceID" />
+            </intent-filter>
+        </service>
+        <service android:name=".gcm.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name=".gcm.MyFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+
+        <activity
+            android:name=".Activites.PayActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activites.PayOrderAct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activites.PaymentSuccessActivity"
+            android:label="@string/title_activity_payment_success"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <data
+                    android:host="EBS"
+                    android:scheme="application.pinerria" />
+
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".Activites.ChatUSer" />
+        <activity android:name=".Activites.Chat" />
+        <activity android:name=".Activites.AddGSTDetails"></activity>
+    </application>
+
+</manifest>

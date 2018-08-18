@@ -1,0 +1,107 @@
+-- Merging decision tree log ---
+manifest
+ADDED from D:\Avnish Pro\PinerriaNew\EBS\AndroidManifest.xml:2:1-55:12
+INJECTED from D:\Avnish Pro\PinerriaNew\EBS\AndroidManifest.xml:2:1-55:12
+INJECTED from D:\Avnish Pro\PinerriaNew\EBS\AndroidManifest.xml:2:1-55:12
+INJECTED from D:\Avnish Pro\PinerriaNew\EBS\AndroidManifest.xml:2:1-55:12
+INJECTED from D:\Avnish Pro\PinerriaNew\EBS\AndroidManifest.xml:2:1-55:12
+INJECTED from D:\Avnish Pro\PinerriaNew\EBS\AndroidManifest.xml:2:1-55:12
+INJECTED from D:\Avnish Pro\PinerriaNew\EBS\AndroidManifest.xml:2:1-55:12
+	package
+		ADDED from D:\Avnish Pro\PinerriaNew\EBS\AndroidManifest.xml:3:5-34
+		INJECTED from D:\Avnish Pro\PinerriaNew\EBS\AndroidManifest.xml
+		INJECTED from D:\Avnish Pro\PinerriaNew\EBS\AndroidManifest.xml
+	android:versionName
+		ADDED from D:\Avnish Pro\PinerriaNew\EBS\AndroidManifest.xml:5:5-30
+		INJECTED from D:\Avnish Pro\PinerriaNew\EBS\AndroidManifest.xml
+		INJECTED from D:\Avnish Pro\PinerriaNew\EBS\AndroidManifest.xml
+	xmlns:android
+		ADDED from D:\Avnish Pro\PinerriaNew\EBS\AndroidManifest.xml:2:11-69
+	android:versionCode
+		ADDED from D:\Avnish Pro\PinerriaNew\EBS\AndroidManifest.xml:4:5-28
+		INJECTED from D:\Avnish Pro\PinerriaNew\EBS\AndroidManifest.xml
+		INJECTED from D:\Avnish Pro\PinerriaNew\EBS\AndroidManifest.xml
+uses-sdk
+ADDED from D:\Avnish Pro\PinerriaNew\EBS\AndroidManifest.xml:7:5-9:41
+	android:targetSdkVersion
+		ADDED from D:\Avnish Pro\PinerriaNew\EBS\AndroidManifest.xml:9:9-38
+	android:minSdkVersion
+		ADDED from D:\Avnish Pro\PinerriaNew\EBS\AndroidManifest.xml:8:9-35
+uses-permission#android.permission.INTERNET
+ADDED from D:\Avnish Pro\PinerriaNew\EBS\AndroidManifest.xml:11:5-67
+	android:name
+		ADDED from D:\Avnish Pro\PinerriaNew\EBS\AndroidManifest.xml:11:22-64
+uses-permission#android.permission.ACCESS_NETWORK_STATE
+ADDED from D:\Avnish Pro\PinerriaNew\EBS\AndroidManifest.xml:12:5-79
+	android:name
+		ADDED from D:\Avnish Pro\PinerriaNew\EBS\AndroidManifest.xml:12:22-76
+uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
+ADDED from D:\Avnish Pro\PinerriaNew\EBS\AndroidManifest.xml:13:5-81
+	android:name
+		ADDED from D:\Avnish Pro\PinerriaNew\EBS\AndroidManifest.xml:13:22-78
+uses-permission#android.permission.READ_PHONE_STATE
+ADDED from D:\Avnish Pro\PinerriaNew\EBS\AndroidManifest.xml:14:5-75
+	android:name
+		ADDED from D:\Avnish Pro\PinerriaNew\EBS\AndroidManifest.xml:14:22-72
+uses-permission#android.permission.READ_EXTERNAL_STORAGE
+ADDED from D:\Avnish Pro\PinerriaNew\EBS\AndroidManifest.xml:15:5-80
+	android:name
+		ADDED from D:\Avnish Pro\PinerriaNew\EBS\AndroidManifest.xml:15:22-77
+application
+ADDED from D:\Avnish Pro\PinerriaNew\EBS\AndroidManifest.xml:17:5-53:19
+	android:label
+		ADDED from D:\Avnish Pro\PinerriaNew\EBS\AndroidManifest.xml:19:9-41
+	android:allowBackup
+		ADDED from D:\Avnish Pro\PinerriaNew\EBS\AndroidManifest.xml:18:9-35
+	android:theme
+		ADDED from D:\Avnish Pro\PinerriaNew\EBS\AndroidManifest.xml:20:9-40
+activity#com.ebs.android.sdk.PaymentDetailActivity
+ADDED from D:\Avnish Pro\PinerriaNew\EBS\AndroidManifest.xml:21:9-25:20
+	android:screenOrientation
+		ADDED from D:\Avnish Pro\PinerriaNew\EBS\AndroidManifest.xml:24:13-49
+	android:label
+		ADDED from D:\Avnish Pro\PinerriaNew\EBS\AndroidManifest.xml:23:13-66
+	android:name
+		ADDED from D:\Avnish Pro\PinerriaNew\EBS\AndroidManifest.xml:22:13-69
+activity#com.ebs.android.sdk.PaymentActivity
+ADDED from D:\Avnish Pro\PinerriaNew\EBS\AndroidManifest.xml:26:9-31:20
+	android:screenOrientation
+		ADDED from D:\Avnish Pro\PinerriaNew\EBS\AndroidManifest.xml:29:13-49
+	android:label
+		ADDED from D:\Avnish Pro\PinerriaNew\EBS\AndroidManifest.xml:28:13-59
+	android:windowSoftInputMode
+		ADDED from D:\Avnish Pro\PinerriaNew\EBS\AndroidManifest.xml:30:13-52
+	android:name
+		ADDED from D:\Avnish Pro\PinerriaNew\EBS\AndroidManifest.xml:27:13-63
+activity#com.ebs.android.sdk.WebViewActivity
+ADDED from D:\Avnish Pro\PinerriaNew\EBS\AndroidManifest.xml:32:9-39:20
+	android:screenOrientation
+		ADDED from D:\Avnish Pro\PinerriaNew\EBS\AndroidManifest.xml:35:13-49
+	android:label
+		ADDED from D:\Avnish Pro\PinerriaNew\EBS\AndroidManifest.xml:34:13-59
+	android:windowSoftInputMode
+		ADDED from D:\Avnish Pro\PinerriaNew\EBS\AndroidManifest.xml:37:13-86
+	android:configChanges
+		ADDED from D:\Avnish Pro\PinerriaNew\EBS\AndroidManifest.xml:36:13-63
+	android:name
+		ADDED from D:\Avnish Pro\PinerriaNew\EBS\AndroidManifest.xml:33:13-63
+activity#com.ebs.android.sdk.EBSHomeConfigurableActivity
+ADDED from D:\Avnish Pro\PinerriaNew\EBS\AndroidManifest.xml:40:9-44:20
+	android:screenOrientation
+		ADDED from D:\Avnish Pro\PinerriaNew\EBS\AndroidManifest.xml:43:13-49
+	android:label
+		ADDED from D:\Avnish Pro\PinerriaNew\EBS\AndroidManifest.xml:42:13-77
+	android:name
+		ADDED from D:\Avnish Pro\PinerriaNew\EBS\AndroidManifest.xml:41:13-75
+activity#com.ebs.android.sdk.PaymentFailureActivity
+ADDED from D:\Avnish Pro\PinerriaNew\EBS\AndroidManifest.xml:45:9-48:20
+	android:label
+		ADDED from D:\Avnish Pro\PinerriaNew\EBS\AndroidManifest.xml:47:13-67
+	android:name
+		ADDED from D:\Avnish Pro\PinerriaNew\EBS\AndroidManifest.xml:46:13-70
+activity#com.ebs.android.sdk.IdleTimeOut
+ADDED from D:\Avnish Pro\PinerriaNew\EBS\AndroidManifest.xml:49:9-52:20
+	android:label
+		ADDED from D:\Avnish Pro\PinerriaNew\EBS\AndroidManifest.xml:51:13-65
+	android:name
+		ADDED from D:\Avnish Pro\PinerriaNew\EBS\AndroidManifest.xml:50:13-59

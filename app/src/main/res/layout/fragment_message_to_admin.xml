@@ -1,0 +1,51 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2">
+        <Button
+            android:id="@+id/sendqu"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Send Message to Admin"
+            android:textColor="#fff"
+            android:layout_weight="1"
+            android:textSize="12dp"
+            android:layout_marginLeft="10dp"
+            android:textAllCaps="false"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/strock_btn_blue"/>
+        <Button
+            android:id="@+id/fromAdmin"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Message from Admin"
+            android:textSize="12dp"
+            android:textColor="#fff"
+            android:layout_weight="1"
+            android:layout_marginLeft="10dp"
+            android:textAllCaps="false"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/strock_btn_blue"/>
+    </LinearLayout>
+    <GridView
+        android:id="@+id/grigView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:padding="10dp">
+
+    </GridView>
+
+
+</LinearLayout>

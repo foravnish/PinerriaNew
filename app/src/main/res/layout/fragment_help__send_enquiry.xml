@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+   android:background="@drawable/login_back" >
+
+    <LinearLayout
+        android:id="@+id/liner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true">
+
+        <include
+            android:id="@+id/header"
+            layout="@layout/titleheader2" />
+
+
+    </LinearLayout>
+
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="To,"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:textColor="#FFF"
+                android:textStyle="bold"
+                android:layout_marginRight="20dp"
+                android:paddingLeft="20dp"
+                android:drawablePadding="10dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Admin"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:textColor="#FFF"
+                android:layout_marginRight="20dp"
+                android:paddingLeft="20dp"
+                android:drawablePadding="10dp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Pinerria"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:textColor="#FFF"
+                android:layout_marginRight="20dp"
+                android:paddingLeft="20dp"
+                android:drawablePadding="10dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Action"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:textColor="#FFF"
+                android:layout_marginRight="20dp"
+                android:paddingLeft="20dp"
+                android:drawablePadding="10dp"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/strock_simple"
+                android:paddingLeft="10dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp">
+                <Spinner
+                    android:id="@+id/spiner"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp">
+
+                </Spinner>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Subject"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:textColor="#FFF"
+                android:layout_marginRight="20dp"
+                android:paddingLeft="20dp"
+                android:drawablePadding="10dp"/>
+
+
+            <EditText
+                android:id="@+id/subject"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="3dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:paddingLeft="10dp"
+                android:drawablePadding="10dp"
+                android:hint="Subject Here"
+                android:inputType="textEmailSubject"
+                android:background="@drawable/strock_simple"/>
+
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Message"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:textColor="#FFF"
+                android:layout_marginRight="20dp"
+                android:paddingLeft="20dp"
+                android:drawablePadding="10dp"/>
+            <EditText
+                android:id="@+id/messages"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="3dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:paddingLeft="10dp"
+                android:drawablePadding="10dp"
+                android:hint="Message"
+                android:gravity="top"
+                android:singleLine="true"
+                android:paddingTop="10dp"
+                android:inputType="textLongMessage"
+                android:background="@drawable/strock_simple"/>
+
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Thanks"
+                android:layout_gravity="right"
+                android:gravity="right"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:textColor="#FFF"
+                android:layout_marginRight="20dp"
+                android:paddingLeft="20dp"
+                android:drawablePadding="10dp"/>
+
+            <Button
+                android:id="@+id/sendEnq"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:text="Send"
+                android:textColor="#fff"
+                android:textSize="20dp"
+                android:background="@drawable/stroke_pink"
+                android:layout_marginTop="30dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="20dp"/>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

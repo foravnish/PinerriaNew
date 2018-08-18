@@ -1,0 +1,510 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/pink"
+    tools:context=".Activites.Registration">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:elevation="5dp"
+        android:theme="@style/ToolbarColoredBackArrow">
+
+        <TextView
+            android:id="@+id/toolbarTxt"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="Add Business"
+            android:gravity="center|left"
+            android:layout_marginLeft="15dp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textSize="20dp"
+            >
+
+        </TextView>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray5">
+
+    </View>
+
+
+    <!--<android.support.design.widget.AppBarLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="25dp"-->
+        <!--android:theme="@style/ToolbarColoredBackArrow">-->
+
+        <!--<android.support.v7.widget.Toolbar-->
+            <!--android:id="@+id/toolbar"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="?attr/actionBarSize"-->
+            <!--android:background="@color/pink"-->
+            <!--app:titleTextColor="@color/gray5"-->
+            <!--app:title="Add Business"-->
+            <!--app:popupTheme="@style/ToolbarColoredBackArrow" >-->
+
+
+        <!--</android.support.v7.widget.Toolbar>-->
+
+    <!--</android.support.design.widget.AppBarLayout>-->
+
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:padding="10dp">
+
+
+
+
+            <!--<de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"-->
+            <!--android:id="@+id/regiImage"-->
+            <!--android:layout_width="110dp"-->
+            <!--android:layout_height="110dp"-->
+            <!--android:layout_centerInParent="true"-->
+            <!--android:layout_marginBottom="5dp"-->
+            <!--android:layout_marginRight="10dp"-->
+            <!--android:src="@drawable/property_agent"-->
+            <!--android:layout_gravity="center"-->
+            <!--app:civ_border_color="@color/pink3"-->
+            <!--app:civ_border_width="3dp" />-->
+
+
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:theme="@style/TextLabel">
+
+                <EditText
+                    android:id="@+id/nameBusiness"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Business Name *"
+                    android:textColor="@color/gray5"
+                    android:textColorHint="@color/gray5"
+                    android:inputType="textCapSentences"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:visibility="gone"
+                android:background="@drawable/strock_simple">
+
+                <Spinner
+                    android:id="@+id/catSpin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                </Spinner>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:visibility="gone"
+                android:background="@drawable/strock_simple">
+
+                <Spinner
+                    android:id="@+id/subCatSpin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                </Spinner>
+
+            </LinearLayout>
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/TextLabel">
+
+                <EditText
+                    android:id="@+id/keyword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Deals in (Type services separated with comma) *"
+                    android:textColor="@color/gray5"
+                    android:inputType="textCapSentences"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/TextLabel">
+
+                <EditText
+                    android:id="@+id/mobile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Mobile *"
+                    android:maxLength="10"
+                    android:textColor="@color/gray5"
+                    android:inputType="phone"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:visibility="gone"
+                android:theme="@style/TextLabel"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/mobileSecond"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Secondary Mobile"
+                    android:inputType="phone"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/TextLabel"
+                android:visibility="gone">
+
+                <EditText
+                    android:id="@+id/landline"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Landline "
+                    android:inputType="phone"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/TextLabel"
+                android:visibility="gone">
+
+                <EditText
+                    android:id="@+id/email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Email Id *"
+                    android:textColor="@color/gray5"
+                    android:inputType="textEmailAddress"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/TextLabel">
+
+                <EditText
+                    android:id="@+id/address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Business Address *"
+                    android:textColor="@color/gray5"
+                    android:inputType="textCapSentences"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+
+
+            <LinearLayout
+                android:id="@+id/linearShow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="10"
+                android:orientation="horizontal">
+
+            <Spinner
+                android:id="@+id/location"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="8"
+                android:layout_marginTop="20dp">
+
+            </Spinner>
+
+                <TextView
+                    android:id="@+id/addLocation"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="18dp"
+                    android:text="Add "/>
+
+            </LinearLayout>
+
+            <View
+                android:id="@+id/viewShow"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+
+                android:background="@color/gray3"></View>
+
+
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/newLocation1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:visibility="gone"
+                android:theme="@style/TextLabel">
+
+                <EditText
+                    android:id="@+id/newLocation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Location *"
+                    android:textColor="@color/gray5"
+                    android:textColorHint="@color/gray5"
+                    android:inputType="textCapSentences"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+
+
+
+            <CheckBox
+                android:id="@+id/checkBobPrice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Show Price"
+                android:layout_marginTop="10dp"
+                android:buttonTint="@color/white"
+                android:textColor="@color/white"/>
+
+            <LinearLayout
+                android:id="@+id/linearPrice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="2"
+                android:visibility="gone"
+                android:orientation="horizontal">
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:theme="@style/TextLabel">
+
+                <EditText
+                    android:id="@+id/minPrice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Starting Price"
+                    android:textColor="@color/gray5"
+                    android:inputType="numberDecimal"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:theme="@style/TextLabel">
+
+                    <EditText
+                        android:id="@+id/maxPrice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Higher Range"
+                        android:textColor="@color/gray5"
+                        android:inputType="numberDecimal"/>
+
+                </android.support.design.widget.TextInputLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:visibility="gone"
+                android:background="@drawable/strock_simple">
+
+                <Spinner
+                    android:id="@+id/country"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    >
+
+                </Spinner>
+
+            </LinearLayout>
+
+
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginTop="5dp"-->
+                <!--android:background="@drawable/strock_simple">-->
+
+                <Spinner
+                    android:id="@+id/state"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:layout_marginTop="20dp">
+
+                </Spinner>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginLeft="5dp"
+                android:visibility="gone"
+                android:layout_marginRight="5dp"
+                android:background="@color/gray5"></View>
+
+            <!--</LinearLayout>-->
+
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginTop="5dp"-->
+                <!--android:background="@drawable/strock_simple">-->
+
+                <Spinner
+                    android:id="@+id/city"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:layout_marginTop="20dp">
+
+                </Spinner>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginLeft="5dp"
+                android:visibility="gone"
+                android:layout_marginRight="5dp"
+                android:background="@color/gray5"></View>
+
+
+            <!--</LinearLayout>-->
+
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/TextLabel"
+                android:visibility="gone">
+
+                <EditText
+                    android:id="@+id/zip"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Pincode *"
+
+                    android:inputType="number"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <!--<TextView-->
+                <!--android:id="@+id/uploadImage"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="Upload Image"-->
+                <!--android:layout_weight="1"-->
+                <!--android:background="@drawable/strock_simple"/>-->
+
+
+                <!--<ImageView-->
+                <!--android:id="@+id/regiImage"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="150dp"-->
+                <!--android:layout_weight="1"-->
+                <!--android:layout_marginLeft="20dp"/>-->
+
+
+                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/regiImage"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="17dp"
+                    android:src="@drawable/image_text"
+                    app:civ_border_color="@color/pink"
+                    android:layout_marginTop="10dp"
+                    app:civ_circle_background_color="@color/pink"
+
+                    android:background="#00ffffff"
+                    app:civ_border_width="3dp" />
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/postAdd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/strock_btn_login"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="10dp"
+                android:text="Submit"
+                android:textStyle="bold"
+
+                android:textAllCaps="false"
+                android:layout_gravity="center"
+                android:textSize="20dp"
+                android:paddingLeft="60dp"
+                android:paddingRight="60dp"
+
+                android:textColor="@color/blue"
+                android:layout_marginBottom="40dp"/>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

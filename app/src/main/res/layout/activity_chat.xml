@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:orientation="vertical">
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="5dp"
+        android:orientation="horizontal"
+        android:background="@color/pink">
+
+
+        <ImageView
+            android:id="@+id/backBtn"
+            android:layout_width="40dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:src="@drawable/left_backpng"
+            android:backgroundTint="@color/white" />
+
+        <TextView
+            android:id="@+id/toolbarTxtName"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="Chat Users"
+            android:gravity="center|left"
+            android:layout_marginLeft="15dp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textSize="20dp"
+            >
+
+        </TextView>
+
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_weight="20"
+        android:layout_height="wrap_content"
+        android:id="@+id/scrollView">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/layout1">
+
+        </LinearLayout>
+    </ScrollView>
+
+    <include
+        layout="@layout/message_area"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"/>
+</LinearLayout>

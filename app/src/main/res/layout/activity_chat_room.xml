@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_start_chat"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:background="@color/pink"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="25dp"
+        android:transitionName="actionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="55dp"
+            android:gravity="center"
+            android:padding="5dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/fnd_img"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentLeft="true"
+                android:src="@drawable/property_agent"/>
+
+            <TextView
+                android:id="@+id/fnd_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="10dp"
+                android:gravity="center"
+                android:text="title"
+                android:layout_toRightOf="@+id/fnd_img"
+                android:textColor="@color/white"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/block_user"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="10dp"
+                android:visibility="gone"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+             />
+        </RelativeLayout>
+    </android.support.v7.widget.Toolbar>
+
+
+    <LinearLayout
+        android:id="@+id/end"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/bluerectangle"
+        android:gravity="center"
+        android:layout_marginBottom="55dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <EditText
+            android:id="@+id/editTextMessage"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1.7"
+            android:background="@android:color/transparent"
+            android:gravity="center_vertical"
+            android:hint="Message here"
+            android:inputType="textMultiLine"
+            android:minLines="2"
+            android:padding="10dp"
+            android:scrollbars="horizontal"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:id="@+id/buttonSend"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_weight=".3"
+            android:scaleType="fitCenter"
+            android:tint="@color/white"
+            android:src="@drawable/ic_menu_send"
+            android:text="Send" />
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/end"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/toolbar"
+
+        android:scrollbars="none">
+
+    </android.support.v7.widget.RecyclerView>
+
+
+</RelativeLayout>
