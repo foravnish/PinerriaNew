@@ -78,19 +78,44 @@
             android:layout_gravity="center"
             android:layout_marginLeft="10dp"
             android:orientation="vertical">
-            <TextView
-
+            <RelativeLayout
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Your City"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="GPS"
+                    android:layout_alignParentRight="true"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/gps"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
             <TextView
                 android:id="@+id/zoneName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
                 android:text="City" />
+
+                <ImageView
+                    android:id="@+id/gps_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="5dp"
+                     />
+            </RelativeLayout>
+
         </LinearLayout>
     </LinearLayout>
 

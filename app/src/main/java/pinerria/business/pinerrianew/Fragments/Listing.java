@@ -22,10 +22,12 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -90,12 +92,14 @@ public class Listing extends Fragment {
     Boolean flag=false;
     Viewholder viewholder;
     JSONArray jsonArray;
+    JSONArray jsonArrayLocation;
     ImageView imageNoListing;
     TextView dateWise,ratingWise,locationWise;
 
 //    ImageView imageNoListing;
 
     private GoogleApiClient googleApiClient;
+    String lat,longi;
 
 
 
@@ -134,6 +138,9 @@ public class Listing extends Fragment {
 
         listingDataOfCom("off");
 
+        Log.d("fgsdgsdfgsdfgdfsgdgd", String.valueOf(HomeAct.latitude));
+        Log.d("fgsdgsdfgsdfgdfsgdgd", String.valueOf(HomeAct.longitude));
+
         dateWise.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -152,7 +159,8 @@ public class Listing extends Fragment {
             @Override
             public void onClick(View view) {
 
-              //  setUpGClient();
+                popLocation();
+
             }
         });
 
@@ -283,9 +291,21 @@ public class Listing extends Fragment {
 //        // Adding request to request queue
 //        queue.add(strReq);
 
+        if (String.valueOf(HomeAct.latitude).equals("null")){
+            Log.d("dfgdfgdfgdfghd","sdfdsgd");
+            lat="";
+            longi="";
+        }
+        else{
+            lat=String.valueOf(HomeAct.latitude);
+            longi=String.valueOf(HomeAct.longitude);
+        }
+
+
 
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
-                Api.subCategoryBusiness+"?sort_rating="+wiseData+"&sub_category="+getArguments().getString("id")+"&user_id="+MyPrefrences.getUserID(getActivity())+"&city_id="+MyPrefrences.getCityID(getActivity()), null, new Response.Listener<JSONObject>() {
+                Api.subCategoryBusiness+"?sort_rating="+wiseData+"&sub_category="+getArguments().getString("id")+"&user_id="+MyPrefrences.getUserID(getActivity())+"&city_id="+MyPrefrences.getCityID(getActivity())+
+                "&latitue="+lat+"&longitue="+longi+"&location_id=", null, new Response.Listener<JSONObject>() {
 
             @Override
             public void onResponse(JSONObject response) {
@@ -302,6 +322,7 @@ public class Listing extends Fragment {
                         expListView.setVisibility(View.VISIBLE);
                         imageNoListing.setVisibility(View.GONE);
                         jsonArray=response.getJSONArray("message");
+                        jsonArrayLocation=response.getJSONArray("location");
                         for (int i=0;i<jsonArray.length();i++){
                             JSONObject jsonObject=jsonArray.getJSONObject(i);
 
@@ -818,6 +839,224 @@ public class Listing extends Fragment {
 //        e.printStackTrace();
 //    }
 //}
+
+
+
+    private void popLocation() {
+
+
+        dialog=new Dialog(getActivity());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.setCancelable(false);
+       // Util.showPgDialog(dialog);
+
+
+        dialog1 = new Dialog(getActivity());
+        dialog1.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog1.setContentView(R.layout.alertdialogcustom3);
+        dialog1.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        //TextView text = (TextView) dialog.findViewById(R.id.msg_txv);
+
+        View footerView = ((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.footer_layout, null, false);
+
+        AllProducts = new ArrayList<>();
+        lvExp = (ListView) dialog1.findViewById(R.id.lvExp);
+        bubmit = (Button) footerView.findViewById(R.id.bubmit);
+
+
+
+
+
+        lvExp.addFooterView(footerView);
+
+        //text.setText(fromHtml(message));
+//        Button ok = (Button) dialog1.findViewById(R.id.btn_ok);
+//        ok.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                dialog1.dismiss();
+//            }
+//        });
+
+
+        Log.d("fgdgdfgdfgdfg", String.valueOf(jsonArrayLocation));
+        dialog1.show();
+        AllProductsLocation.clear();
+        for (int i=0;i<jsonArrayLocation.length();i++){
+            JSONObject jsonObject= null;
+            try {
+                jsonObject = jsonArrayLocation.getJSONObject(i);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            HashMap<String,String> map=new HashMap();
+            map.put("location_id",jsonObject.optString("location_id"));
+            map.put("location",jsonObject.optString("location_name"));
+
+
+            AdapterLocation  adapter=new AdapterLocation ();
+            lvExp.setAdapter(adapter);
+            AllProductsLocation.add(map);
+
+        }
+
+
+
+//        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
+//                "http://bizzcityinfo.com/Api/index.php/main/catIdToLocation"+"?cityId="+ "1"+"&catId="+"239", null, new Response.Listener<JSONObject>() {
+//
+//            @Override
+//            public void onResponse(JSONObject response) {
+//                Log.d("Respose", response.toString());
+//                dialog1.show();
+//                Util.cancelPgDialog(dialog);
+//                try {
+//                    // Parsing json object response
+//                    // response will be a json object
+////                    String name = response.getString("name");
+//
+//                    if (response.getString("status").equalsIgnoreCase("success")){
+//
+//                        JSONArray jsonArray=response.getJSONArray("message");
+//                        AllProductsLocation.clear();
+//                        for (int i=0;i<jsonArray.length();i++){
+//                            JSONObject jsonObject=jsonArray.getJSONObject(i);
+//
+//                            HashMap<String,String> map=new HashMap();
+//                            map.put("id",jsonObject.optString("id"));
+////                            map.put("state_id",jsonObject.optString("state_id"));
+////                            map.put("city_id",jsonObject.optString("city_id"));
+//                            map.put("location",jsonObject.optString("location"));
+//
+//
+//                            AdapterLocation  adapter=new AdapterLocation ();
+//                            lvExp.setAdapter(adapter);
+//                            AllProductsLocation.add(map);
+//
+//                        }
+//
+//                    }
+//                    else {
+//                        Toast.makeText(getActivity(), "No Area Here...", Toast.LENGTH_LONG).show();
+//                    }
+//
+//
+//
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                    Toast.makeText(getActivity(),
+//                            "Error: " + e.getMessage(),
+//                            Toast.LENGTH_LONG).show();
+//                    Util.cancelPgDialog(dialog);
+//                }
+//
+//            }
+//        }, new Response.ErrorListener() {
+//
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                VolleyLog.d("Respose", "Error: " + error.getMessage());
+//                Toast.makeText(getActivity(),
+//                        "Error! Please Connect to the internet", Toast.LENGTH_SHORT).show();
+//                // hide the progress dialog
+//                Util.cancelPgDialog(dialog);
+//
+//            }
+//        });
+//
+//        // Adding request to request queue
+//        jsonObjReq.setShouldCache(false);
+//        AppController.getInstance().addToRequestQueue(jsonObjReq);
+
+
+
+    }
+
+
+    class AdapterLocation extends BaseAdapter {
+
+        LayoutInflater inflater;
+        CheckBox textviwe;
+
+        Boolean flag=false;
+        AdapterLocation() {
+            inflater = (LayoutInflater) getActivity().getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+//            if (inflater == null) {
+//                throw new AssertionError("LayoutInflater not found.");
+//            }
+        }
+
+        @Override
+        public int getCount() {
+            return AllProductsLocation.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return AllProductsLocation.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(final int position, View convertView, ViewGroup parent) {
+
+
+            convertView=inflater.inflate(R.layout.list_location,parent,false);
+
+            textviwe=convertView.findViewById(R.id.textviwe);
+            textviwe.setText(AllProductsLocation.get(position).get("location"));
+
+            data.clear();
+            textviwe.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    Log.d("sdfsdfsdfgsgs",AllProductsLocation.get(position).get("id"));
+                    data.add(AllProductsLocation.get(position).get("id"));
+                }
+            });
+
+            bubmit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    value=data.toString().replace("[","").replace("]","").replace(" ","");
+                    Log.d("fgdgdfgdfgdfgdfg",value.toString());
+                    Log.d("fgdgdfdfdfgdfgdfgdfg",getArguments().getString("fragmentKey"));
+                    // listingDataOfCom(getArguments().getString("value"));
+                    dialog1.dismiss();
+
+                    Fragment fragment=new Listing();
+                    FragmentManager manager=getActivity().getSupportFragmentManager();
+                    Bundle bundle = new Bundle();
+
+
+                    bundle.putString("id", AllProducts.get(position).get("id0"));
+                    bundle.putString("subcategory", AllProducts.get(position).get("subcategory0"));
+
+
+
+                    bundle.putString("value",value.toString());
+                    FragmentTransaction ft=manager.beginTransaction();
+                    fragment.setArguments(bundle);
+                    ft.replace(R.id.content_frame,fragment).addToBackStack(null).commit();
+
+                    //  data.clear();
+
+
+                }
+            });
+
+            return convertView;
+        }
+    }
 
 
 

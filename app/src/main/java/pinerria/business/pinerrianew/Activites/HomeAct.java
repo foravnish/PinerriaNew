@@ -1,5 +1,7 @@
 package pinerria.business.pinerrianew.Activites;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
@@ -8,16 +10,24 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.IntentSender;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.SearchView;
 
+import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -31,6 +41,8 @@ import android.view.MenuItem;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +56,16 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.Result;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -76,7 +98,9 @@ import pinerria.business.pinerrianew.Utils.MyPrefrences;
 import pinerria.business.pinerrianew.gcm.GCMRegistrationIntentService;
 
 public class HomeAct extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener,GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener,
+        LocationListener {
 
     TextView profile,home,chat,inbosearchx,packageList;
     public  static TextView title;
@@ -91,6 +115,16 @@ public class HomeAct extends AppCompatActivity
     private String user;
 
     private List<Note> userList = new ArrayList<>();
+    SwitchCompat switchButton;
+//    LinearLayout gps;
+    ImageView gps_button;
+
+    private Location mylocation;
+    private GoogleApiClient googleApiClient;
+    private final static int REQUEST_CHECK_SETTINGS_GPS=0x1;
+    private final static int REQUEST_ID_MULTIPLE_PERMISSIONS=0x2;
+    public static  Double latitude=null,longitude=null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,7 +145,6 @@ public class HomeAct extends AppCompatActivity
 
         user=MyPrefrences.getMobile(getApplicationContext());
 
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -126,11 +159,13 @@ public class HomeAct extends AppCompatActivity
         MobileNo=header.findViewById(R.id.MobileNo);
         zoneName=header.findViewById(R.id.zoneName);
         userImage=header.findViewById(R.id.userImage);
+        //gps=header.findViewById(R.id.gps);
+        gps_button=header.findViewById(R.id.gps_button);
+
 
         db = new DatabaseHelper(HomeAct.this);
 
-
-         setmRegistrationBroadcastReceiver();
+        setmRegistrationBroadcastReceiver();
 
         Log.d("dfdgdgfsdgdf",MyPrefrences.getCityName(getApplicationContext()));
 
@@ -143,6 +178,7 @@ public class HomeAct extends AppCompatActivity
 //        DrawableCompat.setTint(drawable, Color.GREEN);
 //        DrawableCompat.setTintMode(drawable, PorterDuff.Mode.SRC_OVER);
 //        packageList.setCompoundDrawablesWithIntrinsicBounds(drawable,null,null,null);
+
 
 
         if (MyPrefrences.getUserLogin(getApplicationContext())==true){
@@ -168,6 +204,35 @@ public class HomeAct extends AppCompatActivity
             nav_login.setTitle("Login");
         }
 
+
+        if (String.valueOf(HomeAct.latitude).equals("null")){
+            Log.d("dfgdfgdfgdfghd","sdfdsgd");
+            gps_button.setBackgroundResource(R.drawable.gps_off);
+        }
+        else{
+            gps_button.setBackgroundResource(R.drawable.gps_on);
+        }
+
+
+        gps_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                setUpGClient();
+
+                Fragment fragment = new Home();
+                FragmentManager manager = getSupportFragmentManager();
+                FragmentTransaction ft = manager.beginTransaction();
+                ft.replace(R.id.content_frame, fragment).commit();
+
+
+                gps_button.setBackgroundResource(R.drawable.gps_on);
+                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                drawer.closeDrawer(GravityCompat.START);
+
+            }
+        });
 
 
 
@@ -839,4 +904,158 @@ public class HomeAct extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
+    private synchronized void setUpGClient() {
+        try {
+            googleApiClient = new GoogleApiClient.Builder(this)
+                    .enableAutoManage(this, 0, this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+            googleApiClient.connect();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        checkPermissions();
+    }
+
+    private void checkPermissions() {
+        int permissionLocation = ContextCompat.checkSelfPermission(HomeAct.this,
+                android.Manifest.permission.ACCESS_FINE_LOCATION);
+        List<String> listPermissionsNeeded = new ArrayList<>();
+        if (permissionLocation != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(android.Manifest.permission.ACCESS_FINE_LOCATION);
+            if (!listPermissionsNeeded.isEmpty()) {
+                ActivityCompat.requestPermissions(this,
+                        listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]), REQUEST_ID_MULTIPLE_PERMISSIONS);
+            }
+        }else{
+            getMyLocation();
+        }
+
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.d("fdgdfgdfgdfgd","fdfdfd");
+
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        mylocation = location;
+        if (mylocation != null) {
+            latitude=mylocation.getLatitude();
+            longitude=mylocation.getLongitude();
+//            latitudeTextView.setText("Latitude : "+latitude);
+//            longitudeTextView.setText("Longitude : "+longitude);
+            Log.d("dfsdgdgdfghdfh1",latitude.toString());
+            Log.d("dfsdgdgdfghdfh2",longitude.toString());
+            //Or Do whatever you want with your location
+        }
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        int permissionLocation = ContextCompat.checkSelfPermission(HomeAct.this,
+                Manifest.permission.ACCESS_FINE_LOCATION);
+        if (permissionLocation == PackageManager.PERMISSION_GRANTED) {
+            getMyLocation();
+        }
+    }
+
+    private void getMyLocation() {
+        if (googleApiClient != null) {
+            if (googleApiClient.isConnected()) {
+                int permissionLocation = ContextCompat.checkSelfPermission(HomeAct.this,
+                        Manifest.permission.ACCESS_FINE_LOCATION);
+                if (permissionLocation == PackageManager.PERMISSION_GRANTED) {
+                    mylocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+                    LocationRequest locationRequest = new LocationRequest();
+                    locationRequest.setInterval(3000);
+                    locationRequest.setFastestInterval(3000);
+                    locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+                    LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+                            .addLocationRequest(locationRequest);
+                    builder.setAlwaysShow(true);
+                    LocationServices.FusedLocationApi
+                            .requestLocationUpdates(googleApiClient, locationRequest, this);
+                    PendingResult result =
+                            LocationServices.SettingsApi
+                                    .checkLocationSettings(googleApiClient, builder.build());
+                    result.setResultCallback(new ResultCallback() {
+
+                        @Override
+                        public void onResult(@NonNull Result result) {
+                            final Status status = result.getStatus();
+                            switch (status.getStatusCode()) {
+                                case LocationSettingsStatusCodes.SUCCESS:
+                                    // All location settings are satisfied.
+                                    // You can initialize location requests here.
+                                    int permissionLocation = ContextCompat
+                                            .checkSelfPermission(HomeAct.this,
+                                                    Manifest.permission.ACCESS_FINE_LOCATION);
+                                    if (permissionLocation == PackageManager.PERMISSION_GRANTED) {
+                                        mylocation = LocationServices.FusedLocationApi
+                                                .getLastLocation(googleApiClient);
+                                    }
+                                    break;
+                                case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                                    // Location settings are not satisfied.
+                                    // But could be fixed by showing the user a dialog.
+                                    try {
+                                        // Show the dialog by calling startResolutionForResult(),
+                                        // and check the result in onActivityResult().
+                                        // Ask to turn on GPS automatically
+                                        status.startResolutionForResult(HomeAct.this,
+                                                REQUEST_CHECK_SETTINGS_GPS);
+                                    } catch (IntentSender.SendIntentException e) {
+                                        // Ignore the error.
+                                    }
+                                    break;
+                                case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                                    // Location settings are not satisfied. However, we have no way to fix the
+                                    // settings so we won't show the dialog.
+                                    //finish();
+                                    break;
+                            }
+                        }
+
+                    });
+                }
+            }
+        }
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case REQUEST_CHECK_SETTINGS_GPS:
+                switch (resultCode) {
+                    case Activity.RESULT_OK:
+                        getMyLocation();
+                        break;
+                    case Activity.RESULT_CANCELED:
+                        //finish();
+                        break;
+                }
+                break;
+        }
+    }
+
 }

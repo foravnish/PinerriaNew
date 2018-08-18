@@ -5,12 +5,12 @@
     <item
         android:id="@+id/action_search"
         android:icon="@drawable/search"
-        android:iconTint="@color/black"
+        android:iconTint="@color/pink"
         android:title="search"
+        app:theme="@style/ToolbarColoredBackArrow"
+        app:actionViewClass="android.support.v7.widget.SearchView"
         app:showAsAction="ifRoom|collapseActionView" />
 
 
 </menu>
 
-    <!--app:theme="@style/ToolbarColoredBackArrow"-->
-    <!--app:actionViewClass="android.support.v7.widget.SearchView"-->

@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,10 +38,11 @@ import pinerria.business.pinerrianew.gcm.GCMRegistrationIntentService;
 
 public class Login extends AppCompatActivity {
 
-    TextView forRegistration,btn_forgot_pwd,btn_skip;
+    TextView btn_forgot_pwd,btn_skip;
     Button login;
     EditText password,mobile;
     Dialog dialog;
+    LinearLayout forRegistration;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,7 +64,6 @@ public class Login extends AppCompatActivity {
         btn_skip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 Intent intent=new Intent(getApplicationContext(),HomeAct.class);
                 intent.putExtra("userType","");
                 startActivity(intent);
@@ -127,9 +128,7 @@ public class Login extends AppCompatActivity {
 
     private void mobileVerify_API(final String mobileNo) {
 
-
         Util.showPgDialog(dialog);
-
 
         RequestQueue queue = Volley.newRequestQueue(Login.this);
         StringRequest strReq = new StringRequest(Request.Method.POST,

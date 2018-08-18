@@ -101,6 +101,7 @@
                     android:layout_marginBottom="10dp"/>
 
                 <LinearLayout
+                    android:id="@+id/forRegistration"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
 
@@ -117,7 +118,7 @@
                         android:textSize="14dp"/>
 
                     <TextView
-                        android:id="@+id/forRegistration"
+
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Registration "

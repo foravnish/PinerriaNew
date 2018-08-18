@@ -352,6 +352,7 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
 
                             map.put("id", jsonObject.optString("id"));
                             map.put("category", jsonObject.optString("category"));
+                            map.put("meta_tag", jsonObject.optString("meta_tag"));
                             map.put("image", jsonObject.optString("image"));
                             map.put("meta_tag", jsonObject.optString("meta_tag"));
                             map.put("icon", jsonObject.optString("icon"));
@@ -524,8 +525,7 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
             catIcon=convertView.findViewById(R.id.catIcon);
 
 
-
-            catName.setText(AllProducts.get(position).get("category"));
+            catName.setText(AllProducts.get(position).get("meta_tag"));
 
             ImageLoader imageLoader = AppController.getInstance().getImageLoader();
             imgList.setImageUrl(AllProducts.get(position).get("image").toString().replace(" ","%20"),imageLoader);
