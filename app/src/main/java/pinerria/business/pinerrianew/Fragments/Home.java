@@ -20,6 +20,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,6 +31,7 @@ import android.view.Window;
 import android.view.animation.AlphaAnimation;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -436,6 +438,59 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
         AppController.getInstance().addToRequestQueue(jsonObjReq);
 
 
+
+
+
+
+//        view.setFocusableInTouchMode(true);
+//        view.requestFocus();
+//        view.setOnKeyListener(new View.OnKeyListener() {
+//            @Override
+//            public boolean onKey(View v, int keyCode, KeyEvent event) {
+//                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+//                    if (keyCode == KeyEvent.KEYCODE_BACK) {
+//
+//
+//                        Button Yes_action,No_action;
+//                        TextView heading;
+//                        dialog4 = new Dialog(getActivity());
+//                        dialog4.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//                        dialog4.setContentView(R.layout.update_state1);
+//
+//                        Yes_action=(Button)dialog4.findViewById(R.id.Yes_action);
+//                        No_action=(Button)dialog4.findViewById(R.id.No_action);
+//                        heading=(TextView)dialog4.findViewById(R.id.heading);
+//
+//
+//                        heading.setText("Are you sure you want to exit?");
+//                        Yes_action.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                                //System.exit(0);
+//                                //getActivity().finish();
+//                                getActivity().finishAffinity();
+//
+//                            }
+//                        });
+//
+//                        No_action.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                                dialog4.dismiss();
+//                            }
+//                        });
+//                        dialog4.show();
+////
+//
+//                        //Toast.makeText(getActivity(), "back", Toast.LENGTH_SHORT).show();
+//                        return true;
+//                    }
+//                }
+//                return false;
+//            }
+//        });
+
+
         return  view;
 
     }
@@ -599,6 +654,8 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
                         Bundle bundle = new Bundle();
                         bundle.putString("id", AllProducts.get(position).get("id0"));
                         bundle.putString("subcategory", AllProducts.get(position).get("subcategory0"));
+                        bundle.putString("value", "");
+                        bundle.putString("nearMe","");
                         FragmentManager manager = getActivity().getSupportFragmentManager();
                         FragmentTransaction ft = manager.beginTransaction();
                         fragment.setArguments(bundle);
@@ -623,6 +680,8 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
                         Bundle bundle = new Bundle();
                         bundle.putString("id", AllProducts.get(position).get("id1"));
                         bundle.putString("subcategory", AllProducts.get(position).get("subcategory1"));
+                        bundle.putString("value", "");
+                        bundle.putString("nearMe","");
                         FragmentManager manager = getActivity().getSupportFragmentManager();
                         FragmentTransaction ft = manager.beginTransaction();
                         fragment.setArguments(bundle);
@@ -644,6 +703,8 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
                         Bundle bundle = new Bundle();
                         bundle.putString("id", AllProducts.get(position).get("id2"));
                         bundle.putString("subcategory", AllProducts.get(position).get("subcategory2"));
+                        bundle.putString("value", "");
+                        bundle.putString("nearMe","");
                         FragmentManager manager = getActivity().getSupportFragmentManager();
                         FragmentTransaction ft = manager.beginTransaction();
                         fragment.setArguments(bundle);
@@ -667,6 +728,8 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
                         Bundle bundle = new Bundle();
                         bundle.putString("id", AllProducts.get(position).get("id3"));
                         bundle.putString("subcategory", AllProducts.get(position).get("subcategory3"));
+                        bundle.putString("value", "");
+                        bundle.putString("nearMe","");
                         FragmentManager manager = getActivity().getSupportFragmentManager();
                         FragmentTransaction ft = manager.beginTransaction();
                         fragment.setArguments(bundle);

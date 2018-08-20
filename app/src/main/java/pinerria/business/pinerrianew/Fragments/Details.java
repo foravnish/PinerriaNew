@@ -159,7 +159,7 @@ public class Details extends Fragment {
             address.setText(jsonObject.optString("address")+" "+jsonObject.optString("city_name")+" "+jsonObject.optString("state_name"));
             phone.setText(jsonObject.optString("primary_mobile"));
 
-            totlaUsers.setText(" ("+jsonObject.optString("total_rating_user")+" Review's)");
+            totlaUsers.setText(" ("+jsonObject.optString("total_rating_user")+" Reviews)");
 
             if (!jsonObject.optString("total_rating").equals("")) {
                 rating.setRating(Float.parseFloat(jsonObject.optString("total_rating")));
@@ -333,7 +333,6 @@ public class Details extends Fragment {
                     }
                     else{
 
-
                         Util.errorDialog(getActivity(),"Please Login First!");
                     }
                 }
@@ -347,7 +346,7 @@ public class Details extends Fragment {
                     sharingIntent.setType("text/plain");
 //                String shareBody =comName.getText().toString()+ " "+phone.getText().toString();
                     String shareBody ="Hi, \n" +
-                            "Please visit my business page on Pinerria app. Click on the link below. "+jsonObject.optString("business_name");
+                            "Please visit my business page on Pinerria app. Click on the link below. "+jsonObject.optString("business_share_url");
 
                     sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Details");
                     sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT,shareBody);
@@ -355,8 +354,6 @@ public class Details extends Fragment {
 
                 }
             });
-
-
 
             addReview.setOnClickListener(new View.OnClickListener() {
                 @Override

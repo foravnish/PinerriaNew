@@ -87,7 +87,7 @@
                         android:layout_height="wrap_content"
                         android:hint="Company Name *"
                         android:textColor="@color/white"
-                        android:inputType="textPersonName"/>
+                        android:inputType="textCapSentences"/>
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -129,7 +129,7 @@
                         android:hint="Tax Address *"
 
                         android:textColor="@color/white"
-                        android:inputType="textPersonName"/>
+                        android:inputType="textCapSentences"/>
 
                 </android.support.design.widget.TextInputLayout>
 

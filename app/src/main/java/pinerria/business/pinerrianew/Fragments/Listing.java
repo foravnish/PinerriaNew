@@ -1,8 +1,10 @@
 package pinerria.business.pinerrianew.Fragments;
 
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -94,14 +96,14 @@ public class Listing extends Fragment {
     JSONArray jsonArray;
     JSONArray jsonArrayLocation;
     ImageView imageNoListing;
-    TextView dateWise,ratingWise,locationWise;
+    TextView ratingWise,locationWise;
+    LinearLayout nearMeLayout;
 
 //    ImageView imageNoListing;
 
     private GoogleApiClient googleApiClient;
     String lat,longi;
-
-
+    String nearMeValue;
 
 
     @Override
@@ -115,7 +117,7 @@ public class Listing extends Fragment {
         expListView = (GridView) view.findViewById(R.id.lvExp);
         imageNoListing =  view.findViewById(R.id.imageNoListing);
         ratingWise =  view.findViewById(R.id.ratingWise);
-        dateWise =  view.findViewById(R.id.dateWise);
+        nearMeLayout =  view.findViewById(R.id.nearMeLayout);
         locationWise =  view.findViewById(R.id.locationWise);
 //        imageNoListing = (ImageView) view.findViewById(R.id.imageNoListing);
 //        fabButton = (FloatingActionButton) view.findViewById(R.id.fab);
@@ -141,13 +143,45 @@ public class Listing extends Fragment {
         Log.d("fgsdgsdfgsdfgdfsgdgd", String.valueOf(HomeAct.latitude));
         Log.d("fgsdgsdfgsdfgdfsgdgd", String.valueOf(HomeAct.longitude));
 
-        dateWise.setOnClickListener(new View.OnClickListener() {
+        nearMeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Util.showPgDialog(dialog);
-                listingDataOfCom("off");
+//                Util.showPgDialog(dialog);
+//                listingDataOfCom("off");
+
+                if (String.valueOf(HomeAct.latitude).equals("null")){
+                    Log.d("dfgdfgdfgdfghd","sdfdsgd");
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setMessage("Please click on GPS on side menu")
+                            .setCancelable(false)
+                            .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+
+                                    dialog.cancel();
+
+                                }
+                            });
+
+
+                    AlertDialog alert = builder.create();
+                    //Setting the title manually
+                    alert.setTitle("Pinerria");
+                    alert.show();
+
+
+                }
+                else{
+
+                    popNearMe();
+
+
+                }
+
             }
         });
+
+
         ratingWise.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -209,88 +243,6 @@ public class Listing extends Fragment {
 
         AllProducts.clear();
 
-
-
-//        RequestQueue queue = Volley.newRequestQueue(getActivity());
-//        StringRequest strReq = new StringRequest(Request.Method.POST,
-//                Api.subCategoryBusiness, new Response.Listener<String>() {
-//            @Override
-//            public void onResponse(String response) {
-//                Util.cancelPgDialog(dialog);
-//                Log.e("dfsjfdfsdfgd", "Login Response: " + response);
-//
-//                try {
-//                    JSONObject jsonObject1=new JSONObject(response);
-//                    // if (jsonObject.getString("status").equalsIgnoreCase("success")){
-//
-//                    if (jsonObject1.getString("status").equalsIgnoreCase("success")){
-//
-//                        expListView.setVisibility(View.VISIBLE);
-//                        imageNoListing.setVisibility(View.GONE);
-//                        jsonArray=jsonObject1.getJSONArray("message");
-//                        for (int i=0;i<jsonArray.length();i++){
-//                            JSONObject jsonObject=jsonArray.getJSONObject(i);
-//
-//                            map=new HashMap();
-//                            map.put("id", jsonObject.optString("id"));
-//                            map.put("bussiness_name", jsonObject.optString("bussiness_name"));
-//                            map.put("city_name", jsonObject.optString("city_name"));
-//                            map.put("service_keyword", jsonObject.optString("service_keyword"));
-//                            map.put("image", jsonObject.optString("image"));
-//                            map.put("total_rating_user", jsonObject.optString("total_rating_user"));
-//                            map.put("total_rating", jsonObject.optString("total_rating"));
-//                            map.put("my_favourite", jsonObject.optString("my_favourite"));
-//
-//                            Adapter adapter=new Adapter();
-//                            expListView.setAdapter(adapter);
-//                            AllProducts.add(map);
-//                        }
-//                    }
-//                    else{
-//                        expListView.setVisibility(View.GONE);
-//                        imageNoListing.setVisibility(View.VISIBLE);
-//                    }
-//
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//
-//
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                Util.cancelPgDialog(dialog);
-//                Log.e("fdgdfgdfgd", "Login Error: " + error.getMessage());
-//                Toast.makeText(getActivity(),"Please Connect to the Internet or Wrong Password", Toast.LENGTH_LONG).show();
-//            }
-//        }){
-//
-//            @Override
-//            protected Map<String, String> getParams() throws AuthFailureError {
-//                Log.e("fgdfgdfgdf","Inside getParams");
-//
-//                // Posting parameters to login url
-//                Map<String, String> params = new HashMap<>();
-//                params.put("sort_rating", wiseData);
-//                params.put("sub_category", getArguments().getString("id"));
-//                params.put("city_id", MyPrefrences.getCityID(getActivity()));
-//                params.put("user_id", MyPrefrences.getUserID(getActivity()));
-//
-//                return params;
-//            }
-//
-////                        @Override
-////                        public Map<String, String> getHeaders() throws AuthFailureError {
-////                            Log.e("fdgdfgdfgdfg","Inside getHeaders()");
-////                            Map<String,String> headers=new HashMap<>();
-////                            headers.put("Content-Type","application/x-www-form-urlencoded");
-////                            return headers;
-////                        }
-//        };
-//        // Adding request to request queue
-//        queue.add(strReq);
-
         if (String.valueOf(HomeAct.latitude).equals("null")){
             Log.d("dfgdfgdfgdfghd","sdfdsgd");
             lat="";
@@ -305,7 +257,7 @@ public class Listing extends Fragment {
 
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
                 Api.subCategoryBusiness+"?sort_rating="+wiseData+"&sub_category="+getArguments().getString("id")+"&user_id="+MyPrefrences.getUserID(getActivity())+"&city_id="+MyPrefrences.getCityID(getActivity())+
-                "&latitue="+lat+"&longitue="+longi+"&location_id=", null, new Response.Listener<JSONObject>() {
+                "&latitue="+lat+"&longitue="+longi+"&location_id="+getArguments().getString("value")+"&near_me="+getArguments().getString("nearMe"), null, new Response.Listener<JSONObject>() {
 
             @Override
             public void onResponse(JSONObject response) {
@@ -378,7 +330,7 @@ public class Listing extends Fragment {
     public class Viewholder{
         ImageView imgFav,stars;
 //        MaterialFavoriteButton imgFav;
-        TextView address,name,totlareview,area,keyword,totlaUsers;
+        TextView address,name,totlareview,area,keyword,totlaUsers,distance;
 
         ImageView callNow1;
         LinearLayout liner,linerLayoutOffer;
@@ -440,6 +392,7 @@ public class Listing extends Fragment {
             viewholder.totlaUsers=convertView.findViewById(R.id.totlaUsers);
 //
             viewholder.keyword=convertView.findViewById(R.id.keyword);
+            viewholder.distance=convertView.findViewById(R.id.distance);
 
             viewholder.name.setText(AllProducts.get(position).get("bussiness_name"));
             viewholder.area.setText(AllProducts.get(position).get("city_name"));
@@ -453,6 +406,15 @@ public class Listing extends Fragment {
 //            ImageLoader imageLoader=AppController.getInstance().getImageLoader();
 //            viewholder.imgaeView.setImageUrl(AllProducts.get(position).get("image"),imageLoader);
 
+//            if (String.valueOf(HomeAct.latitude).equals("null")){
+//                viewholder.distance.setText("");
+//            }
+//            else{
+//                String str=AllProducts.get(position).get("distance");
+//                String strr=str.length() < 4 ? str : str.substring(0, 4);
+//                String str1=strr+" Km";
+//                viewholder.distance.setText(str1);
+//            }
 
             Picasso.with(getActivity())
                     .load(AllProducts.get(position).get("image").replace(" ","%20"))
@@ -975,6 +937,81 @@ public class Listing extends Fragment {
     }
 
 
+
+    private void popNearMe() {
+
+        dialog1 = new Dialog(getActivity());
+        dialog1.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog1.setContentView(R.layout.alertdialog_near_me);
+        dialog1.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog1.show();
+
+
+
+
+        final RadioButton radio1 = (RadioButton) dialog1.findViewById(R.id.radio1);
+        final RadioButton radio2 = (RadioButton) dialog1.findViewById(R.id.radio2);
+        final RadioButton radio3 = (RadioButton) dialog1.findViewById(R.id.radio3);
+        final RadioButton radio4 = (RadioButton) dialog1.findViewById(R.id.radio4);
+
+        radio1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                nearMeValue="1";
+                dialog1.dismiss();
+
+
+                openFragmentForListing(nearMeValue);
+            }
+        });
+        radio2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                nearMeValue="3";
+                dialog1.dismiss();
+                openFragmentForListing(nearMeValue);
+            }
+        });
+
+
+        radio3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                nearMeValue="5";
+                dialog1.dismiss();
+                openFragmentForListing(nearMeValue);
+            }
+        });
+
+        radio4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                nearMeValue="all";
+                dialog1.dismiss();
+                openFragmentForListing(nearMeValue);
+            }
+        });
+
+
+    }
+
+    private void openFragmentForListing(String nearMeValue) {
+
+        Fragment fragment=new Listing();
+        FragmentManager manager=getActivity().getSupportFragmentManager();
+        Bundle bundle = new Bundle();
+        bundle.putString("id", getArguments().getString("id"));
+        bundle.putString("subcategory", getArguments().getString("subcategory"));
+        bundle.putString("value",value.toString());
+        bundle.putString("nearMe",nearMeValue.toString());
+
+        FragmentTransaction ft=manager.beginTransaction();
+        fragment.setArguments(bundle);
+        ft.replace(R.id.content_frame,fragment).addToBackStack(null).commit();
+
+    }
+
+
     class AdapterLocation extends BaseAdapter {
 
         LayoutInflater inflater;
@@ -1018,8 +1055,8 @@ public class Listing extends Fragment {
                 @Override
                 public void onClick(View view) {
 
-                    Log.d("sdfsdfsdfgsgs",AllProductsLocation.get(position).get("id"));
-                    data.add(AllProductsLocation.get(position).get("id"));
+                    Log.d("sdfsdfsdfgsgs",AllProductsLocation.get(position).get("location_id"));
+                    data.add(AllProductsLocation.get(position).get("location_id"));
                 }
             });
 
@@ -1029,21 +1066,17 @@ public class Listing extends Fragment {
 
                     value=data.toString().replace("[","").replace("]","").replace(" ","");
                     Log.d("fgdgdfgdfgdfgdfg",value.toString());
-                    Log.d("fgdgdfdfdfgdfgdfgdfg",getArguments().getString("fragmentKey"));
+                   // Log.d("fgdgdfdfdfgdfgdfgdfg",getArguments().getString("fragmentKey"));
                     // listingDataOfCom(getArguments().getString("value"));
                     dialog1.dismiss();
 
                     Fragment fragment=new Listing();
                     FragmentManager manager=getActivity().getSupportFragmentManager();
                     Bundle bundle = new Bundle();
-
-
-                    bundle.putString("id", AllProducts.get(position).get("id0"));
-                    bundle.putString("subcategory", AllProducts.get(position).get("subcategory0"));
-
-
-
+                    bundle.putString("id", getArguments().getString("id"));
+                    bundle.putString("subcategory", getArguments().getString("subcategory"));
                     bundle.putString("value",value.toString());
+                    bundle.putString("nearMe","");
                     FragmentTransaction ft=manager.beginTransaction();
                     fragment.setArguments(bundle);
                     ft.replace(R.id.content_frame,fragment).addToBackStack(null).commit();

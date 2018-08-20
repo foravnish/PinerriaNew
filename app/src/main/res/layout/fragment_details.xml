@@ -93,7 +93,7 @@
 
                                 android:gravity="center"
                                 android:layout_toRightOf="@+id/rating"
-                                android:textColor="@color/grayText" />
+                                android:textColor="@color/white" />
 
 
                         </RelativeLayout>

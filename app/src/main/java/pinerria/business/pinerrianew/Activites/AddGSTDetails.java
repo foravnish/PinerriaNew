@@ -272,7 +272,7 @@ public class AddGSTDetails extends AppCompatActivity {
                     JSONObject jsonObject = new JSONObject(response);
                     if (jsonObject.getString("status").equalsIgnoreCase("success")) {
 
-                        errorDialog(AddGSTDetails.this,jsonObject.getString("message"));
+                        errorDialog(AddGSTDetails.this,"Information Successfully Added");
                         //callEbsKit(PayOrderAct.this, Double.parseDouble(p_amt));
 
                     }

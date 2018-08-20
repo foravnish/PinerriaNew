@@ -104,8 +104,6 @@ public class PaymentSuccessActivity extends Activity {
 		payment_id = intent.getStringExtra("payment_id");
 		try {
 
-
-
 			jsonObject2=new JSONObject(intent.getStringExtra("payment_id"));
 			Log.d("gdfgdfghdfh",jsonObject2.optString("PaymentId"));
 			MyPrefrences.setPaymentId(getApplicationContext(),jsonObject2.optString("PaymentId"));
@@ -142,7 +140,7 @@ public class PaymentSuccessActivity extends Activity {
 			public void onClick(View v) {
 				Log.d("Status1233","success");
 
-				submitOrderApi(payment_id,"success");
+				submitOrderApi(payment_id,paymId,tarID,amount,"success");
 
 
 				//new PostingID("1").execute();
@@ -152,13 +150,13 @@ public class PaymentSuccessActivity extends Activity {
 //				intent.putExtra("threemonths","");
 //				intent.putExtra("sixmonths","");
 //				intent.putExtra("areatype","");
+
 //				intent.putExtra("areatypenum","");
 //				intent.putExtra("heading","");
 //				intent.putExtra("forPayment",Type1);
 //				startActivity(intent);
 			}
 		});
-
 
 		Button btn_retry = (Button) findViewById(R.id.btn_retry);
 		btn_retry.setOnClickListener(new OnClickListener() {
@@ -175,7 +173,7 @@ public class PaymentSuccessActivity extends Activity {
 		btn_cancel.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				submitOrderApi(payment_id,"failure");
+				submitOrderApi(payment_id,paymId,tarID,amount,"failure");
 				//new PostingID("2").execute();
 			}
 		});
@@ -183,12 +181,12 @@ public class PaymentSuccessActivity extends Activity {
 	}
 
 
-	private void submitOrderApi(final String payment_id, final String status) {
+	private void submitOrderApi(final String payment_id, final String p_id, final String txn_id, final String P_amount, final String status) {
 
 		Util.showPgDialog(dialog);
 		RequestQueue queue = Volley.newRequestQueue(PaymentSuccessActivity.this);
 		StringRequest strReq = new StringRequest(Request.Method.POST,
-				Api.payOrderAmount, new Response.Listener<String>() {
+				Api.updatePurchasedPackage, new Response.Listener<String>() {
 			@Override
 			public void onResponse(String response) {
 				Util.cancelPgDialog(dialog);
@@ -223,14 +221,12 @@ public class PaymentSuccessActivity extends Activity {
 
 				// Posting parameters to login url
 				Map<String, String> params = new HashMap<>();
-				params.put("payment_id", payment_id);
-
-				Random r = new Random();
-				int i1 = r.nextInt(800 - 650) + 65;
-				Log.d("fgsdgfsdghdfhd", String.valueOf(i1));
-
-				params.put("transaction_id", String.valueOf(i1));
+				params.put("payment_id", p_id);
+				params.put("transaction_id", txn_id);
+				params.put("response", payment_id);
+				params.put("pay_amount", P_amount);
 				params.put("payment_status", status);
+				params.put("unique_number", MyPrefrences.getDateTime(getApplicationContext()));
 
 
 

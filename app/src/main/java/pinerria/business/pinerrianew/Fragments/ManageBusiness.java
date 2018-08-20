@@ -218,8 +218,11 @@ public class ManageBusiness extends Fragment {
                     if (response.getString("status").equalsIgnoreCase("success")){
 
 
+
                         //  imageNoListing.setVisibility(View.GONE);
                         JSONArray jsonArray=response.getJSONArray("message");
+
+                        Log.d("sdfsdfsdfdfdf", String.valueOf(jsonArray));
 
                         jsonObject=jsonArray.getJSONObject(0);
 
@@ -238,11 +241,14 @@ public class ManageBusiness extends Fragment {
                         subCatImage.setImageUrl(jsonObject.optString("image"),imageLoader);
 
 
-                        if (jsonObject.optString("user_package").equalsIgnoreCase("N0")){
+                        String val = null;
+                        if (jsonObject.optString("user_package").equalsIgnoreCase("No")){
                             membership.setText("Regular");
+                             val="accept";
                             //membership2.setText("Upgrade to Premium");
                         }
-                        else {
+                        
+                        else if(val!="accept") {
 
                             JSONArray jsonArray1=jsonObject.getJSONArray("user_package");
                             JSONObject jsonObject2=jsonArray1.optJSONObject(0);

@@ -8,6 +8,8 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -152,6 +154,28 @@ public class Transcation extends Fragment {
 
 
 
+        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+
+                Fragment fragment = new TranscationDetails();
+                Bundle bundle=new Bundle();
+                try {
+                    bundle.putString("jsonArray",jsonArray.get(i).toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                FragmentManager manager = getFragmentManager();
+                FragmentTransaction ft = manager.beginTransaction();
+                fragment.setArguments(bundle);
+                ft.replace(R.id.content_frame, fragment).addToBackStack(null).commit();
+
+
+            }
+        });
+
+
         return view;
     }
 
@@ -195,34 +219,30 @@ public class Transcation extends Fragment {
 
 
             pName=(TextView)convertView.findViewById(R.id.pName);
-            tracscationNo=(TextView)convertView.findViewById(R.id.tracscationNo);
+            //tracscationNo=(TextView)convertView.findViewById(R.id.tracscationNo);
             purDate=(TextView)convertView.findViewById(R.id.purDate);
-            expDate=(TextView)convertView.findViewById(R.id.expDate);
+           // expDate=(TextView)convertView.findViewById(R.id.expDate);
             price=(TextView)convertView.findViewById(R.id.price);
-            buynow=(TextView) convertView.findViewById(R.id.buynow);
-            status=(TextView) convertView.findViewById(R.id.status);
-            PaidAmount=(TextView) convertView.findViewById(R.id.PaidAmount);
+            //buynow=(TextView) convertView.findViewById(R.id.buynow);
+            //status=(TextView) convertView.findViewById(R.id.status);
+            //PaidAmount=(TextView) convertView.findViewById(R.id.PaidAmount);
             duration=(TextView) convertView.findViewById(R.id.duration);
-
-//            map.put("id", jsonObject.optString("id"));
-//            map.put("package_name", jsonObject.optString("package_name"));
-//            map.put("package_duration", jsonObject.optString("package_duration"));
-//            map.put("actual_value", jsonObject.optString("actual_value"));
-//            map.put("paid_amount", jsonObject.optString("paid_amount"));
-//            map.put("payment_status", jsonObject.optString("payment_status"));
-//            map.put("purchase_date", jsonObject.optString("purchase_date"));
-//            map.put("expiry_date", jsonObject.optString("expiry_date"));
-//            map.put("transaction_id", jsonObject.optString("transaction_id"));
 
 
             pName.setText(AllProducts.get(position).get("package_name"));
-            price.setText(AllProducts.get(position).get("actual_value"));
-            purDate.setText("Pur Date: "+AllProducts.get(position).get("purchase_date"));
-            expDate.setText("Exp Date: "+AllProducts.get(position).get("expiry_date"));
-            status.setText("Status: "+AllProducts.get(position).get("payment_status"));
-            PaidAmount.setText("Paid Amount ₹ "+AllProducts.get(position).get("paid_amount"));
+            price.setText("₹ "+AllProducts.get(position).get("actual_value"));
+
+            String year=AllProducts.get(position).get("purchase_date").substring(0,4);
+            String month=AllProducts.get(position).get("purchase_date").substring(5,7);
+            String day=AllProducts.get(position).get("purchase_date").substring(8,10);
+            purDate.setText(day+"-"+month+"-"+year);
+
+
+          //  expDate.setText("Exp Date: "+AllProducts.get(position).get("expiry_date"));
+           // status.setText("Status: "+AllProducts.get(position).get("payment_status"));
+            //PaidAmount.setText("Paid Amount ₹ "+AllProducts.get(position).get("paid_amount"));
             duration.setText(AllProducts.get(position).get("package_duration")+" Months");
-            tracscationNo.setText("Txn No: "+AllProducts.get(position).get("transaction_id"));
+           // tracscationNo.setText("Txn No: "+AllProducts.get(position).get("transaction_id"));
 
 
 //            gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {

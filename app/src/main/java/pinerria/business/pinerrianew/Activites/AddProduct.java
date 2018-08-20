@@ -46,7 +46,9 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.squareup.okhttp.MediaType;
@@ -125,7 +127,6 @@ public class AddProduct extends AppCompatActivity {
     String loc_id="";
     public double minPirce=0,maxPirce=0;
     TextView addLocation;
-
     View viewShow;
     LinearLayout linearShow;
 
@@ -331,12 +332,19 @@ public class AddProduct extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
                 //if (!country.getSelectedItem().toString().equalsIgnoreCase("India")) {
-                idLocation=AllCity.get(i).get("id");
-
-//                    location.setSelection(i);
-
+                try {
+                    idLocation=AllCity.get(i).get("id");
                     Log.d("sdfsdfsdfsd",idLocation);
 
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                if (location.getSelectedItem().toString().equalsIgnoreCase("Add Location")){
+                    //Toast.makeText(getApplicationContext(), "add", Toast.LENGTH_SHORT).show();
+                    addLocationPop();
+                }
 
             }
 
@@ -635,6 +643,12 @@ public class AddProduct extends AppCompatActivity {
 
                         loc_id=jsonObject.optString("location_id");
 
+                        newLocation1.setVisibility(View.VISIBLE);
+                        linearShow.setVisibility(View.GONE);
+                        viewShow.setVisibility(View.GONE);
+
+                        newLocation.setText(jsonObject.optString("location_name"));
+
                         if (jsonObject.optString("min_price").equals("")) {
                             checkBobPrice.setChecked(false);
                             //flag="0";
@@ -643,6 +657,11 @@ public class AddProduct extends AppCompatActivity {
                             checkBobPrice.setChecked(true);
                           //  flag="1";
                         }
+
+
+//                        ImageLoader imageLoader=AppController.getInstance().getImageLoader();
+//                        regiImage.setImageUrl(jsonObject.optString("image").replace(" ","%20"),imageLoader);
+
                         Picasso.with(AddProduct.this)
                                 .load(jsonObject.optString("image").replace(" ","%20"))
                                 .fit()
@@ -944,7 +963,7 @@ public class AddProduct extends AppCompatActivity {
 
                 if (json.optString("status").equalsIgnoreCase("success")) {
 
-                    Toast.makeText(getApplicationContext(), "Business Add Successfully...", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Business Added Successfully...", Toast.LENGTH_LONG).show();
 
                     Intent intent=new Intent(AddProduct.this,HomeAct.class);
                     intent.putExtra("userType","my_product");
@@ -1792,6 +1811,24 @@ public class AddProduct extends AppCompatActivity {
 
 
                         }
+                    }
+                    else{
+                        AllCity.clear();
+                        cityList.clear();
+
+                        HashMap<String, String> map2 = new HashMap<>();
+                        map2.put("id", "");
+                        AllCity.add(map2);
+                        cityList.add("Select Location");
+                        cityList.add("Add Location");
+
+                        HashMap<String,String> map=new HashMap<>();
+
+                        adapterCity = new ArrayAdapter(getApplicationContext(),R.layout.simple_spinner_item,cityList);
+                        adapterCity.setDropDownViewResource(R.layout.simple_spinner_dropdown_item);
+                        location.setAdapter(adapterCity);
+
+                        AllCity.add(map);
                     }
 
                 } catch (JSONException e) {

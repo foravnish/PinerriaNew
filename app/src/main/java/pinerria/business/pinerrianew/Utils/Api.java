@@ -56,6 +56,7 @@ public class Api {
     public static String locationByCityId=BASEURL+"locationByCityId";
     public static String addLocation=BASEURL+"addLocation";
     public static String updateGSTDetails=BASEURL+"updateGSTDetails";
+    public static String updatePurchasedPackage=BASEURL+"updatePurchasedPackage";
 
 
 

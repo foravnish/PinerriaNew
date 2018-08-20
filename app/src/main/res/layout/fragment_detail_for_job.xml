@@ -491,11 +491,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="left"
-                        android:textSize="12dp"
-                        android:textStyle="bold"
+                        android:textSize="14dp"
                         android:layout_marginLeft="5dp"
                         android:text="Description"
-                        android:textColor="@color/black" />
+                        android:textColor="@color/grayText" />
 
 
                     <TextView
@@ -503,12 +502,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="left"
-                        android:textSize="16dp"
+                        android:textSize="14dp"
                         android:layout_marginLeft="5dp"
                         android:layout_marginBottom="10dp"
                         android:layout_marginRight="5dp"
                         android:text="Shopping Life Style"
-                        android:textColor="@color/black" />
+                        android:textColor="@color/md_grey_900" />
 
                 </LinearLayout>
 

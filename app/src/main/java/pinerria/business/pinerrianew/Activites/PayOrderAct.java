@@ -39,6 +39,7 @@ import java.util.Random;
 import pinerria.business.pinerrianew.Fragments.PayOrder;
 import pinerria.business.pinerrianew.R;
 import pinerria.business.pinerrianew.Utils.Api;
+import pinerria.business.pinerrianew.Utils.MyPrefrences;
 import pinerria.business.pinerrianew.Utils.Util;
 
 public class PayOrderAct extends AppCompatActivity {
@@ -115,6 +116,14 @@ public class PayOrderAct extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     if (validate()) {
+
+
+                        Long tsLong = System.currentTimeMillis()/1000;
+                        String ts = tsLong.toString();
+                        Log.d("TimeCurrent",ts);
+                        MyPrefrences.setDateTime(getApplicationContext(),ts);
+
+
                         submitOrderApi(jsonObject.optString("payment_id"),jsonObject.optString("amount"));
 
                     }
@@ -187,7 +196,7 @@ public class PayOrderAct extends AppCompatActivity {
 
                     params.put("tax_address", tax_address.getText().toString());
                     params.put("user_email", user_email.getText().toString());
-
+                    params.put("unique_number", MyPrefrences.getDateTime(getApplicationContext()));
 
                     return params;
                 }
@@ -322,7 +331,7 @@ public class PayOrderAct extends AppCompatActivity {
         /** Optional */
         PaymentRequest.getInstance().setShippingEmail("test@testmail.com");
         /** Optional */
-        PaymentRequest.getInstance().setShippingPhone("01234567890");
+        PaymentRequest.getInstance().setShippingPhone(MyPrefrences.getDateTime(getApplicationContext()));
         /** Optional */
 
         PaymentRequest.getInstance().setLogEnabled(String.valueOf(amount));

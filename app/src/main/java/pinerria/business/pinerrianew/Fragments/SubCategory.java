@@ -149,6 +149,8 @@ public class SubCategory extends Fragment {
                 Bundle bundle=new Bundle();
                 bundle.putString("id",AllProducts.get(i).get("id"));
                 bundle.putString("subcategory",AllProducts.get(i).get("subcategory"));
+                bundle.putString("value", "");
+                bundle.putString("nearMe","");
                 FragmentManager manager=getActivity().getSupportFragmentManager();
                 FragmentTransaction ft=manager.beginTransaction();
                 fragment.setArguments(bundle);

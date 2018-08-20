@@ -71,7 +71,7 @@
         android:id="@+id/groupc_policy">
         <item
             android:id="@+id/nav_gst_detail"
-            android:icon="@drawable/banner_req"
+            android:icon="@drawable/addgstdetail"
             android:title="Add GST Detail" />
     </group>
 

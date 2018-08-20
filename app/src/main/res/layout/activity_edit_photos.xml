@@ -74,9 +74,9 @@
 
     <ImageView
         android:id="@+id/imageV1"
-        android:layout_width="80dp"
+        android:layout_width="0dp"
         android:visibility="gone"
-        android:layout_height="80dp"/>
+        android:layout_height="0dp"/>
 
 
     <!--<LinearLayout-->

@@ -308,7 +308,7 @@ public class Registration extends AppCompatActivity {
 
                     else{
                         Log.d("fdgsdgsdfgsdfgsdgrfgds","not ");
-                        Util.errorDialog(Registration.this,"Please select i agree to T&C");
+                        Util.errorDialog(Registration.this,"Please indicate acceptance of Terms & Conditions");
                     }
 
 
@@ -547,8 +547,6 @@ public class Registration extends AppCompatActivity {
 
                                 if(s.equals("null")) {
 
-
-
                                     reference.child(mob).child("password").setValue(pass);
                                     reference2.child(mob).child("name").setValue(namePerson.getText().toString());
 
@@ -564,18 +562,15 @@ public class Registration extends AppCompatActivity {
 
                                         if (!obj.has(mob)) {
 
-
                                             reference.child(mob).child("password").setValue(pass);
                                             reference2.child(mob).child("name").setValue(namePerson.getText().toString());
-
-
 
                                             Toast.makeText(getApplicationContext(), "Registration Successfully... Please Login.", Toast.LENGTH_SHORT).show();
                                             startActivity(new Intent(Registration.this,   Login.class));
                                             finish();
 
                                         } else {
-                                            Toast.makeText(Registration.this, "username already exists", Toast.LENGTH_LONG).show();
+                                            Toast.makeText(Registration.this, "User already exists", Toast.LENGTH_LONG).show();
                                         }
 
                                     } catch (JSONException e) {
@@ -596,12 +591,6 @@ public class Registration extends AppCompatActivity {
 
                         RequestQueue rQueue = Volley.newRequestQueue(Registration.this);
                         rQueue.add(request);
-
-
-
-
-
-
 
 
                     }

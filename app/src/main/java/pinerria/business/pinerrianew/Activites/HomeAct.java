@@ -118,6 +118,7 @@ public class HomeAct extends AppCompatActivity
     SwitchCompat switchButton;
 //    LinearLayout gps;
     ImageView gps_button;
+    TextView gps_button2;
 
     private Location mylocation;
     private GoogleApiClient googleApiClient;
@@ -161,6 +162,7 @@ public class HomeAct extends AppCompatActivity
         userImage=header.findViewById(R.id.userImage);
         //gps=header.findViewById(R.id.gps);
         gps_button=header.findViewById(R.id.gps_button);
+        gps_button2=header.findViewById(R.id.gps_button2);
 
 
         db = new DatabaseHelper(HomeAct.this);
@@ -182,7 +184,10 @@ public class HomeAct extends AppCompatActivity
 
 
         if (MyPrefrences.getUserLogin(getApplicationContext())==true){
-            nameUser.setText(MyPrefrences.getUSENAME(getApplicationContext()));
+            String upperString = MyPrefrences.getUSENAME(getApplicationContext()).substring(0,1).toUpperCase() + MyPrefrences.getUSENAME(getApplicationContext()).substring(1);
+            nameUser.setText(upperString);
+
+            //nameUser.setText(MyPrefrences.getUSENAME(getApplicationContext()));
             MobileNo.setText("+91 "+MyPrefrences.getMobile(getApplicationContext()));
             Picasso.with(getApplicationContext())
                     .load(MyPrefrences.getImage(getApplicationContext()).replace(" ","%20"))
@@ -215,6 +220,26 @@ public class HomeAct extends AppCompatActivity
 
 
         gps_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                setUpGClient();
+
+                Fragment fragment = new Home();
+                FragmentManager manager = getSupportFragmentManager();
+                FragmentTransaction ft = manager.beginTransaction();
+                ft.replace(R.id.content_frame, fragment).commit();
+
+
+                gps_button.setBackgroundResource(R.drawable.gps_on);
+                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                drawer.closeDrawer(GravityCompat.START);
+
+            }
+        });
+
+        gps_button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -382,7 +407,6 @@ public class HomeAct extends AppCompatActivity
                 startActivity(new Intent(HomeAct.this,SelectZone.class));
             }
         });
-
 
 
 
@@ -645,6 +669,8 @@ public class HomeAct extends AppCompatActivity
                 Bundle bundle = new Bundle();
                 bundle.putString("id", query);
                 bundle.putString("subcategory", query);
+                bundle.putString("value", "");
+                bundle.putString("nearMe","");
                 FragmentManager manager = getSupportFragmentManager();
                 FragmentTransaction ft = manager.beginTransaction();
                 fragment.setArguments(bundle);

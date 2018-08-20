@@ -1,0 +1,420 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Fragments.TranscationDetails">
+
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:orientation="vertical">
+
+
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="name"
+                android:fontFamily="@font/muli_bold"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/p_black"
+                android:textSize="16dp"/>
+
+            <TextView
+                android:id="@+id/company_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="name"
+                android:fontFamily="@font/muli"
+                android:textColor="#666"
+                android:textStyle="bold"
+                android:textSize="16dp"/>
+            <TextView
+                android:id="@+id/package_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="name"
+                android:fontFamily="@font/muli"
+                android:textColor="#666"
+                android:textStyle="bold"
+                android:textSize="16dp"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/package_duration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="name"
+                android:fontFamily="@font/muli"
+                android:textColor="#666"
+                android:textStyle="bold"
+                android:textSize="16dp"/>
+
+            <TextView
+                android:id="@+id/status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="name"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:fontFamily="@font/muli_semibold"
+                android:textColor="@color/green"
+                android:inputType="textCapCharacters"
+                android:textStyle="bold"
+                android:textSize="16dp"/>
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:background="#999">
+
+            </View>
+
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Invoice Summary"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/blue"
+                android:textStyle="bold"
+                android:fontFamily="@font/muli_bold"
+                android:textSize="16dp"/>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginTop="10dp"
+                    android:text="Payment Id"
+                    android:textColor="#777"
+                    android:fontFamily="@font/muli"
+                    android:textSize="12dp" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Purchase Date"
+                    android:fontFamily="@font/muli"
+                    android:layout_marginTop="10dp"
+                    android:textColor="#777"
+                    android:layout_alignParentRight="true"
+                    android:textSize="12dp"/>
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+                <TextView
+                    android:id="@+id/payment_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Payment Id"
+                    android:textColor="#333"
+                    android:fontFamily="@font/muli_bold"
+                    android:layout_alignParentLeft="true"
+                    android:textSize="16dp"/>
+
+
+                <TextView
+                    android:id="@+id/purchase_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Purchase Date"
+                    android:textColor="#777"
+                    android:fontFamily="@font/muli_bold"
+                    android:layout_alignParentRight="true"
+                    android:textSize="16dp"/>
+
+
+            </RelativeLayout>
+
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Transaction Id"
+                    android:layout_marginTop="10dp"
+                    android:textColor="#777"
+                    android:fontFamily="@font/muli"
+                    android:layout_alignParentLeft="true"
+                    android:textSize="12dp"/>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Expiry Date"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/muli"
+                    android:textColor="#777"
+                    android:layout_alignParentRight="true"
+                    android:textSize="12dp"/>
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+                <TextView
+                    android:id="@+id/transaction_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Payment Id"
+                    android:textColor="#333"
+                    android:fontFamily="@font/muli_bold"
+                    android:layout_alignParentLeft="true"
+                    android:textSize="16dp"/>
+
+
+                <TextView
+                    android:id="@+id/expiry_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Purchase Date"
+                    android:textColor="#777"
+                    android:fontFamily="@font/muli_bold"
+                    android:layout_alignParentRight="true"
+                    android:textSize="16dp"/>
+
+
+            </RelativeLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp"
+                android:background="#999">
+
+            </View>
+
+
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Package Summary"
+                android:textColor="@color/blue"
+                android:textStyle="bold"
+                android:fontFamily="@font/muli_bold"
+                android:textSize="16dp"/>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginTop="10dp"
+                    android:text="Amount"
+                    android:textColor="#777"
+                    android:fontFamily="@font/muli"
+                    android:textSize="12dp" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Discount"
+                    android:layout_marginTop="10dp"
+                    android:textColor="#777"
+                    android:fontFamily="@font/muli"
+                    android:layout_alignParentRight="true"
+                    android:textSize="12dp"/>
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+                <TextView
+                    android:id="@+id/actual_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Payment Id"
+                    android:textColor="#333"
+                    android:fontFamily="@font/muli_bold"
+                    android:layout_alignParentLeft="true"
+                    android:textSize="16dp"/>
+
+
+                <TextView
+                    android:id="@+id/discount_percent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Purchase Date"
+                    android:textColor="#777"
+                    android:fontFamily="@font/muli_bold"
+                    android:layout_alignParentRight="true"
+                    android:textSize="16dp"/>
+
+
+            </RelativeLayout>
+
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="After Discount Price"
+                    android:layout_marginTop="10dp"
+                    android:textColor="#777"
+                    android:fontFamily="@font/muli"
+                    android:layout_alignParentLeft="true"
+                    android:textSize="12dp"/>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="GST"
+                    android:layout_marginTop="10dp"
+                    android:textColor="#777"
+                    android:fontFamily="@font/muli"
+                    android:layout_alignParentRight="true"
+                    android:textSize="12dp"/>
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+                <TextView
+                    android:id="@+id/after_discount_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Payment Id"
+                    android:textColor="#333"
+                    android:fontFamily="@font/muli_bold"
+                    android:layout_alignParentLeft="true"
+                    android:textSize="16dp"/>
+
+
+                <TextView
+                    android:id="@+id/gst"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Purchase Date"
+                    android:textColor="#777"
+                    android:fontFamily="@font/muli_bold"
+                    android:layout_alignParentRight="true"
+                    android:textSize="16dp"/>
+
+
+            </RelativeLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="40dp"
+                android:background="#999">
+
+            </View>
+
+
+
+
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Amount Paid"
+                    android:layout_marginTop="5dp"
+                    android:textColor="#333"
+                    android:fontFamily="@font/muli_bold"
+                    android:layout_alignParentLeft="true"
+                    android:textSize="16dp"/>
+
+
+                <TextView
+                    android:id="@+id/total_amount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Payment Id"
+                    android:layout_marginTop="5dp"
+                    android:textColor="#333"
+                    android:fontFamily="@font/muli_bold"
+                    android:layout_alignParentRight="true"
+                    android:textSize="16dp"/>
+
+
+            </RelativeLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="20dp"
+                android:background="#999">
+
+            </View>
+
+        </LinearLayout>
+    </ScrollView>
+
+
+</LinearLayout>

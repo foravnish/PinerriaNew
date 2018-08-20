@@ -26,6 +26,7 @@ public class MyPrefrences {
     static SharedPreferences CityName;
     static SharedPreferences CityDialog;
     static SharedPreferences Image;
+    static SharedPreferences DateTime;
     public static SharedPreferences mySharedPreferencesToken;
     public static SharedPreferences PAYMENTID;
 
@@ -46,6 +47,7 @@ public class MyPrefrences {
     public static String CITYNAME = "CITYNAME";
     public static String CITYDIA = "CITYDIA";
     public static String IMAGE = "IMAGE";
+    public static String DATE = "DATE";
     public static String PUMTID = "PUMTID";
 
     public static void resetPrefrences(Context context) {
@@ -309,6 +311,22 @@ public class MyPrefrences {
         PAYMENTID = PreferenceManager.getDefaultSharedPreferences(context);
         return PAYMENTID.getString(PUMTID,"");
     }
+
+
+
+    public static void setDateTime(Context context, String is) {
+        DateTime = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = DateTime.edit();
+        editor.putString(DATE, is);
+        editor.commit();
+    }
+
+    public static String getDateTime(Context context) {
+        DateTime = PreferenceManager.getDefaultSharedPreferences(context);
+        return DateTime.getString(DATE,"");
+    }
+
+
 
 
 

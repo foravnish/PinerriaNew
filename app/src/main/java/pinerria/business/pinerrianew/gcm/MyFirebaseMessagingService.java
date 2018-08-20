@@ -38,6 +38,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         message = remoteMessage.getData();
 //        Log.d("fgdghbfdhdfghfgjh", String.valueOf(remoteMessage.getData()));
         Log.d("fgdghbfdhdfghfgjh", remoteMessage.getData()+"");
+        Log.d("fdxgdfgdfgfhfhf", message+"");
+
+        sendNotification(message);
 
         //Toast.makeText(getApplicationContext(), ""+message, Toast.LENGTH_SHORT).show();
        // sendNotification1(message.toString());

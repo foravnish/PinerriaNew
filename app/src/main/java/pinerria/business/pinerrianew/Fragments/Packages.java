@@ -1,8 +1,10 @@
 package pinerria.business.pinerrianew.Fragments;
 
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -38,7 +40,9 @@ import java.util.HashMap;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import pinerria.business.pinerrianew.Activites.AddGSTDetails;
 import pinerria.business.pinerrianew.Activites.HomeAct;
+import pinerria.business.pinerrianew.Activites.Login;
 import pinerria.business.pinerrianew.Activites.PayActivity;
 import pinerria.business.pinerrianew.R;
 import pinerria.business.pinerrianew.Utils.Api;
@@ -99,9 +103,6 @@ public class Packages extends Fragment {
 //        });
 
 
-
-
-
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
                 Api.businessPackage+"/"+ MyPrefrences.getUserID(getActivity()), null, new Response.Listener<JSONObject>() {
 
@@ -136,7 +137,10 @@ public class Packages extends Fragment {
                             gridview.setAdapter(adapter);
                             AllProducts.add(map);
                         }
-                        userInfoAyyay=response.getJSONArray("userInfo");
+
+                        if (!response.getString("userInfo").equals("")) {
+                            userInfoAyyay = response.getJSONArray("userInfo");
+                        }
 
                     }
                     else{
@@ -177,16 +181,47 @@ public class Packages extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
+                if (MyPrefrences.getUserLogin(getActivity())==true) {
 
-                Intent intent=new Intent(getActivity(), PayActivity.class);
-                try {
-                    intent.putExtra("jsonArray",jsonArray.get(i).toString());
-                    intent.putExtra("userInfo",userInfoAyyay.get(0).toString());
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    Intent intent=new Intent(getActivity(), PayActivity.class);
+                    try {
+                        intent.putExtra("jsonArray",jsonArray.get(i).toString());
+                        intent.putExtra("userInfo",userInfoAyyay.get(0).toString());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    startActivity(intent);
+                    getActivity().overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+
                 }
-                startActivity(intent);
-                getActivity().overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+                else{
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setMessage("Please Login to Purchase Package")
+                            .setCancelable(false)
+                            .setPositiveButton("Login", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+
+                                    Intent intent=new Intent(getActivity(),Login.class);
+                                    startActivity(intent);
+                                    getActivity().overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+                                    getActivity().finish();
+                                }
+                            })
+                            .setNegativeButton("Not Now", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    //  Action for 'NO' Button
+                                    dialog.cancel();
+
+
+                                }
+                            });
+                    AlertDialog alert = builder.create();
+                    //Setting the title manually
+                    alert.setTitle("Pinerria");
+                    alert.show();
+
+                }
 
 
             }

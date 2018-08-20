@@ -29,8 +29,6 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
 
 
 
-
-
         //Displaying token on logcat
     }
 }
