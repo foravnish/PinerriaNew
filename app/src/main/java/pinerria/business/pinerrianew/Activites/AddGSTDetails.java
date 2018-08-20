@@ -28,6 +28,9 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.ebs.android.sdk.Config;
+import com.ebs.android.sdk.EBSPayment;
+import com.ebs.android.sdk.PaymentRequest;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -89,6 +92,7 @@ public class AddGSTDetails extends AppCompatActivity {
 
         getProfileData();
 
+        Log.d("fgdfgdfgdfgdfgd",getIntent().getStringExtra("amount"));
 
         checkBob.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -117,7 +121,7 @@ public class AddGSTDetails extends AppCompatActivity {
                     if (validate()) {
 
 
-                        submitOrderApi();
+                        submitOrderApi(getIntent().getStringExtra("type"));
 
                     }
                 }
@@ -159,7 +163,7 @@ public class AddGSTDetails extends AppCompatActivity {
 
             @Override
             public void onResponse(JSONObject response) {
-                Log.d("Respose", response.toString());
+                Log.d("Respose_getProfileData", response.toString());
 
                 Util.cancelPgDialog(dialog);
                 try {
@@ -257,7 +261,7 @@ public class AddGSTDetails extends AppCompatActivity {
     }
 
 
-    private void submitOrderApi() {
+    private void submitOrderApi(final String type) {
 
         Util.showPgDialog(dialog);
         RequestQueue queue = Volley.newRequestQueue(AddGSTDetails.this);
@@ -272,7 +276,16 @@ public class AddGSTDetails extends AppCompatActivity {
                     JSONObject jsonObject = new JSONObject(response);
                     if (jsonObject.getString("status").equalsIgnoreCase("success")) {
 
-                        errorDialog(AddGSTDetails.this,"Information Successfully Added");
+                        if (type.equalsIgnoreCase("package")){
+
+                        callEbsKit(AddGSTDetails.this, Double.parseDouble(getIntent().getStringExtra("amount")));
+//                        callEbsK
+
+                        }
+                        else if (type.equalsIgnoreCase("no_package")){
+                            errorDialog(AddGSTDetails.this,"Information Successfully Added");
+                        }
+
                         //callEbsKit(PayOrderAct.this, Double.parseDouble(p_amt));
 
                     }
@@ -342,6 +355,136 @@ public class AddGSTDetails extends AppCompatActivity {
             }
         });
         dialog.show();
+
+    }
+
+
+    private void callEbsKit(AddGSTDetails buyProduct, double amount) {
+        /**
+         * Set Parameters Before Initializing the EBS Gateway, All mandatory
+         * values must be provided
+         */
+
+        /** Payment Amount Details */
+        // Total Amount
+
+        PaymentRequest.getInstance().setTransactionAmount(String.valueOf(amount));
+
+        /** Mandatory */
+
+        PaymentRequest.getInstance().setAccountId(ACC_ID);
+        PaymentRequest.getInstance().setSecureKey(SECRET_KEY);
+
+        // Reference No
+//        Random r = new Random();
+//        int i1 = r.nextInt(800 - 650) + 65;
+//        Log.d("fgsdgfsdghdfhd", String.valueOf(i1));
+
+        Random r = new Random();
+        int i1 = r.nextInt(800 - 650) + 65;
+        Log.d("fgsdgfsdghdfhd", String.valueOf(i1));
+        PaymentRequest.getInstance().setReferenceNo(String.valueOf(i1));
+        /** Mandatory */
+
+        // Email Id
+        //PaymentRequest.getInstance().setBillingEmail("test_tag@testmail.com");
+
+        PaymentRequest.getInstance().setBillingEmail("customerhelpdesk@pinerria.com");
+        /** Mandatory */
+
+        PaymentRequest.getInstance().setFailureid(String.valueOf(amount));
+
+        // PaymentRequest.getInstance().setFailuremessage(getResources().getString(R.string.payment_failure_message));
+        // System.out.println("FAILURE MESSAGE"+getResources().getString(R.string.payment_failure_message));
+
+        /** Mandatory */
+
+        // Currency
+        PaymentRequest.getInstance().setCurrency("INR");
+        /** Mandatory */
+
+        /** Optional */
+        // Your Reference No or Order Id for this transaction
+        PaymentRequest.getInstance().setTransactionDescription(
+                "Test Transaction");
+
+        /** Billing Details */
+        PaymentRequest.getInstance().setBillingName("Type");
+        /** Optional */
+        PaymentRequest.getInstance().setBillingAddress("North Mada Street");
+        /** Optional */
+        PaymentRequest.getInstance().setBillingCity("Chennai");
+        /** Optional */
+        PaymentRequest.getInstance().setBillingPostalCode("600019");
+        /** Optional */
+        PaymentRequest.getInstance().setBillingState("Tamilnadu");
+        /** Optional */
+        PaymentRequest.getInstance().setBillingCountry("IND");
+        /** Optional */
+        PaymentRequest.getInstance().setBillingPhone("01234567890");
+        /** Optional */
+
+        /** Shipping Details */
+        PaymentRequest.getInstance().setShippingName("Test_Name");
+        /** Optional */
+        PaymentRequest.getInstance().setShippingAddress("North Mada Street");
+        /** Optional */
+        PaymentRequest.getInstance().setShippingCity("Chennai");
+        /** Optional */
+        PaymentRequest.getInstance().setShippingPostalCode("600019");
+        /** Optional */
+        PaymentRequest.getInstance().setShippingState("Tamilnadu");
+        /** Optional */
+        PaymentRequest.getInstance().setShippingCountry("IND");
+        /** Optional */
+        PaymentRequest.getInstance().setShippingEmail("test@testmail.com");
+        /** Optional */
+        PaymentRequest.getInstance().setShippingPhone(MyPrefrences.getDateTime(getApplicationContext()));
+        /** Optional */
+
+        PaymentRequest.getInstance().setLogEnabled(String.valueOf(amount));
+
+
+        /**
+         * Payment option configuration
+         */
+
+        /** Optional */
+        PaymentRequest.getInstance().setHidePaymentOption(false);
+
+        /** Optional */
+        PaymentRequest.getInstance().setHideCashCardOption(false);
+
+        /** Optional */
+        PaymentRequest.getInstance().setHideCreditCardOption(false);
+
+        /** Optional */
+        PaymentRequest.getInstance().setHideDebitCardOption(false);
+
+        /** Optional */
+        PaymentRequest.getInstance().setHideNetBankingOption(false);
+
+        /** Optional */
+        PaymentRequest.getInstance().setHideStoredCardOption(false);
+
+        /**
+         * Initialise parameters for dyanmic values sending from merchant
+         */
+
+        custom_post_parameters = new ArrayList<HashMap<String, String>>();
+        HashMap<String, String> hashpostvalues = new HashMap<String, String>();
+        hashpostvalues.put("account_details", "saving");
+        hashpostvalues.put("merchant_type", "gold");
+        custom_post_parameters.add(hashpostvalues);
+
+        PaymentRequest.getInstance()
+                .setCustomPostValues(custom_post_parameters);
+        /** Optional-Set dyanamic values */
+
+        // PaymentRequest.getInstance().setFailuremessage(getResources().getString(R.string.payment_failure_message));
+
+        EBSPayment.getInstance().init(AddGSTDetails.this, ACC_ID, SECRET_KEY,
+                Config.Mode.ENV_LIVE, Config.Encryption.ALGORITHM_SHA512, "EBS");
 
     }
 

@@ -838,6 +838,8 @@ public class HomeAct extends AppCompatActivity
         } else if (id == R.id.nav_gst_detail) {
 
             Intent intent=new Intent(HomeAct.this,AddGSTDetails.class);
+            intent.putExtra("type","no_package");
+            intent.putExtra("amount","");
             startActivity(intent);
             overridePendingTransition(R.anim.fadein, R.anim.fadeout);
 

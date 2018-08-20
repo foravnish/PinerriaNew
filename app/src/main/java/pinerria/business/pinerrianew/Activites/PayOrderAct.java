@@ -21,6 +21,8 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.ebs.android.sdk.Config;
@@ -39,6 +41,7 @@ import java.util.Random;
 import pinerria.business.pinerrianew.Fragments.PayOrder;
 import pinerria.business.pinerrianew.R;
 import pinerria.business.pinerrianew.Utils.Api;
+import pinerria.business.pinerrianew.Utils.AppController;
 import pinerria.business.pinerrianew.Utils.MyPrefrences;
 import pinerria.business.pinerrianew.Utils.Util;
 
@@ -80,6 +83,10 @@ public class PayOrderAct extends AppCompatActivity {
         // Util.showPgDialog(dialog);
 
         Log.d("sdfsdfsdfs",getIntent().getStringExtra("jsonArray"));
+
+
+        getProfileData();
+
 
         checkBob.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -378,6 +385,74 @@ public class PayOrderAct extends AppCompatActivity {
         EBSPayment.getInstance().init(PayOrderAct.this, ACC_ID, SECRET_KEY,
                 Config.Mode.ENV_LIVE, Config.Encryption.ALGORITHM_SHA512, "EBS");
 
+    }
+
+
+    private void getProfileData() {
+        Util.showPgDialog(dialog);
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
+                Api.userById+"/"+ MyPrefrences.getUserID(getApplicationContext()), null, new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d("Respose_getProfileData", response.toString());
+
+                Util.cancelPgDialog(dialog);
+                try {
+                    // Parsing json object response
+                    // response will be a json object
+//                    String name = response.getString("name");
+
+                    if (response.getString("status").equalsIgnoreCase("success")){
+
+
+                        //  imageNoListing.setVisibility(View.GONE);
+                        JSONArray jsonArray=response.getJSONArray("message");
+
+                        JSONObject jsonObject=jsonArray.getJSONObject(0);
+
+                        company_name=findViewById(R.id.company_name);
+                        gst_number=findViewById(R.id.gst_number);
+                        tax_address=findViewById(R.id.tax_address);
+                        user_email=findViewById(R.id.user_email);
+
+                        company_name.setText(jsonObject.optString("company_name"));
+                        gst_number.setText(jsonObject.optString("gst_number"));
+                        tax_address.setText(jsonObject.optString("tax_address"));
+                        user_email.setText(jsonObject.optString("email_address"));
+
+                    }
+                    else{
+                        //   Toast.makeText(getApplicationContext(), "Some Error", Toast.LENGTH_SHORT).show();
+
+                    }
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(),
+                            "Error: " + e.getMessage(),
+                            Toast.LENGTH_LONG).show();
+                    Util.cancelPgDialog(dialog);
+                }
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d("Respose", "Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        "Error! Please Connect to the internet", Toast.LENGTH_SHORT).show();
+                // hide the progress dialog
+                Util.cancelPgDialog(dialog);
+
+            }
+        });
+
+        // Adding request to request queue
+        jsonObjReq.setShouldCache(false);
+        AppController.getInstance().addToRequestQueue(jsonObjReq);
     }
 
 
