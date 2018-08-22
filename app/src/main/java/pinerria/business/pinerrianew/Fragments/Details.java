@@ -91,7 +91,8 @@ public class Details extends Fragment {
     CardView cardGallery;
     MaterialRatingBar rating;
     private DatabaseHelper db;
-
+    LinearLayout priceLayout;
+    TextView price;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -118,6 +119,8 @@ public class Details extends Fragment {
         address =  view.findViewById(R.id.address);
         phone =  view.findViewById(R.id.phone);
         rating=view.findViewById(R.id.rating);
+        price=view.findViewById(R.id.price);
+        priceLayout=view.findViewById(R.id.priceLayout);
 
 
         mRecyclerView.setHasFixedSize(true);
@@ -163,6 +166,20 @@ public class Details extends Fragment {
 
             if (!jsonObject.optString("total_rating").equals("")) {
                 rating.setRating(Float.parseFloat(jsonObject.optString("total_rating")));
+            }
+
+
+            if (jsonObject.optString("min_price").equals("")){
+                priceLayout.setVisibility(View.GONE);
+            }
+            else{
+                priceLayout.setVisibility(View.VISIBLE);
+                price.setText("Price ₹ "+jsonObject.optString("min_price"));
+
+                if (!jsonObject.optString("max_price").equals("")){
+                    price.setText("Price ₹ "+jsonObject.optString("min_price")+"-"+jsonObject.optString("max_price"));
+                }
+
             }
 
 

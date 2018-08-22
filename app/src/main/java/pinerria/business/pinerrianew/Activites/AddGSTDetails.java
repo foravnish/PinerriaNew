@@ -63,6 +63,7 @@ public class AddGSTDetails extends AppCompatActivity {
     ArrayList<HashMap<String, String>> custom_post_parameters;
     private static final int ACC_ID = 27791;// Provided by EBS
     private static final String SECRET_KEY = "87a9449095742721db3814e444495e9b";// Provided by EBS
+    int i1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -278,10 +279,26 @@ public class AddGSTDetails extends AppCompatActivity {
 
                         if (type.equalsIgnoreCase("package")){
 
-                        callEbsKit(AddGSTDetails.this, Double.parseDouble(getIntent().getStringExtra("amount")));
+
+                            paymentGatway(Double.parseDouble(getIntent().getStringExtra("amount")));
+
+
+
 //                        callEbsK
 
                         }
+
+                        else if (type.equalsIgnoreCase("packageBefore")){
+
+                            Intent intent=new Intent(AddGSTDetails.this,HomeAct.class);
+                            intent.putExtra("userType","2");
+                            startActivity(intent);
+                            overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+                            finish();
+
+                        }
+
+
                         else if (type.equalsIgnoreCase("no_package")){
                             errorDialog(AddGSTDetails.this,"Information Successfully Added");
                         }
@@ -332,6 +349,78 @@ public class AddGSTDetails extends AppCompatActivity {
         // Adding request to request queue
         queue.add(strReq);
 
+
+    }
+
+    private void paymentGatway(final double amountA) {
+
+        RequestQueue queue = Volley.newRequestQueue(AddGSTDetails.this);
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                Api.generateHashKey, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Util.cancelPgDialog(dialog);
+                Log.e("dfsjfdfsdfgd", "AddGSTDetails Response: " + response);
+
+                try {
+                    JSONObject jsonObject=new JSONObject(response);
+                    // if (jsonObject.getString("status").equalsIgnoreCase("success")){
+
+                    if (jsonObject.optString("status").equals("success")) {
+
+                        callEbsKit(AddGSTDetails.this, Double.parseDouble(getIntent().getStringExtra("amount")));
+
+                    }
+                    else{
+                        Toast.makeText(getApplicationContext(),jsonObject.getString("message") , Toast.LENGTH_SHORT).show();
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Util.cancelPgDialog(dialog);
+                Log.e("fdgdfgdfgd", "Login Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),"Please Connect to the Internet ", Toast.LENGTH_LONG).show();
+            }
+        }){
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Log.e("fgdfgdfgdf","Inside getParams");
+
+
+                Random r = new Random();
+                i1 = r.nextInt(800 - 650) + 65;
+                Log.d("fgsdgfsdghdfhd", String.valueOf(i1));
+
+
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<>();
+                params.put("amount", String.valueOf(amountA));
+                params.put("account_id", String.valueOf(ACC_ID));
+                params.put("reference_no", String.valueOf(i1));
+                params.put("email", "customerhelpdesk@pinerria.com");
+                params.put("currency", "INR");
+
+                return params;
+            }
+
+//                        @Override
+//                        public Map<String, String> getHeaders() throws AuthFailureError {
+//                            Log.e("fdgdfgdfgdfg","Inside getHeaders()");
+//                            Map<String,String> headers=new HashMap<>();
+//                            headers.put("Content-Type","application/x-www-form-urlencoded");
+//                            return headers;
+//                        }
+        };
+        // Adding request to request queue
+        queue.add(strReq);
 
     }
 

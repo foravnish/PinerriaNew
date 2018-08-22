@@ -97,9 +97,11 @@ public class PaymentSuccessActivity extends Activity {
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_payment_success);
 
+		Log.d("dfsfsfsfs","true");
 		tryAgainLayout=(LinearLayout)findViewById(R.id.ll_button);
 		btn_payment_success = (Button) findViewById(R.id.btn_payment_success);
 		Intent intent = getIntent();
+
 
 		payment_id = intent.getStringExtra("payment_id");
 		try {
@@ -518,9 +520,11 @@ public class PaymentSuccessActivity extends Activity {
 			System.out.println("paymentid_rsp" + PaymentId);
 
 			if(PaymentStatus.equalsIgnoreCase("failed")){
+				Log.d("sdfsfsdfsf","failed");
 				tryAgainLayout.setVisibility(View.VISIBLE);
 				btn_payment_success.setVisibility(View.GONE);
 			}else{
+				Log.d("sdfsfsdfsf","success");
 				btn_payment_success.setVisibility(View.VISIBLE);
 				tryAgainLayout.setVisibility(View.GONE);
 			}

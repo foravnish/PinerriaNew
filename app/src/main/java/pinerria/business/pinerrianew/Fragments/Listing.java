@@ -67,7 +67,7 @@ import pinerria.business.pinerrianew.Utils.Api;
 import pinerria.business.pinerrianew.Utils.AppController;
 import pinerria.business.pinerrianew.Utils.MyPrefrences;
 import pinerria.business.pinerrianew.Utils.Util;
-import pinerria.business.pinerrianew.gcm.GCMRegistrationIntentService;
+
 
 
 /**
@@ -254,7 +254,6 @@ public class Listing extends Fragment {
         }
 
 
-
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
                 Api.subCategoryBusiness+"?sort_rating="+wiseData+"&sub_category="+getArguments().getString("id")+"&user_id="+MyPrefrences.getUserID(getActivity())+"&city_id="+MyPrefrences.getCityID(getActivity())+
                 "&latitue="+lat+"&longitue="+longi+"&location_id="+getArguments().getString("value")+"&near_me="+getArguments().getString("nearMe"), null, new Response.Listener<JSONObject>() {
@@ -287,6 +286,8 @@ public class Listing extends Fragment {
                             map.put("total_rating_user", jsonObject.optString("total_rating_user"));
                             map.put("total_rating", jsonObject.optString("total_rating"));
                             map.put("my_favourite", jsonObject.optString("my_favourite"));
+                            map.put("min_price", jsonObject.optString("min_price"));
+                            map.put("max_price", jsonObject.optString("max_price"));
 
                             Adapter adapter=new Adapter();
                             expListView.setAdapter(adapter);
@@ -330,10 +331,10 @@ public class Listing extends Fragment {
     public class Viewholder{
         ImageView imgFav,stars;
 //        MaterialFavoriteButton imgFav;
-        TextView address,name,totlareview,area,keyword,totlaUsers,distance;
+        TextView address,name,price,area,keyword,totlaUsers,distance;
 
         ImageView callNow1;
-        LinearLayout liner,linerLayoutOffer;
+        LinearLayout liner,priceLayout;
         MaterialRatingBar rating;
 //        NetworkImageView imgaeView;
         RoundedImageView imgaeView;
@@ -390,9 +391,11 @@ public class Listing extends Fragment {
 //            viewholder.distance=convertView.findViewById(R.id.distance);
             viewholder.imgaeView=convertView.findViewById(R.id.imgaeView);
             viewholder.totlaUsers=convertView.findViewById(R.id.totlaUsers);
+            viewholder.price=convertView.findViewById(R.id.price);
 //
             viewholder.keyword=convertView.findViewById(R.id.keyword);
             viewholder.distance=convertView.findViewById(R.id.distance);
+            viewholder.priceLayout=convertView.findViewById(R.id.priceLayout);
 
             viewholder.name.setText(AllProducts.get(position).get("bussiness_name"));
             viewholder.area.setText(AllProducts.get(position).get("city_name"));
@@ -402,19 +405,20 @@ public class Listing extends Fragment {
                 viewholder.rating.setRating(Float.parseFloat(AllProducts.get(position).get("total_rating")));
             }
 
+            if (AllProducts.get(position).get("min_price").equals("")){
+                viewholder.priceLayout.setVisibility(View.GONE);
+            }
+            else{
+                viewholder.priceLayout.setVisibility(View.VISIBLE);
+                viewholder.price.setText("Price ₹ "+AllProducts.get(position).get("min_price"));
 
-//            ImageLoader imageLoader=AppController.getInstance().getImageLoader();
-//            viewholder.imgaeView.setImageUrl(AllProducts.get(position).get("image"),imageLoader);
+                if (!AllProducts.get(position).get("max_price").equals("")){
+                    viewholder.price.setText("Price ₹ "+AllProducts.get(position).get("min_price")+"-"+AllProducts.get(position).get("max_price"));
+                }
 
-//            if (String.valueOf(HomeAct.latitude).equals("null")){
-//                viewholder.distance.setText("");
-//            }
-//            else{
-//                String str=AllProducts.get(position).get("distance");
-//                String strr=str.length() < 4 ? str : str.substring(0, 4);
-//                String str1=strr+" Km";
-//                viewholder.distance.setText(str1);
-//            }
+            }
+
+
 
             Picasso.with(getActivity())
                     .load(AllProducts.get(position).get("image").replace(" ","%20"))

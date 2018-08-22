@@ -112,6 +112,27 @@
             android:title="Contact Us"  />
     </group>
     <group android:checkableBehavior="single"
+        android:id="@+id/grouptnc">
+        <item
+            android:id="@+id/nav_tnc"
+            android:icon="@drawable/termscondition"
+            android:title="Terms &amp; Conditions"  />
+    </group>
+    <group android:checkableBehavior="single"
+        android:id="@+id/group_faq">
+        <item
+            android:id="@+id/nav_faqs"
+            android:icon="@drawable/information"
+            android:title="FAQs"  />
+    </group>
+    <group android:checkableBehavior="single"
+        android:id="@+id/group_aboutus">
+        <item
+            android:id="@+id/nav_about"
+            android:icon="@drawable/questionsabout"
+            android:title="About Us"  />
+    </group>
+    <group android:checkableBehavior="single"
         android:id="@+id/group14">
         <item
             android:id="@+id/nav_logout"

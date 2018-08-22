@@ -22,6 +22,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.SwitchCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -129,6 +130,8 @@ public class AddProduct extends AppCompatActivity {
     TextView addLocation;
     View viewShow;
     LinearLayout linearShow;
+    SwitchCompat switchBusiness;
+    String val_mobile="Yes";
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -157,6 +160,7 @@ public class AddProduct extends AppCompatActivity {
         newLocation=findViewById(R.id.newLocation);
         viewShow=findViewById(R.id.viewShow);
         linearShow=findViewById(R.id.linearShow);
+        switchBusiness=findViewById(R.id.switchBusiness);
 
         //Toolbar mActionBarToolbar = (Toolbar)findViewById(R.id.toolbar);
         //setSupportActionBar(mActionBarToolbar);
@@ -188,6 +192,20 @@ public class AddProduct extends AppCompatActivity {
 
       //  country();
 
+
+        switchBusiness.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                // Toast.makeText(getActivity(), position+" "+b, Toast.LENGTH_SHORT).show();
+
+                if (b==true){
+                    val_mobile="Yes";
+                }
+                else if (b==false){
+                    val_mobile="No";
+                }
+            }
+        });
 
         locationList();
         Log.d("dfgdfgdfgdfgd",MyPrefrences.getCityID2(getApplicationContext()));
@@ -643,9 +661,11 @@ public class AddProduct extends AppCompatActivity {
 
                         loc_id=jsonObject.optString("location_id");
 
-                        newLocation1.setVisibility(View.VISIBLE);
-                        linearShow.setVisibility(View.GONE);
-                        viewShow.setVisibility(View.GONE);
+//                        newLocation1.setVisibility(View.VISIBLE);
+//                        linearShow.setVisibility(View.GONE);
+//                        viewShow.setVisibility(View.GONE);
+
+                        Log.d("dfdgdfgdfghdfhgdfh",jsonObject.optString("call_button"));
 
                         newLocation.setText(jsonObject.optString("location_name"));
 
@@ -656,6 +676,18 @@ public class AddProduct extends AppCompatActivity {
                         else {
                             checkBobPrice.setChecked(true);
                           //  flag="1";
+                        }
+
+
+                        if (jsonObject.optString("call_button").equalsIgnoreCase("Yes")){
+                            switchBusiness.setChecked(true);
+                            val_mobile="Yes";
+
+                        }
+                        else if (jsonObject.optString("call_button").equalsIgnoreCase("No")){
+                            switchBusiness.setChecked(false);
+                            val_mobile="No";
+
                         }
 
 
@@ -1014,8 +1046,9 @@ public class AddProduct extends AppCompatActivity {
                     .addFormDataPart("max_price", maxPrice.getText().toString())
                     .addFormDataPart("min_price", minPrice.getText().toString())
                     .addFormDataPart("price_status", flag)
-                    .addFormDataPart("call_button_status", "1")
+                    .addFormDataPart("call_button_status", val_mobile)
                     .addFormDataPart("location_id", idLocation)
+
                     .addFormDataPart("image", fileName1, RequestBody.create(MEDIA_TYPE_PNG, sourceFile1))
                     .build();
 
@@ -1171,14 +1204,16 @@ public class AddProduct extends AppCompatActivity {
                     .addFormDataPart("max_price", maxPrice.getText().toString())
                     .addFormDataPart("min_price", minPrice.getText().toString())
                     .addFormDataPart("price_status", flag)
-                    .addFormDataPart("call_button_status", "1")
+                    .addFormDataPart("call_button_status", val_mobile)
                     .addFormDataPart("location_id", idLocation)
+                  //  .addFormDataPart("show_mobile", val_mobile)
                     .addFormDataPart("image", fileName1, RequestBody.create(MEDIA_TYPE_PNG, sourceFile1))
                     .build();
 
             Log.d("dfsdfdgdfgdfgdfg",MyPrefrences.getCityID2(getApplicationContext()));
             Log.d("dfsdfdgdfgdfgdfg",MyPrefrences.getState(getApplicationContext()));
             Log.d("dfgdfgdfgd",idLocation);
+            Log.d("gdfgdfgdfgdfgdfgdgdg",val_mobile);
 
 
 //            Log.d("fvfgdgdfhgghfhgdfh", amounts.getText().toString().replace("₹ ", ""));
@@ -1325,8 +1360,9 @@ public class AddProduct extends AppCompatActivity {
                     .addFormDataPart("max_price", maxPrice.getText().toString())
                     .addFormDataPart("min_price", minPrice.getText().toString())
                     .addFormDataPart("price_status", flag)
-                    .addFormDataPart("call_button_status", "1")
+                    .addFormDataPart("call_button_status", val_mobile)
                     .addFormDataPart("location_id", idLocation)
+//                    .addFormDataPart("show_mobile", val_mobile)
                     .addFormDataPart("image", "")
                     .addFormDataPart("old_image", fileName1)
                     .build();
@@ -1335,6 +1371,7 @@ public class AddProduct extends AppCompatActivity {
             Log.d("dfsdfdgdfgdfgdfg",MyPrefrences.getState(getApplicationContext()));
             Log.d("dfgdfgdfgd",idLocation);
 
+            Log.d("gdfgdfgdfgdfgdfgdgdg",val_mobile);
 
 //            Log.d("fvfgdgdfhgghfhgdfh", amounts.getText().toString().replace("₹ ", ""));
 //            Log.d("fvfgdgdfhgdfhqwdfs",amounts.getText().toString().replace("₹ ", ""));
@@ -1762,7 +1799,6 @@ public class AddProduct extends AppCompatActivity {
 
     private void locationList() {
 
-
         Log.d("dfgdfgdfgdfgd",MyPrefrences.getCityID2(getApplicationContext()));
 
 //        Util.showPgDialog(dialog);
@@ -1775,7 +1811,6 @@ public class AddProduct extends AppCompatActivity {
                 Util.cancelPgDialog(dialog);
                 try {
 
-
                     if (response.getString("status").equalsIgnoreCase("success")){
 
                         AllCity.clear();
@@ -1785,7 +1820,6 @@ public class AddProduct extends AppCompatActivity {
                         map2.put("id", "");
                         AllCity.add(map2);
                         cityList.add("Select Location");
-
 
 
                         JSONArray jsonArray=response.getJSONArray("message");

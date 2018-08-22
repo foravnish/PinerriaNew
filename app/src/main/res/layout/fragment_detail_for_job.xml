@@ -428,62 +428,106 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:weightSum="2"
-                        android:orientation="horizontal">
-                        <Button
+                        android:orientation="horizontal"
+                        android:padding="0dp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp"
+                        android:weightSum="5">
+
+                        <LinearLayout
                             android:id="@+id/call"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentBottom="true"
-                            android:layout_marginBottom="10dp"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginRight="10dp"
+                            android:layout_marginBottom="5dp"
+                            android:layout_marginLeft="9dp"
+                            android:layout_marginRight="9dp"
+                            android:layout_marginTop="9dp"
                             android:layout_weight="1"
-                            android:layout_marginTop="15dp"
-                            android:background="@drawable/strock_btn_green"
-                            android:fontFamily="@font/muli_bold"
-                            android:text="Call Now"
-                            android:textAllCaps="false"
-                            android:textColor="#fff"
-                            android:textSize="16dp" />
+                            android:orientation="vertical">
 
-                        <Button
+
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:adjustViewBounds="true"
+                                android:src="@drawable/call" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginTop="7dp"
+                                android:fontFamily="@font/muli_semibold"
+                                android:gravity="center_horizontal"
+                                android:text="Call"
+                                android:textColor="@color/md_black_1000"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
                             android:id="@+id/chat_now"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentBottom="true"
-                            android:layout_marginBottom="10dp"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginRight="10dp"
+                            android:layout_marginBottom="5dp"
+                            android:layout_marginLeft="29dp"
+                            android:layout_marginRight="9dp"
+                            android:layout_marginTop="9dp"
                             android:layout_weight="1"
-                            android:layout_marginTop="15dp"
-                            android:background="@drawable/strock_btn_green"
-                            android:fontFamily="@font/muli_bold"
-                            android:text="Chat Now"
-                            android:textAllCaps="false"
-                            android:textColor="#fff"
-                            android:textSize="16dp" />
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:adjustViewBounds="true"
+                                android:src="@drawable/chat_now" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginTop="7dp"
+                                android:fontFamily="@font/muli_semibold"
+                                android:gravity="center_horizontal"
+                                android:text="Chat"
+                                android:textColor="@color/md_black_1000"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+
+
+
+
+                        <LinearLayout
+                            android:id="@+id/shareDetail"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="5dp"
+                            android:layout_marginLeft="29dp"
+                            android:layout_marginRight="9dp"
+                            android:layout_marginTop="9dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:adjustViewBounds="true"
+                                android:src="@drawable/share_now" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginTop="7dp"
+                                android:fontFamily="@font/muli_semibold"
+                                android:gravity="center_horizontal"
+                                android:text="Share"
+                                android:textColor="@color/md_black_1000"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+
                     </LinearLayout>
-
-
-                    <Button
-                        android:id="@+id/shareDetail"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginBottom="10dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="10dp"
-                        android:paddingLeft="20dp"
-                        android:paddingRight="20dp"
-                        android:background="@drawable/strock_btn_green"
-                        android:fontFamily="@font/muli_bold"
-                        android:text="Share Job"
-                        android:textAllCaps="false"
-                        android:textColor="#fff"
-                        android:textSize="16dp" />
 
 
 

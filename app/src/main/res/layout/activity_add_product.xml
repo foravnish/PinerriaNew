@@ -241,7 +241,6 @@
                 android:id="@+id/linearShow"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
                 android:orientation="horizontal">
 
             <Spinner
@@ -308,6 +307,7 @@
                 android:layout_marginTop="10dp"
                 android:buttonTint="@color/white"
                 android:textColor="@color/white"/>
+
 
             <LinearLayout
                 android:id="@+id/linearPrice"
@@ -441,6 +441,31 @@
 
 
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/muli_bold"
+                    android:singleLine="true"
+                    android:text="Display my phone no. to buyers"
+                    android:textColor="@color/white"
+                    android:textSize="17sp" />
+
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/switchBusiness"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="20dp"
+                    android:checked="true"
+                    android:textColor="@color/p_black" />
+            </LinearLayout>
 
 
             <LinearLayout
@@ -484,6 +509,7 @@
                     app:civ_border_width="3dp" />
 
             </LinearLayout>
+
 
             <Button
                 android:id="@+id/postAdd"

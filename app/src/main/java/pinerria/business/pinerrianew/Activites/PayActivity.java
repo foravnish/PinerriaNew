@@ -144,32 +144,40 @@ public class PayActivity extends AppCompatActivity {
 //                            jsonObject2.optString("gst_number"),jsonObject2.optString("tax_address"),jsonObject2.optString("email_address"));
 
 
-                    if (jsonObject2.optString("company_name").equalsIgnoreCase("")){
-//                        Toast.makeText(getApplicationContext(), "blank", Toast.LENGTH_SHORT).show();
+                    Long tsLong = System.currentTimeMillis()/1000;
+                    String ts = tsLong.toString();
+                    Log.d("TimeCurrent",ts);
+                    MyPrefrences.setDateTime(getApplicationContext(),ts);
 
-                        Long tsLong = System.currentTimeMillis()/1000;
-                        String ts = tsLong.toString();
-                        Log.d("TimeCurrent",ts);
-                        MyPrefrences.setDateTime(getApplicationContext(),ts);
-
-
-                        Intent intent=new Intent(PayActivity.this,AddGSTDetails.class);
-                        intent.putExtra("type","package");
-                        intent.putExtra("amount",amount+"");
-                        startActivity(intent);
-                        overridePendingTransition(R.anim.fadein, R.anim.fadeout);
-                    }
-                    else{
+                    PurchasePackage(amount,jsonObject2.optString("company_name"),
+                            jsonObject2.optString("gst_number"),jsonObject2.optString("tax_address"),jsonObject2.optString("email_address"));
 
 
-                        Long tsLong = System.currentTimeMillis()/1000;
-                        String ts = tsLong.toString();
-                        Log.d("TimeCurrent",ts);
-                        MyPrefrences.setDateTime(getApplicationContext(),ts);
 
-                        PurchasePackage(amount,jsonObject2.optString("company_name"),
-                                jsonObject2.optString("gst_number"),jsonObject2.optString("tax_address"),jsonObject2.optString("email_address"));
-                    }
+//                    if (jsonObject2.optString("company_name").equalsIgnoreCase("")){
+////                        Toast.makeText(getApplicationContext(), "blank", Toast.LENGTH_SHORT).show();
+//
+//                        Long tsLong = System.currentTimeMillis()/1000;
+//                        String ts = tsLong.toString();
+//                        Log.d("TimeCurrent",ts);
+//                        MyPrefrences.setDateTime(getApplicationContext(),ts);
+//
+//                        Intent intent=new Intent(PayActivity.this,AddGSTDetails.class);
+//                        intent.putExtra("type","packageBefore");
+//                        intent.putExtra("amount",amount+"");
+//                        startActivity(intent);
+//                        overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+//                    }
+//                    else{
+//
+//                        Long tsLong = System.currentTimeMillis()/1000;
+//                        String ts = tsLong.toString();
+//                        Log.d("TimeCurrent",ts);
+//                        MyPrefrences.setDateTime(getApplicationContext(),ts);
+//
+//                        PurchasePackage(amount,jsonObject2.optString("company_name"),
+//                                jsonObject2.optString("gst_number"),jsonObject2.optString("tax_address"),jsonObject2.optString("email_address"));
+//                    }
 
                 }
                 else{
@@ -273,7 +281,16 @@ public class PayActivity extends AppCompatActivity {
                 params.put("actual_value", jsonObject.optString("actual_value"));
                 params.put("discount_percent", jsonObject.optString("discount_percent"));
                 params.put("after_discount_price", jsonObject.optString("after_discount_price"));
-                params.put("gst", jsonObject.optString("gst"));
+                if (jsonObject.optString("gst").equals("")){
+                    params.put("gst", "NA");
+
+                    Log.d("fsdfsdfsdfsdfsdfs","NA");
+                }
+                else{
+                    params.put("gst", jsonObject.optString("gst"));
+                    Log.d("fsdfsdfsdfsdfsdfs",jsonObject.optString("gst"));
+                }
+
                 params.put("total_amount", jsonObject.optString("total_value"));
                 params.put("user_id", MyPrefrences.getUserID(getApplicationContext()));
                 params.put("payment_id", "N/A");
@@ -286,6 +303,7 @@ public class PayActivity extends AppCompatActivity {
                 params.put("tax_address", address);
                 params.put("user_email", email);
                 params.put("unique_number", MyPrefrences.getDateTime(getApplicationContext()));
+
 
                 return params;
             }

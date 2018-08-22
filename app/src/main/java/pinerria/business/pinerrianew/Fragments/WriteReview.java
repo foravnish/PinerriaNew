@@ -355,7 +355,7 @@ public class WriteReview extends Fragment {
             viewholder.date_txt=convertView.findViewById(R.id.date_txt);
 
 //            viewholder.comName.setText(AllProducts.get(position).get("uname"));
-            viewholder.comName.setText(AllProducts.get(position).get("user_name").substring(0,1).toUpperCase()+AllProducts.get(position).get("user_name").substring(1).toLowerCase());
+            viewholder.comName.setText(AllProducts.get(position).get("user_name").substring(0,1).toUpperCase()+AllProducts.get(position).get("user_name").substring(1).toUpperCase());
             viewholder.user_icon.setText(AllProducts.get(position).get("user_name"));
 //            viewholder.c1_mobile1.setText(AllProducts.get(position).get("mobile"));
 //            String number;

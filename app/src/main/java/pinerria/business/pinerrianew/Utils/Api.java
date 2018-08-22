@@ -7,8 +7,8 @@ package pinerria.business.pinerrianew.Utils;
 public class Api {
 
 
-
-    public static String BASEURL="http://pinerria.com/pinerria/api/";
+//    public static String BASEURL="http://pinerria.com/pinerria/api/";
+    public static String BASEURL="http://pinerria.com/api/";
     public static String catToSubCat=BASEURL+"catToSubCat";
     public static String category=BASEURL+"category";
     public static String subCatByCatId=BASEURL+"subCatByCatId";
@@ -57,7 +57,8 @@ public class Api {
     public static String addLocation=BASEURL+"addLocation";
     public static String updateGSTDetails=BASEURL+"updateGSTDetails";
     public static String updatePurchasedPackage=BASEURL+"updatePurchasedPackage";
-
+    public static String pinerriaInfo=BASEURL+"pinerriaInfo";
+    public static String generateHashKey  = BASEURL+"generateHashKey";
 
 
     public static String URL_FETCH_MESSAGES=BASEURL+"myChatingHistory";

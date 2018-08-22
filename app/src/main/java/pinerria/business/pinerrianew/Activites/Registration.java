@@ -70,7 +70,7 @@ import pinerria.business.pinerrianew.Utils.AppController;
 import pinerria.business.pinerrianew.Utils.JSONParser;
 import pinerria.business.pinerrianew.Utils.MyPrefrences;
 import pinerria.business.pinerrianew.Utils.Util;
-import pinerria.business.pinerrianew.gcm.GCMRegistrationIntentService;
+
 
 public class Registration extends AppCompatActivity {
 
@@ -494,7 +494,7 @@ public class Registration extends AppCompatActivity {
 
                 else {
 
-                    verifyOTP_API(mob,otp_edit.getText().toString());
+                    verifyOTP_API(mob,otp_edit.getText().toString(),dialog2);
 
                 }
             }
@@ -504,7 +504,7 @@ public class Registration extends AppCompatActivity {
 
     }
 
-    private void verifyOTP_API(final String mob, final String otp) {
+    private void verifyOTP_API(final String mob, final String otp, final Dialog dialogOTP) {
 
         Util.showPgDialog(dialog);
 
@@ -595,6 +595,8 @@ public class Registration extends AppCompatActivity {
 
                     }
                     else{
+//                        dialogOTP.dismiss();
+                        Util.cancelPgDialog(dialog);
                         Toast.makeText(getApplicationContext(),jsonObject.getString("message") , Toast.LENGTH_SHORT).show();
                     }
 

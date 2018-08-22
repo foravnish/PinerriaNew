@@ -66,7 +66,7 @@ public class Packages extends Fragment {
     List<HashMap<String,String>> AllProducts ;
     Dialog dialog;
     HashMap<String,String> map;
-
+    JSONObject jsonObject2;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -140,6 +140,10 @@ public class Packages extends Fragment {
 
                         if (!response.getString("userInfo").equals("")) {
                             userInfoAyyay = response.getJSONArray("userInfo");
+                            for ( int j=0;j<userInfoAyyay.length();j++) {
+                                jsonObject2 = userInfoAyyay.getJSONObject(j);
+                            }
+
                         }
 
                     }
@@ -181,17 +185,45 @@ public class Packages extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
+
+                Log.d("fgdgdfgdfgdfgdgd",jsonObject2.optString("company_name"));
+
                 if (MyPrefrences.getUserLogin(getActivity())==true) {
 
-                    Intent intent=new Intent(getActivity(), PayActivity.class);
-                    try {
-                        intent.putExtra("jsonArray",jsonArray.get(i).toString());
-                        intent.putExtra("userInfo",userInfoAyyay.get(0).toString());
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+
+                    if (jsonObject2.optString("company_name").equalsIgnoreCase("")){
+//                        Toast.makeText(getApplicationContext(), "blank", Toast.LENGTH_SHORT).show();
+//
+//                        Long tsLong = System.currentTimeMillis()/1000;
+//                        String ts = tsLong.toString();
+//                        Log.d("TimeCurrent",ts);
+//                        MyPrefrences.setDateTime(getActivity(),ts);
+
+                        Intent intent=new Intent(getActivity(),AddGSTDetails.class);
+                        intent.putExtra("type","packageBefore");
+                        intent.putExtra("amount","");
+                        startActivity(intent);
+                        getActivity().overridePendingTransition(R.anim.fadein, R.anim.fadeout);
                     }
-                    startActivity(intent);
-                    getActivity().overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+                    else{
+
+                        Intent intent=new Intent(getActivity(), PayActivity.class);
+                        try {
+                            intent.putExtra("jsonArray",jsonArray.get(i).toString());
+                            intent.putExtra("userInfo",userInfoAyyay.get(0).toString());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        startActivity(intent);
+                        getActivity().overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+
+
+
+                    }
+
+
+
+
 
                 }
                 else{

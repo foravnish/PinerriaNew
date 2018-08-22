@@ -78,6 +78,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import pinerria.business.pinerrianew.Fragments.AddJobs;
 import pinerria.business.pinerrianew.Fragments.BannerRequest;
 import pinerria.business.pinerrianew.Fragments.ContactUs;
+import pinerria.business.pinerrianew.Fragments.Faqs;
 import pinerria.business.pinerrianew.Fragments.Home;
 import pinerria.business.pinerrianew.Fragments.Listing;
 import pinerria.business.pinerrianew.Fragments.ManageBusiness;
@@ -86,6 +87,7 @@ import pinerria.business.pinerrianew.Fragments.MyProducts;
 import pinerria.business.pinerrianew.Fragments.Packages;
 import pinerria.business.pinerrianew.Fragments.PayOrder;
 import pinerria.business.pinerrianew.Fragments.SearchData;
+import pinerria.business.pinerrianew.Fragments.TermsCondition;
 import pinerria.business.pinerrianew.Fragments.Transcation;
 import pinerria.business.pinerrianew.Fragments.ViewJobs;
 import pinerria.business.pinerrianew.R;
@@ -95,7 +97,7 @@ import pinerria.business.pinerrianew.Utils.Api;
 import pinerria.business.pinerrianew.Utils.AppController;
 import pinerria.business.pinerrianew.Utils.MyPrefrences;
 
-import pinerria.business.pinerrianew.gcm.GCMRegistrationIntentService;
+
 
 public class HomeAct extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,GoogleApiClient.ConnectionCallbacks,
@@ -167,7 +169,7 @@ public class HomeAct extends AppCompatActivity
 
         db = new DatabaseHelper(HomeAct.this);
 
-        setmRegistrationBroadcastReceiver();
+       // setmRegistrationBroadcastReceiver();
 
         Log.d("dfdgdgfsdgdf",MyPrefrences.getCityName(getApplicationContext()));
 
@@ -377,27 +379,24 @@ public class HomeAct extends AppCompatActivity
         }
 
 
-        Fragment fragment = new Home();
-        FragmentManager manager = getSupportFragmentManager();
-        FragmentTransaction ft = manager.beginTransaction();
-        ft.replace(R.id.content_frame, fragment).commit();
-        ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout, R.anim.frag_fade_right, R.anim.frag_fad_left);
 
 
 
-//        if (getIntent().getStringExtra("userType").equalsIgnoreCase("my_product")){
-//            Fragment fragment = new ManageBusiness();
-//            FragmentManager manager = getSupportFragmentManager();
-//            FragmentTransaction ft = manager.beginTransaction();
-//            ft.replace(R.id.content_frame, fragment).commit();
-//            ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout, R.anim.frag_fade_right, R.anim.frag_fad_left);
-//        }else {
-//            Fragment fragment = new Home();
-//            FragmentManager manager = getSupportFragmentManager();
-//            FragmentTransaction ft = manager.beginTransaction();
-//            ft.replace(R.id.content_frame, fragment).commit();
-//            ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout, R.anim.frag_fade_right, R.anim.frag_fad_left);
-//        }
+
+        if (getIntent().getStringExtra("userType").equalsIgnoreCase("2")){
+            Fragment fragment = new Packages();
+            FragmentManager manager = getSupportFragmentManager();
+            FragmentTransaction ft = manager.beginTransaction();
+            ft.replace(R.id.content_frame, fragment).commit();
+            ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout, R.anim.frag_fade_right, R.anim.frag_fad_left);
+        }
+          else {
+            Fragment fragment = new Home();
+            FragmentManager manager = getSupportFragmentManager();
+            FragmentTransaction ft = manager.beginTransaction();
+            ft.replace(R.id.content_frame, fragment).commit();
+            ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout, R.anim.frag_fade_right, R.anim.frag_fad_left);
+        }
 
         zoneName.setText(MyPrefrences.getCityName(getApplicationContext())+"  ▼");
         zoneName.setOnClickListener(new View.OnClickListener() {
@@ -659,7 +658,7 @@ public class HomeAct extends AppCompatActivity
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchEditText.setTextColor(getResources().getColor(R.color.black));
         searchEditText.setHintTextColor(getResources().getColor(R.color.black));
-
+        searchView.setQueryHint("Search Business");
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -712,20 +711,20 @@ public class HomeAct extends AppCompatActivity
     }
 
     //Registering receiver on activity resume
-    @Override
-    protected void onResume() {
-        super.onResume();
-        //Log.w("MainActivity", "onResume");
-        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
-                new IntentFilter(GCMRegistrationIntentService.REGISTRATION_SUCCESS));
-        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
-                new IntentFilter(GCMRegistrationIntentService.REGISTRATION_ERROR));
-
-//        if (InternetStatus.isConnectingToInternet(MainActivity.this)) {
-//            new GetFrequest().execute();
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        //Log.w("MainActivity", "onResume");
+//        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
+//                new IntentFilter(GCMRegistrationIntentService.REGISTRATION_SUCCESS));
+//        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
+//                new IntentFilter(GCMRegistrationIntentService.REGISTRATION_ERROR));
 //
-//        }
-    }
+////        if (InternetStatus.isConnectingToInternet(MainActivity.this)) {
+////            new GetFrequest().execute();
+////
+////        }
+//    }
     //Unregistering receiver on activity paused
     @Override
     protected void onPause() {
@@ -735,56 +734,56 @@ public class HomeAct extends AppCompatActivity
     }
 
 
-    private void setmRegistrationBroadcastReceiver() {
-        //Initializing our broadcast receiver
-        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
-
-            //When the broadcast received
-            //We are sending the broadcast from GCMRegistrationIntentService
-
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                //If the broadcast has received with success
-                //that means device is registered successfully
-                if (intent.getAction().equals(GCMRegistrationIntentService.REGISTRATION_SUCCESS)) {
-                    //Getting the registration token from the intent
-                    String token = intent.getStringExtra("token");
-                    //Displaying the token as toast
-                    //Toast.makeText(getApplicationContext(), "Registration token:" + token, Toast.LENGTH_LONG).show();
-
-                    //if the intent is not with success then displaying error messages
-                } else if (intent.getAction().equals(GCMRegistrationIntentService.REGISTRATION_ERROR)) {
-                    Toast.makeText(getApplicationContext(), "GCM registration error!", Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(getApplicationContext(), "Error occurred", Toast.LENGTH_LONG).show();
-                }
-            }
-        };
-
-        //Checking play service is available or not
-        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getApplicationContext());
-
-        //if play service is not available
-        if (ConnectionResult.SUCCESS != resultCode) {
-            //If play service is supported but not installed
-            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
-                //Displaying message that play service is not installed
-                Toast.makeText(getApplicationContext(), "Google Play Service is not install/enabled in this device!", Toast.LENGTH_LONG).show();
-                GooglePlayServicesUtil.showErrorNotification(resultCode, getApplicationContext());
-
-                //If play service is not supported
-                //Displaying an error message
-            } else {
-                Toast.makeText(getApplicationContext(), "This device does not support for Google Play Service!", Toast.LENGTH_LONG).show();
-            }
-
-            //If play service is available
-        } else {
-            //Starting intent to register device
-            Intent itent = new Intent(this, GCMRegistrationIntentService.class);
-            startService(itent);
-        }
-    }
+//    private void setmRegistrationBroadcastReceiver() {
+//        //Initializing our broadcast receiver
+//        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
+//
+//            //When the broadcast received
+//            //We are sending the broadcast from GCMRegistrationIntentService
+//
+//            @Override
+//            public void onReceive(Context context, Intent intent) {
+//                //If the broadcast has received with success
+//                //that means device is registered successfully
+//                if (intent.getAction().equals(GCMRegistrationIntentService.REGISTRATION_SUCCESS)) {
+//                    //Getting the registration token from the intent
+//                    String token = intent.getStringExtra("token");
+//                    //Displaying the token as toast
+//                    //Toast.makeText(getApplicationContext(), "Registration token:" + token, Toast.LENGTH_LONG).show();
+//
+//                    //if the intent is not with success then displaying error messages
+//                } else if (intent.getAction().equals(GCMRegistrationIntentService.REGISTRATION_ERROR)) {
+//                    Toast.makeText(getApplicationContext(), "GCM registration error!", Toast.LENGTH_LONG).show();
+//                } else {
+//                    Toast.makeText(getApplicationContext(), "Error occurred", Toast.LENGTH_LONG).show();
+//                }
+//            }
+//        };
+//
+//        //Checking play service is available or not
+//        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getApplicationContext());
+//
+//        //if play service is not available
+//        if (ConnectionResult.SUCCESS != resultCode) {
+//            //If play service is supported but not installed
+//            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
+//                //Displaying message that play service is not installed
+//                Toast.makeText(getApplicationContext(), "Google Play Service is not install/enabled in this device!", Toast.LENGTH_LONG).show();
+//                GooglePlayServicesUtil.showErrorNotification(resultCode, getApplicationContext());
+//
+//                //If play service is not supported
+//                //Displaying an error message
+//            } else {
+//                Toast.makeText(getApplicationContext(), "This device does not support for Google Play Service!", Toast.LENGTH_LONG).show();
+//            }
+//
+//            //If play service is available
+//        } else {
+//            //Starting intent to register device
+//            Intent itent = new Intent(this, GCMRegistrationIntentService.class);
+//            startService(itent);
+//        }
+//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -887,7 +886,6 @@ public class HomeAct extends AppCompatActivity
             ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout,R.anim.frag_fade_right, R.anim.frag_fad_left);
 
         } else if (id == R.id.nav_trans) {
-
             Fragment fragment = new Transcation();
             FragmentManager manager = getSupportFragmentManager();
             FragmentTransaction ft = manager.beginTransaction();
@@ -895,12 +893,30 @@ public class HomeAct extends AppCompatActivity
             ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout,R.anim.frag_fade_right, R.anim.frag_fad_left);
 
         } else if (id == R.id.nav_my_jobs) {
-
             Fragment fragment = new MyJobs();
             FragmentManager manager = getSupportFragmentManager();
             FragmentTransaction ft = manager.beginTransaction();
             ft.replace(R.id.content_frame, fragment).addToBackStack(null).commit();
             ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout,R.anim.frag_fade_right, R.anim.frag_fad_left);
+
+         } else if (id == R.id.nav_tnc) {
+                Fragment fragment = new TermsCondition();
+                FragmentManager manager = getSupportFragmentManager();
+                FragmentTransaction ft = manager.beginTransaction();
+                ft.replace(R.id.content_frame, fragment).addToBackStack(null).commit();
+                ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout,R.anim.frag_fade_right, R.anim.frag_fad_left);
+         } else if (id == R.id.nav_faqs) {
+                        Fragment fragment = new Faqs();
+                        FragmentManager manager = getSupportFragmentManager();
+                        FragmentTransaction ft = manager.beginTransaction();
+                        ft.replace(R.id.content_frame, fragment).addToBackStack(null).commit();
+                        ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout,R.anim.frag_fade_right, R.anim.frag_fad_left);
+          } else if (id == R.id.nav_about) {
+                                Fragment fragment = new AboutUs();
+                                FragmentManager manager = getSupportFragmentManager();
+                                FragmentTransaction ft = manager.beginTransaction();
+                                ft.replace(R.id.content_frame, fragment).addToBackStack(null).commit();
+                                ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout,R.anim.frag_fade_right, R.anim.frag_fad_left);
 
         } else if (id == R.id.nav_pay_order) {
 
@@ -910,9 +926,7 @@ public class HomeAct extends AppCompatActivity
             ft.replace(R.id.content_frame, fragment).addToBackStack(null).commit();
             ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout,R.anim.frag_fade_right, R.anim.frag_fad_left);
 
-
          } else if (id == R.id.nav_contact) {
-
                         Fragment fragment = new ContactUs();
                         FragmentManager manager = getSupportFragmentManager();
                         FragmentTransaction ft = manager.beginTransaction();

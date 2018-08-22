@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,8 +51,8 @@ public class DetailForJob extends Fragment {
         // Required empty public constructor
     }
 
-    TextView comName,heading,address,phone,shareDetail,description,salary,experience,full_part_time,date,jobId;
-    Button call,chat_now;
+    TextView comName,heading,address,phone,description,salary,experience,full_part_time,date,jobId;
+    LinearLayout call,chat_now,shareDetail;
     NetworkImageView imageView;
     JSONObject jsonObject;
 
@@ -85,7 +86,6 @@ public class DetailForJob extends Fragment {
             imageView.setImageUrl(jsonObject.optString("image").toString().replace(" ","%20"),imageLoader);
 
             HomeAct.title.setText(jsonObject.optString("heading"));
-            comName =  view.findViewById(R.id.comName);
             heading =  view.findViewById(R.id.heading);
             address =  view.findViewById(R.id.address);
             phone =  view.findViewById(R.id.phone);
@@ -261,7 +261,7 @@ public class DetailForJob extends Fragment {
             }
 
             else {
-                call.setTextColor(Color.parseColor("#545454"));
+              //  call.setTextColor(Color.parseColor("#545454"));
                 phone.setText("N/A");
                 call.setOnClickListener(new View.OnClickListener() {
                     @Override

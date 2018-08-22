@@ -1,135 +1,192 @@
 package pinerria.business.pinerrianew.gcm;
 
+
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.media.RingtoneManager;
-import android.net.Uri;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
-import android.text.LoginFilter;
 import android.util.Log;
-import android.widget.Toast;
 
+import com.firebase.client.Firebase;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 
-import java.util.Map;
+import java.io.IOException;
+import java.net.URL;
 
+import pinerria.business.pinerrianew.Activites.HomeAct;
 import pinerria.business.pinerrianew.R;
-import pinerria.business.pinerrianew.Utils.NotificationHandler;
-import pinerria.business.pinerrianew.Utils.Util;
+
 
 /**
- * Created by user on 11/2/2016.
+ * Created by Andriod Avnish on 06-Mar-18.
  */
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
-    Map<String, String> message;
+    private static final String TAG = MyFirebaseMessagingService.class.getSimpleName();
+
+    //  private NotificationUtils notificationUtils;
+
+    Bitmap image;
+
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        super.onMessageReceived(remoteMessage);
-        //Log.e("message", ": " + remoteMessage.getData());
+        Log.e(TAG, "Fromgdfhgdfghfgjf: " + remoteMessage.getMessageType());
+        Log.e(TAG, "Fromgdfhgdfghfgjf: " + remoteMessage.getData());
+        Log.e(TAG, "Fromgdfhgdfghfgjf: " + remoteMessage.getNotification().getBody());
 
-        message = remoteMessage.getData();
-//        Log.d("fgdghbfdhdfghfgjh", String.valueOf(remoteMessage.getData()));
-        Log.d("fgdghbfdhdfghfgjh", remoteMessage.getData()+"");
-        Log.d("fdxgdfgdfgfhfhf", message+"");
 
-        sendNotification(message);
 
-        //Toast.makeText(getApplicationContext(), ""+message, Toast.LENGTH_SHORT).show();
-       // sendNotification1(message.toString());
-        if (message.containsKey("type")) {
-            Log.d("gdfgdfgdfgdfghd","type");
-            //sendNotification(message);
 
+        String data= String.valueOf(remoteMessage.getData());
+        String org=data.replace("message=","");
+
+        //org.substring(1, org.length()-1);
+        //Log.d("ffdgdfgdfgd",  org.substring(1, org.length()-1).toString());
+
+        JSONObject jsonObject= null;
+        try {
+            jsonObject = new JSONObject(org.substring(1, org.length()-1).toString());
+            Log.d("ffdgdfgdfgd",jsonObject.toString());
+
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
+
+
+
+        //Todo notification
+
+
+
+
+            NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+            inboxStyle.addLine(remoteMessage.getNotification().getBody());
+            Notification notification;
+            final NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
+                    getApplicationContext());
+            Intent notificationIntent = new Intent(getApplicationContext(), HomeAct.class);
+            notificationIntent.putExtra("userType","");
+            PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, notificationIntent, 0);
+            notification = mBuilder.setSmallIcon(R.mipmap.logo_noti).setTicker("Pinerria").setWhen(0)
+                    .setAutoCancel(true)
+                    .setContentTitle("Pinerria")
+                    .setTicker("Pineria")
+//                .setContentIntent(resultPendingIntent)
+                    .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
+                    .setStyle(inboxStyle)
+//                .setWhen(getTimeMilliSec(timeStamp))
+                    .setSmallIcon(R.mipmap.logo_noti)
+                    .setContentIntent(contentIntent)
+                   // .setStyle(new NotificationCompat.BigPictureStyle().bigPicture(image))
+//                .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), icon))
+                    .setContentText(remoteMessage.getNotification().getBody())
+                    .build();
+
+
+            NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.notify(0, notification);
+
+
     }
 
 
-    //This method is generating a notification and displaying the notification
-
-    private void sendNotification(Map<String, String> msg) {
-        //Creating a broadcast intent
-        Intent pushNotification;
-
-        //We will create this class to handle notifications
-        NotificationHandler notificationHandler = new NotificationHandler(getApplicationContext());
-        //If the app is in foreground
-        if (!NotificationHandler.isAppIsInBackground(getApplicationContext())) {
-            Log.d("fsdfsdfgsdgfsdg","true");
-            //Toast.makeText(this, "1", Toast.LENGTH_SHORT).show();
-            if (message.get("type").equalsIgnoreCase("send_message")
-                    && Util.ChatOn == 1 && message.get("user_id").equalsIgnoreCase(Util.Sender_ID)) {
-                //Toast.makeText(this, "2", Toast.LENGTH_SHORT).show();
-                pushNotification = new Intent(Util.Noti_Msg);
-                //Adding notification data to the intent
-                pushNotification.putExtra("message", message.get("message"));
-                pushNotification.putExtra("date_time", message.get("date_time"));
-                pushNotification.putExtra("sender_id", message.get("user_id"));
-                pushNotification.putExtra("sender_name", message.get("sender_name"));
-                pushNotification.putExtra("sender_image", message.get("sender_image"));
-                LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
-                //Log.e("on chat screen", ": ");
-            } else if (message.get("type").equalsIgnoreCase("get_request") && Util.ChatDtl_On == 1) {
-               // Toast.makeText(this, "3", Toast.LENGTH_SHORT).show();
-                pushNotification = new Intent(Util.Get_Rquest);
-                //Adding notification data to the intent
-                pushNotification.putExtra("message", message.get("message"));
-                pushNotification.putExtra("date_time", message.get("date_time"));
-                pushNotification.putExtra("sender_id", message.get("user_id"));
-                LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
-            } else {
-                Toast.makeText(this, "4", Toast.LENGTH_SHORT).show();
-                Util.Noti_Bg = 1;
-                Util.Sender_ID = message.get("user_id");
-                Util.Sender_Name = message.get("sender_name");
-                Util.Sender_Img = message.get("sender_image");
-
-                notificationHandler.showNotificationMessage(Util.Sender_Name, message.get("message"), message.get("type")
-                        , Integer.valueOf(message.get("user_id")));
-            }
-
-            //Sending a broadcast to the chatroom to add the new message
-
-        } else {
-            Log.d("fsdfsdfgsdgfsdg","false");
-            //Log.e("App in Background", ": ");
-            //If app is in foreground displaying push notification
-            //Toast.makeText(this, "6", Toast.LENGTH_SHORT).show();
-            Util.Noti_Bg = 1;
-            Util.Sender_ID = message.get("user_id");
-            Util.Sender_Name = message.get("sender_name");
-            Util.Sender_Img = message.get("sender_image");
-            notificationHandler.showNotificationMessage(Util.Sender_Name, message.get("message"), message.get("type")
-                    , Integer.valueOf(message.get("user_id")));
-            // LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
 
 
-            //sendNotification(title, message);
-
-        }
-    }
 
 
-//    private void sendNotification1(String message) {
-//        Intent intent = new Intent(this, MainActivity.class);
-//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//        int requestCode = 0;
-//        PendingIntent pendingIntent = PendingIntent.getActivity(this, requestCode, intent, PendingIntent.FLAG_ONE_SHOT);
-//        Uri sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-//        NotificationCompat.Builder noBuilder = new NotificationCompat.Builder(this)
-//                .setSmallIcon(R.drawable.logo)
-//                .setContentText(message)
-//                .setAutoCancel(true)
-//                .setContentIntent(pendingIntent);
+
+//    private void handleNotification(String message) {
+//        if (!NotificationUtils.isAppIsInBackground(getApplicationContext())) {
+//            // app is in foreground, broadcast the push message
+//            Intent pushNotification = new Intent(Config.PUSH_NOTIFICATION);
+//            pushNotification.putExtra("message", message);
+//            LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
 //
-//        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-//        notificationManager.notify(0, noBuilder.build()); //0 = ID of notification
+//            // play notification sound
+//            NotificationUtils notificationUtils = new NotificationUtils(getApplicationContext());
+//            notificationUtils.playNotificationSound();
+//        }else{
+//            // If the app is in background, firebase itself handles the notification
+//        }
+//    }
+
+//    private void handleDataMessage(JSONObject json) {
+//        Log.e(TAG, "push json: " + json.toString());
+//
+//        try {
+//            JSONObject data = json.getJSONObject("data");
+//
+//            String title = data.getString("title");
+//            String message = data.getString("message");
+//            boolean isBackground = data.getBoolean("is_background");
+//            String imageUrl = data.getString("image");
+//            String timestamp = data.getString("timestamp");
+//            JSONObject payload = data.getJSONObject("payload");
+//
+//            Log.e(TAG, "title: " + title);
+//            Log.e(TAG, "message: " + message);
+//            Log.e(TAG, "isBackground: " + isBackground);
+//            Log.e(TAG, "payload: " + payload.toString());
+//            Log.e(TAG, "imageUrl: " + imageUrl);
+//            Log.e(TAG, "timestamp: " + timestamp);
+//
+//
+//            if (!NotificationUtils.isAppIsInBackground(getApplicationContext())) {
+//                // app is in foreground, broadcast the push message
+//                Intent pushNotification = new Intent(Config.PUSH_NOTIFICATION);
+//                pushNotification.putExtra("message", message);
+//                LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
+//
+//                // play notification sound
+//                NotificationUtils notificationUtils = new NotificationUtils(getApplicationContext());
+//                notificationUtils.playNotificationSound();
+//            } else {
+//                // app is in background, show the notification in notification tray
+//                Intent resultIntent = new Intent(getApplicationContext(), MainActivity.class);
+//                resultIntent.putExtra("message", message);
+//
+//                // check for image attachment
+//                if (TextUtils.isEmpty(imageUrl)) {
+//                    showNotificationMessage(getApplicationContext(), title, message, timestamp, resultIntent);
+//                } else {
+//                    // image is present, show notification with image
+//                    showNotificationMessageWithBigImage(getApplicationContext(), title, message, timestamp, resultIntent, imageUrl);
+//                }
+//            }
+//        } catch (JSONException e) {
+//            Log.e(TAG, "Json Exception: " + e.getMessage());
+//        } catch (Exception e) {
+//            Log.e(TAG, "Exception: " + e.getMessage());
+//        }
+//    }
+
+    /**
+     * Showing notification with text only
+     */
+//    private void showNotificationMessage(Context context, String title, String message, String timeStamp, Intent intent) {
+//        notificationUtils = new NotificationUtils(context);
+//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//        notificationUtils.showNotificationMessage(title, message, timeStamp, intent);
+//    }
+
+    /**
+     * Showing notification with text and image
+     */
+//    private void showNotificationMessageWithBigImage(Context context, String title, String message, String timeStamp, Intent intent, String imageUrl) {
+//        notificationUtils = new NotificationUtils(context);
+//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//        notificationUtils.showNotificationMessage(title, message, timeStamp, intent, imageUrl);
 //    }
 }

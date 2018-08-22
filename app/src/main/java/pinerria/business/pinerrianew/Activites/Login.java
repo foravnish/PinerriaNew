@@ -32,9 +32,10 @@ import java.util.Map;
 
 import pinerria.business.pinerrianew.R;
 import pinerria.business.pinerrianew.Utils.Api;
+import pinerria.business.pinerrianew.Utils.AppController;
 import pinerria.business.pinerrianew.Utils.MyPrefrences;
 import pinerria.business.pinerrianew.Utils.Util;
-import pinerria.business.pinerrianew.gcm.GCMRegistrationIntentService;
+
 
 public class Login extends AppCompatActivity {
 
@@ -441,8 +442,9 @@ public class Login extends AppCompatActivity {
 
                         JSONObject jsonObject1 = jsonArray.getJSONObject(0);
 
-                        Intent intentReg = new Intent(Login.this, GCMRegistrationIntentService.class);
-                        startService(intentReg);
+//                        Intent intentReg = new Intent(Login.this, GCMRegistrationIntentService.class);
+//                        startService(intentReg);
+
 
                         //  Toast.makeText(getApplicationContext(), "Login Successfully...", Toast.LENGTH_SHORT).show();
 
@@ -460,7 +462,7 @@ public class Login extends AppCompatActivity {
                         intent.putExtra("userType","user");
                         startActivity(intent);
                         finish();
-
+                        registerGCM();
 
                     }
                     else{
@@ -506,4 +508,66 @@ public class Login extends AppCompatActivity {
         queue.add(strReq);
 
     }
+
+    private void registerGCM() {
+        Intent registrationComplete = null;
+        String token = null;
+
+            token= MyPrefrences.getgcm_token(this);
+            //token = instanceID.getToken(getString(R.string.gcm_defaultSenderId), GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
+            //Log.w("GCMRegIntentService", "token:" + token);
+
+            sendRegistrationTokenToServer(token);
+
+    }
+    private void sendRegistrationTokenToServer(final String token) {
+        //Getting the user id from shared preferences
+        //We are storing gcm token for the user in our mysql database
+        final String id = MyPrefrences.getUserID(getApplicationContext());
+        //Log.w("GCMRegIntentService", "loadUserid:" + id);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Api.URL_STORE_TOKEN,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String s) {
+                        try {
+
+                            Log.d("dfsdfsdfsdfsdfs",s);
+                            JSONObject jsonObject=new JSONObject(s);
+                            if (jsonObject.optString("status").equalsIgnoreCase("failure")){
+                                //Toast.makeText(getApplicationContext(), "Some Error! Contact to Admin...", Toast.LENGTH_SHORT).show();
+                            }
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        //Log.w("GCMRegIntentService", "sendRegistrationTokenToServer! ErrorListener:" );
+                        Toast.makeText(getApplicationContext(), "sendRegistrationTokenToServer! ErrorListener", Toast.LENGTH_LONG).show();
+
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("fcm_id", token);
+                params.put("user_id", id);
+
+                Log.d("fdsfsdgfsdgdfgd",token);
+                Log.d("fdsfsdgfsdgdfgd",id);
+
+                return params;
+            }
+        };
+        AppController.getInstance().addToRequestQueue(stringRequest);
+    }
+
+
+
+
 }
