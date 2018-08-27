@@ -75,7 +75,6 @@
             android:title="Add GST Detail" />
     </group>
 
-
     <group android:checkableBehavior="single"
         android:id="@+id/group9">
         <item
@@ -83,6 +82,15 @@
             android:icon="@drawable/package_icon"
             android:title="Packages" />
     </group>
+
+    <group android:checkableBehavior="single"
+        android:id="@+id/group_mess_to_admin">
+        <item
+            android:id="@+id/nav_mass_to_admin"
+            android:icon="@drawable/messagetoadmin"
+            android:title="Message To Admin" />
+    </group>
+
     <group android:checkableBehavior="single"
         android:id="@+id/group10">
         <item

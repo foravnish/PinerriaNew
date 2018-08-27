@@ -155,7 +155,8 @@ public class Details extends Fragment {
             comName =  view.findViewById(R.id.comName);
             nameUser =  view.findViewById(R.id.nameUser);
             address =  view.findViewById(R.id.address);
-            phone =  view.findViewById(R.id.phone);
+
+            Log.d("dfsdgsdfgsdfgsdfgds",jsonObject.optString("user_name"));
 
             comName.setText(jsonObject.optString("user_name"));
             nameUser.setText(jsonObject.optString("bussiness_name"));
@@ -164,6 +165,15 @@ public class Details extends Fragment {
 
             totlaUsers.setText(" ("+jsonObject.optString("total_rating_user")+" Reviews)");
 
+
+            if (jsonObject.optString("call_button").equals("Yes")){
+                price.setVisibility(View.VISIBLE);
+
+            }
+            else if (jsonObject.optString("call_button").equals("No")){
+                price.setVisibility(View.GONE);
+
+            }
             if (!jsonObject.optString("total_rating").equals("")) {
                 rating.setRating(Float.parseFloat(jsonObject.optString("total_rating")));
             }
@@ -196,7 +206,7 @@ public class Details extends Fragment {
             }
 
 
-            if (jsonObject.optString("call_button").equals("1")){
+            if (jsonObject.optString("call_button").equals("Yes")){
                 call.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -268,7 +278,7 @@ public class Details extends Fragment {
 
             }
 
-            else if (jsonObject.optString("call_button").equals("0")){
+            else if (jsonObject.optString("call_button").equals("No")){
                // call.setTextColor(Color.parseColor("#545454"));
                 phone.setText("N/A");
                 call.setOnClickListener(new View.OnClickListener() {
@@ -449,6 +459,7 @@ public class Details extends Fragment {
                     UserDetails.chatWith = jsonObject.optString("primary_mobile");
                     Intent intent=new Intent(getActivity(), Chat.class);
                     intent.putExtra("name",jsonObject.optString("user_name"));
+                    intent.putExtra("value","0");
                     startActivity(intent);
 
                     Log.d("dfsdfsdfsdfgsdgdfgertg",jsonObject.optString("primary_mobile"));

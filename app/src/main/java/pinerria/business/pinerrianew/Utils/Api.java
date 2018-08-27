@@ -9,6 +9,9 @@ public class Api {
 
 //    public static String BASEURL="http://pinerria.com/pinerria/api/";
     public static String BASEURL="http://pinerria.com/api/";
+    public static String BASEURL_FOR_IMAGE="http://pinerria.com/assets/images/business/";
+
+
     public static String catToSubCat=BASEURL+"catToSubCat";
     public static String category=BASEURL+"category";
     public static String subCatByCatId=BASEURL+"subCatByCatId";
@@ -59,7 +62,7 @@ public class Api {
     public static String updatePurchasedPackage=BASEURL+"updatePurchasedPackage";
     public static String pinerriaInfo=BASEURL+"pinerriaInfo";
     public static String generateHashKey  = BASEURL+"generateHashKey";
-
+//    public static String generateHashKey  = "https://pinerria.com/pinerriaold/AndroidApi.php?function=generateHashKey";
 
     public static String URL_FETCH_MESSAGES=BASEURL+"myChatingHistory";
     public static String URL_SEND_MESSAGE=BASEURL+"saveChatData";

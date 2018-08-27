@@ -82,6 +82,7 @@ import pinerria.business.pinerrianew.Fragments.Faqs;
 import pinerria.business.pinerrianew.Fragments.Home;
 import pinerria.business.pinerrianew.Fragments.Listing;
 import pinerria.business.pinerrianew.Fragments.ManageBusiness;
+import pinerria.business.pinerrianew.Fragments.MessageToAdmin;
 import pinerria.business.pinerrianew.Fragments.MyJobs;
 import pinerria.business.pinerrianew.Fragments.MyProducts;
 import pinerria.business.pinerrianew.Fragments.Packages;
@@ -884,6 +885,14 @@ public class HomeAct extends AppCompatActivity
             FragmentTransaction ft = manager.beginTransaction();
             ft.replace(R.id.content_frame, fragment).addToBackStack(null).commit();
             ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout,R.anim.frag_fade_right, R.anim.frag_fad_left);
+
+         } else if (id == R.id.nav_mass_to_admin) {
+
+                    Fragment fragment = new MessageToAdmin();
+                    FragmentManager manager = getSupportFragmentManager();
+                    FragmentTransaction ft = manager.beginTransaction();
+                    ft.replace(R.id.content_frame, fragment).addToBackStack(null).commit();
+                    ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout,R.anim.frag_fade_right, R.anim.frag_fad_left);
 
         } else if (id == R.id.nav_trans) {
             Fragment fragment = new Transcation();

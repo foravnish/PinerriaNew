@@ -1,5 +1,11 @@
 package pinerria.business.pinerrianew.Activites;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.media.RingtoneManager;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +23,7 @@ import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 
 import org.w3c.dom.Text;
 
@@ -27,6 +34,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import pinerria.business.pinerrianew.R;
+import pinerria.business.pinerrianew.Utils.MyPrefrences;
 
 
 public class Chat extends AppCompatActivity {
@@ -69,10 +77,6 @@ public class Chat extends AppCompatActivity {
             }
         });
 
-
-
-
-
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,6 +103,41 @@ public class Chat extends AppCompatActivity {
             }
         });
 
+
+        reference1.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+
+                NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                Intent notificationIntent = new Intent(getApplicationContext(), ChatUSer.class);
+                notificationIntent.putExtra("name", "");
+                notificationIntent.putExtra("value", "1");
+                PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, notificationIntent, 0);
+
+                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(Chat.this)
+                        .setSmallIcon(R.drawable.message)
+                        .setContentTitle("New Message from " + "name")
+                        .setContentText("mgs")
+                        .setOnlyAlertOnce(true)
+                        .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                        .setContentIntent(contentIntent);
+                mBuilder.setAutoCancel(true);
+                mBuilder.setLocalOnly(false);
+                mNotificationManager.notify(1, mBuilder.build());
+
+
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+
+
+
+
         reference1.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -112,26 +151,32 @@ public class Chat extends AppCompatActivity {
 
                 if(userName.equals(UserDetails.username)){
 //                    addMessageBox("You:-\n" + message, date,1);
-                    addMessageBox( message, date,1);
+                    addMessageBox( message, date,1, getIntent().getStringExtra("name"));
                 }
                 else{
 //                    addMessageBox(UserDetails.chatWith + ":-\n" + message, date,2);
-                    addMessageBox(message, date,2);
+                    addMessageBox(message, date,2,getIntent().getStringExtra("name"));
                 }
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
+
+
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
 
+
+
             }
 
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+
 
             }
 
@@ -143,7 +188,7 @@ public class Chat extends AppCompatActivity {
 
     }
 
-    public void addMessageBox(String message,String date, int type){
+    public void addMessageBox(String message,String date, int type,String name){
 
 //        TextView textView = new TextView(Chat.this);
 //        textView.setText(message);
@@ -174,6 +219,25 @@ public class Chat extends AppCompatActivity {
             dateTxt.setText(date);
            // lp2.gravity = Gravity.RIGHT;
             //textView.setBackgroundResource(R.drawable.rounded_corner2);
+
+
+                NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                Intent notificationIntent = new Intent(getApplicationContext(), ChatUSer.class);
+                notificationIntent.putExtra("name", "");
+                notificationIntent.putExtra("value", "1");
+                PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, notificationIntent, 0);
+
+                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(Chat.this)
+                        .setSmallIcon(R.drawable.message)
+                        .setContentTitle("New Message from " + name)
+                        .setContentText(message)
+                        .setOnlyAlertOnce(true)
+                        .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                        .setContentIntent(contentIntent);
+                mBuilder.setAutoCancel(true);
+                mBuilder.setLocalOnly(false);
+                mNotificationManager.notify(1, mBuilder.build());
+
         }
 
         txtView.setLayoutParams(lp2);

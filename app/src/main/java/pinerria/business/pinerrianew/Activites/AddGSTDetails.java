@@ -63,7 +63,7 @@ public class AddGSTDetails extends AppCompatActivity {
     ArrayList<HashMap<String, String>> custom_post_parameters;
     private static final int ACC_ID = 27791;// Provided by EBS
     private static final String SECRET_KEY = "87a9449095742721db3814e444495e9b";// Provided by EBS
-    int i1;
+    int i1=123456;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -349,7 +349,6 @@ public class AddGSTDetails extends AppCompatActivity {
         // Adding request to request queue
         queue.add(strReq);
 
-
     }
 
     private void paymentGatway(final double amountA) {
@@ -368,7 +367,8 @@ public class AddGSTDetails extends AppCompatActivity {
 
                     if (jsonObject.optString("status").equals("success")) {
 
-                        callEbsKit(AddGSTDetails.this, Double.parseDouble(getIntent().getStringExtra("amount")));
+                        Log.d("sdsfsdfgsdgsfdgsdfgdf", String.valueOf(Double.parseDouble(getIntent().getStringExtra("amount"))));
+                        callEbsKit(AddGSTDetails.this, amountA);
 
                     }
                     else{
@@ -378,7 +378,6 @@ public class AddGSTDetails extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
 
             }
         }, new Response.ErrorListener() {
@@ -395,11 +394,10 @@ public class AddGSTDetails extends AppCompatActivity {
                 Log.e("fgdfgdfgdf","Inside getParams");
 
 
-                Random r = new Random();
-                i1 = r.nextInt(800 - 650) + 65;
-                Log.d("fgsdgfsdghdfhd", String.valueOf(i1));
+                Ranhttp://pinerria.com/api/userBusinessRating/66("fgsdgfsdghdfhd", String.valueOf(i1));
 
 
+                Log.d("sdgfsdfgsdgsdfgdsfgdf", String.valueOf(amountA));
                 // Posting parameters to login url
                 Map<String, String> params = new HashMap<>();
                 params.put("amount", String.valueOf(amountA));
@@ -408,6 +406,12 @@ public class AddGSTDetails extends AppCompatActivity {
                 params.put("email", "customerhelpdesk@pinerria.com");
                 params.put("currency", "INR");
 
+
+                Log.d("AmountData",String.valueOf(amountA));
+                Log.d("account_id",String.valueOf(ACC_ID));
+                Log.d("reference_no",String.valueOf(i1));
+                Log.d("email","customerhelpdesk@pinerria.com");
+                Log.d("currency","INR");
                 return params;
             }
 
@@ -457,6 +461,7 @@ public class AddGSTDetails extends AppCompatActivity {
         /** Payment Amount Details */
         // Total Amount
 
+        Log.d("AmountVaslue",String.valueOf(amount));
         PaymentRequest.getInstance().setTransactionAmount(String.valueOf(amount));
 
         /** Mandatory */
@@ -469,9 +474,12 @@ public class AddGSTDetails extends AppCompatActivity {
 //        int i1 = r.nextInt(800 - 650) + 65;
 //        Log.d("fgsdgfsdghdfhd", String.valueOf(i1));
 
-        Random r = new Random();
-        int i1 = r.nextInt(800 - 650) + 65;
-        Log.d("fgsdgfsdghdfhd", String.valueOf(i1));
+//        Random r = new Random();
+//        int i1 = r.nextInt(800 - 650) + 65;
+//        Log.d("fgsdgfsdghdfhd", String.valueOf(i1));
+
+
+        Log.d("fdsdfgsdfgfdsgdfgdfgdf", String.valueOf(i1));
         PaymentRequest.getInstance().setReferenceNo(String.valueOf(i1));
         /** Mandatory */
 

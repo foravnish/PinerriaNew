@@ -138,6 +138,7 @@ public class DetailForJob extends Fragment {
                         UserDetails.chatWith = jsonObject.optString("mobile");
                         Intent intent=new Intent(getActivity(), Chat.class);
                         intent.putExtra("name",jsonObject.optString("user_name"));
+                        intent.putExtra("value","0");
                         startActivity(intent);
 
                         Log.d("dfsdfsdfsdfgsdgdfgertg",jsonObject.optString("mobile"));

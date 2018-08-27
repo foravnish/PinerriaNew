@@ -237,6 +237,7 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
             }
         });
 
+        Log.d("sdfsdfsdfsdgsdg",MyPrefrences.getCityID(getActivity()));
 
         JsonObjectRequest jsonObjReq2 = new JsonObjectRequest(Request.Method.GET,
                 Api.banner+"/"+MyPrefrences.getCityID(getActivity())+"/555", null, new Response.Listener<JSONObject>() {

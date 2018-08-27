@@ -47,8 +47,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Log.e(TAG, "Fromgdfhgdfghfgjf: " + remoteMessage.getNotification().getBody());
 
 
-
-
         String data= String.valueOf(remoteMessage.getData());
         String org=data.replace("message=","");
 

@@ -132,6 +132,8 @@ public class AddProduct extends AppCompatActivity {
     LinearLayout linearShow;
     SwitchCompat switchBusiness;
     String val_mobile="Yes";
+    boolean flagLocation=false;
+    boolean isData=false;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -187,6 +189,8 @@ public class AddProduct extends AppCompatActivity {
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dialog.setCancelable(false);
 
+        locationList();
+
        // categoryData();
 //        stateList("1");
 
@@ -207,7 +211,9 @@ public class AddProduct extends AppCompatActivity {
             }
         });
 
-        locationList();
+
+
+
         Log.d("dfgdfgdfgdfgd",MyPrefrences.getCityID2(getApplicationContext()));
         addLocation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -215,7 +221,6 @@ public class AddProduct extends AppCompatActivity {
                 addLocationPop();
             }
         });
-
 
         checkBobPrice.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -228,7 +233,6 @@ public class AddProduct extends AppCompatActivity {
                     MyPrefrences.setIsPrice(getApplicationContext(),true);
 
                 }
-
                 else if(b==false){
                     flag="no";
                     maxPrice.setText("");
@@ -428,15 +432,86 @@ public class AddProduct extends AppCompatActivity {
             }
         });
 
+
+
         postAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
+//                Log.d("dsfsfsdfsdfsfsfs",jsonObject.optString("image").toString());
+//
+//                String rep = jsonObject.optString("image").toString().replace("http://pinerria.com/assets/images/business/", "");
+//                Log.d("dfdgdfgdfgd", rep);
+
+
 
                 if (idLocation.equals("")) {
-                    Util.errorDialog(AddProduct.this, "Please Select Location");
-                } else {
 
+                    if (newLocation.getText().toString().equals("")) {
+                        Util.errorDialog(AddProduct.this, "Can't blank Location");
+                    }
+                    else{
+
+                        idLocation=jsonObject.optString("location_id");
+                        if (validate()) {
+
+                            if (Home.business == true) {
+
+                                String path = null;
+                                String filename = null;
+
+                                try {
+                                    path = f.toString();
+                                    filename = path.substring(path.lastIndexOf("/") + 1);
+                                    Log.d("dsfdfsdfsfs", filename);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                if (filename == null) {
+//                                Util.errorDialog(AddProduct.this,"Please Select Image");
+
+
+                                    String rep = jsonObject.optString("image").toString().replace(Api.BASEURL_FOR_IMAGE, "");
+                                    Log.d("dfdgdfgdfgd", rep);
+
+                                    PostDataEdit2(rep, jsonObject.optString("id"));
+                                } else {
+                                    //Toast.makeText(AddProduct.this, "yes", Toast.LENGTH_SHORT).show();
+                                    PostDataEdit(path, filename, jsonObject.optString("id"));
+
+                                }
+                            } else if (Home.business == false) {
+                                String path = null;
+                                String filename = null;
+
+                                try {
+                                    path = f.toString();
+                                    filename = path.substring(path.lastIndexOf("/") + 1);
+                                    Log.d("dsfdfsdfsfs", filename);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                if (filename == null) {
+                                    Util.errorDialog(AddProduct.this, "Please Select Image");
+                                } else {
+                                    //Toast.makeText(AddProduct.this, "yes", Toast.LENGTH_SHORT).show();
+                                    PostData(path, filename);
+
+                                }
+
+
+                            }
+
+
+                        }
+
+
+                    }
+                }
+                else {
+
+
+                   // idLocation=jsonObject.optString("location_id");
                     if (validate()) {
 
                         if (Home.business == true) {
@@ -455,7 +530,7 @@ public class AddProduct extends AppCompatActivity {
 //                                Util.errorDialog(AddProduct.this,"Please Select Image");
 
 
-                                String rep = jsonObject.optString("image").toString().replace("http://pinerria.com/pinerria/assets/images/business/", "");
+                                String rep = jsonObject.optString("image").toString().replace(Api.BASEURL_FOR_IMAGE, "");
                                 Log.d("dfdgdfgdfgd", rep);
 
                                 PostDataEdit2(rep, jsonObject.optString("id"));
@@ -488,7 +563,13 @@ public class AddProduct extends AppCompatActivity {
 
 
                     }
+
                 }
+
+
+
+
+
             }
 //                    }
 //                }
@@ -589,8 +670,6 @@ public class AddProduct extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Log.e("fgdfgdfgdf","Inside getParams");
 
-
-
                 // Posting parameters to login url
                 Map<String, String> params = new HashMap<>();
                 params.put("state_id", MyPrefrences.getState(getApplicationContext()));
@@ -619,9 +698,7 @@ public class AddProduct extends AppCompatActivity {
 
     }
 
-
     private void getFilledData() {
-
 
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
                 Api.userBusiness+"/"+ MyPrefrences.getUserID(getApplicationContext()), null, new Response.Listener<JSONObject>() {
@@ -638,11 +715,13 @@ public class AddProduct extends AppCompatActivity {
 
                     if (response.getString("status").equalsIgnoreCase("success")){
 
+
+
+
                         //  imageNoListing.setVisibility(View.GONE);
                         JSONArray jsonArray=response.getJSONArray("message");
 
                             jsonObject=jsonArray.getJSONObject(0);
-
 
 //                            map=new HashMap();
 //                            map.put("id", jsonObject.optString("id"));
@@ -700,7 +779,46 @@ public class AddProduct extends AppCompatActivity {
                                 // .transform(transformation)
                                 .into(regiImage);
 
+
+
+                        if (isData==true) {
+                            for (int i = 0; i < AllCity.size(); i++) {
+                                Log.d("sdfsdgfsdgfsdfgsdg", AllCity.get(i).get("id"));
+
+                                Log.d("dfgdfgdfgdfgdgd", jsonObject.optString("location_id"));
+                                if (AllCity.get(i).get("id").equals(jsonObject.optString("location_id"))) {
+                                   // Toast.makeText(getApplicationContext(), "yes", Toast.LENGTH_SHORT).show();
+                                    flagLocation = true;
+                                    location.setSelection(i);
+                                    break;
+
+                                } else {
+                                    //  Toast.makeText(getApplicationContext(), "no", Toast.LENGTH_SHORT).show();
+                                    flagLocation = false;
+                                }
+
+                            }
+                        }else if (isData==false){
+
+                        }
+
+
+                        Log.d("gsdgfsdgdfgdfgddfgd", String.valueOf(flagLocation));
+
+
                     }
+
+                    if (flagLocation==false){
+                        newLocation1.setVisibility(View.VISIBLE);
+                        linearShow.setVisibility(View.GONE);
+                        viewShow.setVisibility(View.GONE);
+                    }
+                    else if (flagLocation==true){
+                        newLocation1.setVisibility(View.GONE);
+                        linearShow.setVisibility(View.VISIBLE);
+                        viewShow.setVisibility(View.VISIBLE);
+                    }
+
                     else{
                        // expListView.setVisibility(View.GONE);
                         // imageNoListing.setVisibility(View.VISIBLE);
@@ -1812,6 +1930,7 @@ public class AddProduct extends AppCompatActivity {
                 try {
 
                     if (response.getString("status").equalsIgnoreCase("success")){
+                        isData=true;
 
                         AllCity.clear();
                         cityList.clear();
@@ -1842,9 +1961,8 @@ public class AddProduct extends AppCompatActivity {
 
                             AllCity.add(map);
 
-
-
                         }
+                        cityList.add("Add Location");
                     }
                     else{
                         AllCity.clear();
@@ -1863,6 +1981,7 @@ public class AddProduct extends AppCompatActivity {
                         location.setAdapter(adapterCity);
 
                         AllCity.add(map);
+                        isData= false;
                     }
 
                 } catch (JSONException e) {

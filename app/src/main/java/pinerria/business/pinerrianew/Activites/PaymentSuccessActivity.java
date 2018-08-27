@@ -199,7 +199,6 @@ public class PaymentSuccessActivity extends Activity {
 					if (jsonObject.getString("status").equalsIgnoreCase("success")) {
 
 
-
 					}
 
 				} catch (JSONException e) {
@@ -704,5 +703,43 @@ public class PaymentSuccessActivity extends Activity {
 //		}
 //
 //	}
+
+
+	private void errorDialog2(final String status) {
+		TextView Yes_action, No_action,btn;
+		TextView heading;
+
+		dialog4 = new Dialog(PaymentSuccessActivity.this);
+		dialog4.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		dialog4.setContentView(R.layout.alertdialogcustom_feedback_form);
+		dialog4.setCancelable(false);
+
+
+		Button cancel = (Button) dialog4.findViewById(R.id.cancel);
+
+		heading = (TextView) dialog4.findViewById(R.id.msg_txv);
+
+
+		cancel.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				dialog4.dismiss();
+
+				Intent intent=new Intent(getApplicationContext(),HomeAct.class);
+				intent.putExtra("userType","");
+				startActivity(intent);
+				overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+				finish();
+
+
+
+			}
+		});
+
+		dialog4.show();
+	}
+
+
+
 
 }

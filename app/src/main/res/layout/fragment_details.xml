@@ -209,30 +209,33 @@
                 android:textSize="15dp" />
 
 
-                <LinearLayout
-                    android:id="@+id/priceLayout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_toRightOf="@+id/phone"
-                    android:orientation="horizontal">
-
-
-                    <TextView
-                        android:id="@+id/price"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/muli_bold"
-                        android:text=""
-                        android:textColor="#111111" />
-
-
-
-                </LinearLayout>
 
             </RelativeLayout>
+            <LinearLayout
+                android:id="@+id/priceLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_marginTop="15dp"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/phone"
+                android:orientation="horizontal">
+
+
+                <TextView
+                    android:id="@+id/price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="dddd"
+                    android:drawablePadding="10dp"
+                    android:fontFamily="@font/muli"
+                    android:drawableTint="@color/md_blue_grey_400"
+                    android:drawableLeft="@drawable/rupee"
+                    android:textColor="@color/black" />
+
+
+
+            </LinearLayout>
 
 
             <LinearLayout
