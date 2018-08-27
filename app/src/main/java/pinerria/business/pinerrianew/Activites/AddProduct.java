@@ -1113,6 +1113,10 @@ public class AddProduct extends AppCompatActivity {
 
                 if (json.optString("status").equalsIgnoreCase("success")) {
 
+                    Log.d("dsfdsgdgdfgdfgdfgdfgd", String.valueOf(json));
+
+                    MyPrefrences.setBusinesID(getApplicationContext(),json.optString("message"));
+
                     Toast.makeText(getApplicationContext(), "Business Added Successfully...", Toast.LENGTH_LONG).show();
 
                     Intent intent=new Intent(AddProduct.this,HomeAct.class);
@@ -1269,6 +1273,8 @@ public class AddProduct extends AppCompatActivity {
 
                 if (json.optString("status").equalsIgnoreCase("success")) {
 
+                    Log.d("dsfdsgdgdfgdfgdfgdfgd", String.valueOf(json));
+
                     Toast.makeText(getApplicationContext(), "Business Edit Successfully...", Toast.LENGTH_LONG).show();
 
                     Intent intent=new Intent(AddProduct.this,HomeAct.class);
@@ -1424,6 +1430,11 @@ public class AddProduct extends AppCompatActivity {
 
 
                 if (json.optString("status").equalsIgnoreCase("success")) {
+
+                    Log.d("dsfdsgdgdfgdfgdfgdfgd", String.valueOf(json));
+
+
+
 
                     Toast.makeText(getApplicationContext(), "Business Edit Successfully...", Toast.LENGTH_LONG).show();
 

@@ -106,6 +106,28 @@
             android:title="View Jobs" />
     </group>
     <group android:checkableBehavior="single"
+        android:id="@+id/group_rating">
+        <item
+            android:id="@+id/nav_rating"
+            android:icon="@drawable/myrating"
+            android:title="My Ratings" />
+    </group>
+    <group android:checkableBehavior="single"
+        android:id="@+id/group_call_his">
+        <item
+            android:id="@+id/nav_call_his"
+            android:icon="@drawable/mycalls"
+            android:title="My Calls" />
+    </group>
+    <group android:checkableBehavior="single"
+        android:id="@+id/group_fav">
+        <item
+            android:id="@+id/nav_my_fav"
+            android:icon="@drawable/favirate"
+            android:title="My Favourite" />
+    </group>
+
+    <group android:checkableBehavior="single"
         android:id="@+id/group12">
         <item
             android:id="@+id/nav_pay_order"

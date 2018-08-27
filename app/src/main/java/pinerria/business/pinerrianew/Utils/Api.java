@@ -62,6 +62,9 @@ public class Api {
     public static String updatePurchasedPackage=BASEURL+"updatePurchasedPackage";
     public static String pinerriaInfo=BASEURL+"pinerriaInfo";
     public static String generateHashKey  = BASEURL+"generateHashKey";
+    public static String myRating  = BASEURL+"myRating";
+    public static String updateMyRating  = BASEURL+"updateMyRating";
+    public static String myRecievedCall  = BASEURL+"myRecievedCall";
 //    public static String generateHashKey  = "https://pinerria.com/pinerriaold/AndroidApi.php?function=generateHashKey";
 
     public static String URL_FETCH_MESSAGES=BASEURL+"myChatingHistory";
@@ -99,13 +102,13 @@ public class Api {
     public static String homeBannerImage=BASEURL3+"homeBannerImage";
     public static String emergencyCategory=BASEURL+"emergencyCategory";
     public static String emergency=BASEURL+"emergency";
-    public static String myRating=BASEURL+"myRating";
+    //public static String myRating=BASEURL+"myRating";
     public static String ratingByCompany=BASEURL+"ratingByCompany";
     ///public static String city=BASEURL3+"city";
   //  public static String news=BASEURL+"news";
     public static String trendingCategory=BASEURL+"trendingCategory";
     public static String cityDetails=BASEURL+"cityDetails";
-    public static String editSubmitedRating=BASEURL+"editSubmitedRating";
+    //public static String editSubmitedRating=BASEURL+"editSubmitedRating";
     public static String deleteSubmitedRating=BASEURL+"deleteSubmitedRating";
     public static String profileIncorrectRqst=BASEURL+"profileIncorrectRqst";
     public static String buyerProfileDetails=BASEURL+"buyerProfileDetails";

@@ -230,7 +230,6 @@ public class ManageBusiness extends Fragment {
                     if (response.getString("status").equalsIgnoreCase("success")){
 
 
-
                         //  imageNoListing.setVisibility(View.GONE);
                         JSONArray jsonArray=response.getJSONArray("message");
 

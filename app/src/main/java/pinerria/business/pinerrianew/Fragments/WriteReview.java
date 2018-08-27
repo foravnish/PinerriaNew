@@ -214,6 +214,7 @@ public class WriteReview extends Fragment {
                     if (response.getString("status").equalsIgnoreCase("success")){
 
                         JSONArray jsonArray=response.getJSONArray("message");
+                        Log.d("dfgsdgdfgdfgdfgd", String.valueOf(jsonArray.length()));
                         for (int i=0;i<jsonArray.length();i++){
                             JSONObject jsonObject=jsonArray.getJSONObject(i);
 
@@ -229,9 +230,16 @@ public class WriteReview extends Fragment {
                             map.put("user_name",jsonObject.optString("user_name"));
                             map.put("created_date",jsonObject.optString("created_date"));
 
+
+
                             Adapter adapter=new Adapter();
                             expListView.setAdapter(adapter);
                             AllProducts.add(map);
+
+                            if (jsonObject.optString("user_id").equals(MyPrefrences.getUserID(getActivity()))){
+                                editText.setText(jsonObject.optString("review"));
+                                rtbar.setRating(Float.parseFloat(jsonObject.optString("rating")));
+                            }
                         }
                     }
                     else{
@@ -277,7 +285,6 @@ public class WriteReview extends Fragment {
         LinearLayout liner;
         MaterialRatingBar rtbar2;
     }
-
 
     private void errorDialog(String res) {
 
@@ -340,7 +347,7 @@ public class WriteReview extends Fragment {
         }
 
         @Override
-        public View getView(final int position, View convertView, ViewGroup parent) {
+        public View getView(int position, View convertView, ViewGroup parent) {
 
             convertView=inflater.inflate(R.layout.list_view_rating,parent,false);
 
@@ -354,7 +361,9 @@ public class WriteReview extends Fragment {
             viewholder.date_txt=convertView.findViewById(R.id.date_txt);
 
 //            viewholder.comName.setText(AllProducts.get(position).get("uname"));
-            viewholder.comName.setText(AllProducts.get(position).get("user_name").substring(0,1).toUpperCase()+AllProducts.get(position).get("user_name").substring(1).toUpperCase());
+            if (!AllProducts.get(position).get("user_name").equals("")) {
+                viewholder.comName.setText(AllProducts.get(position).get("user_name").substring(0, 1).toUpperCase() + AllProducts.get(position).get("user_name").substring(1).toUpperCase());
+            }
             viewholder.user_icon.setText(AllProducts.get(position).get("user_name"));
 //            viewholder.c1_mobile1.setText(AllProducts.get(position).get("mobile"));
 //            String number;

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/md_grey_100">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="7dp"
+        app:cardElevation="3dp">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <TextView
+                android:id="@+id/comName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="sdfsdfsdf"
+                android:textColor="@color/blue"
+                android:fontFamily="@font/muli_bold"
+                android:textSize="14sp"
+                android:layout_marginTop="5dp"/>
+
+            <TextView
+                android:id="@+id/mobileNo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="dfsdf"
+                android:layout_below="@+id/comName"
+                android:textColor="@color/grayText"
+                android:fontFamily="@font/muli_bold"
+                android:textSize="14sp"
+                android:layout_marginTop="5dp"/>
+
+            <LinearLayout
+                android:id="@+id/date_txt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_below="@+id/mobileNo">
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:src="@drawable/datewise"
+                    android:layout_below="@+id/rating_txt"
+                    android:layout_toRightOf="@+id/user_icon"
+                    android:tint="@color/md_grey_600"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="10dp"/>
+                <TextView
+                    android:id="@+id/date_txt2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_toRightOf="@+id/cal_icon"
+                    android:layout_below="@+id/rating_txt"
+                    android:gravity="center_vertical"
+
+                    android:textColor="@color/grayText"
+                    android:textSize="12sp"
+                    android:text="05 May 2018"/>
+
+
+                <LinearLayout
+                    android:id="@+id/call"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginRight="10dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:layout_margin="5dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_weight="1"
+                        android:drawablePadding="10dp"
+                        android:drawableTint="@color/md_grey_600"
+                        android:fontFamily="@font/muli_semibold"
+                        android:gravity="right"
+                        android:background="@drawable/strock_btn_call"
+                        android:text="Call"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:textColor="@color/white"
+                        android:textSize="18dp" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+
+
+
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+</LinearLayout>

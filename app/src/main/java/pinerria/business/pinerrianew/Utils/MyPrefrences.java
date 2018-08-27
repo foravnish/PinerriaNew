@@ -14,6 +14,7 @@ public class MyPrefrences {
     static SharedPreferences isPrice;
     static SharedPreferences citySelection;
     public static SharedPreferences userIdPrefences;
+    public static SharedPreferences busiessIdPrefences;
     static SharedPreferences cataPrefences;
     static SharedPreferences subCataPrefences;
     static SharedPreferences username;
@@ -154,6 +155,21 @@ public class MyPrefrences {
         userIdPrefences = PreferenceManager.getDefaultSharedPreferences(context);
         return userIdPrefences.getString(USER_ID,"");
     }
+
+
+    public static void setBusinesID(Context context, String is) {
+        busiessIdPrefences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = busiessIdPrefences.edit();
+        editor.putString("BUSINESS", is);
+        editor.commit();
+    }
+
+    public static String getBusinesID(Context context) {
+        busiessIdPrefences = PreferenceManager.getDefaultSharedPreferences(context);
+        return busiessIdPrefences.getString("BUSINESS","");
+    }
+
+
 
     public static void setCatID(Context context, String is) {
         cataPrefences = PreferenceManager.getDefaultSharedPreferences(context);

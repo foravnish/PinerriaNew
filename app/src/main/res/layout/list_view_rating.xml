@@ -61,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@+id/user_icon"
-                android:text="Pankaj Kumar"
+                android:text=""
                 android:textColor="@color/black"
                 android:textSize="13sp" />
 
@@ -95,7 +95,7 @@
                 android:layout_below="@+id/rtbar2"
                 android:layout_toRightOf="@+id/user_icon"
                 android:textColor="@color/md_grey_700"
-                android:text="International trade Fair of machines and tools of woods for industries and many more useful tools, held on 13th sept."
+                android:text=""
                 android:textSize="11sp"
                 android:layout_marginLeft="10dp"
                 />

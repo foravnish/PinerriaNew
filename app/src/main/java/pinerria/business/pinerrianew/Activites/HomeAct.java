@@ -77,16 +77,19 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 import pinerria.business.pinerrianew.Fragments.AddJobs;
 import pinerria.business.pinerrianew.Fragments.BannerRequest;
+import pinerria.business.pinerrianew.Fragments.CallHistory;
 import pinerria.business.pinerrianew.Fragments.ContactUs;
 import pinerria.business.pinerrianew.Fragments.Faqs;
 import pinerria.business.pinerrianew.Fragments.Home;
 import pinerria.business.pinerrianew.Fragments.Listing;
 import pinerria.business.pinerrianew.Fragments.ManageBusiness;
 import pinerria.business.pinerrianew.Fragments.MessageToAdmin;
+import pinerria.business.pinerrianew.Fragments.MyFavourate;
 import pinerria.business.pinerrianew.Fragments.MyJobs;
 import pinerria.business.pinerrianew.Fragments.MyProducts;
 import pinerria.business.pinerrianew.Fragments.Packages;
 import pinerria.business.pinerrianew.Fragments.PayOrder;
+import pinerria.business.pinerrianew.Fragments.RatingView;
 import pinerria.business.pinerrianew.Fragments.SearchData;
 import pinerria.business.pinerrianew.Fragments.TermsCondition;
 import pinerria.business.pinerrianew.Fragments.Transcation;
@@ -281,8 +284,10 @@ public class HomeAct extends AppCompatActivity
                             Menu menu = navigationView.getMenu();
                             MenuItem nav_add_product = menu.findItem(R.id.nav_add_product);
                             MenuItem nav_manage_business = menu.findItem(R.id.nav_manage_business);
+                            MenuItem nav_call_his = menu.findItem(R.id.nav_call_his);
                             nav_add_product.setVisible(true);
                             nav_manage_business.setVisible(false);
+                            nav_call_his.setVisible(false);
 
                         }
                         else if (response.optString("business").equalsIgnoreCase("Yes")){
@@ -290,8 +295,10 @@ public class HomeAct extends AppCompatActivity
                             Menu menu = navigationView.getMenu();
                             MenuItem nav_add_product = menu.findItem(R.id.nav_add_product);
                             MenuItem nav_manage_business = menu.findItem(R.id.nav_manage_business);
+                            MenuItem nav_call_his = menu.findItem(R.id.nav_call_his);
                             nav_add_product.setVisible(false);
                             nav_manage_business.setVisible(true);
+                            nav_call_his.setVisible(true);
                         }
 
                         if (response.optString("job").equalsIgnoreCase("No")){
@@ -347,8 +354,11 @@ public class HomeAct extends AppCompatActivity
             Menu menu = navigationView.getMenu();
             MenuItem nav_add_product = menu.findItem(R.id.nav_add_product);
             MenuItem nav_manage_business = menu.findItem(R.id.nav_manage_business);
+            MenuItem nav_call_his = menu.findItem(R.id.nav_call_his);
             nav_add_product.setVisible(false);
             nav_manage_business.setVisible(true);
+            nav_call_his.setVisible(true);
+
 
         }
         else if (HomeAct.business==false){
@@ -356,8 +366,10 @@ public class HomeAct extends AppCompatActivity
             Menu menu = navigationView.getMenu();
             MenuItem nav_add_product = menu.findItem(R.id.nav_add_product);
             MenuItem nav_manage_business = menu.findItem(R.id.nav_manage_business);
+            MenuItem nav_call_his = menu.findItem(R.id.nav_call_his);
             nav_add_product.setVisible(true);
             nav_manage_business.setVisible(false);
+            nav_call_his.setVisible(false);
         }
 
         if (HomeAct.jobs==true){
@@ -886,6 +898,23 @@ public class HomeAct extends AppCompatActivity
             ft.replace(R.id.content_frame, fragment).addToBackStack(null).commit();
             ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout,R.anim.frag_fade_right, R.anim.frag_fad_left);
 
+          } else if (id == R.id.nav_rating) {
+
+                    Fragment fragment = new RatingView();
+                    FragmentManager manager = getSupportFragmentManager();
+                    FragmentTransaction ft = manager.beginTransaction();
+                    ft.replace(R.id.content_frame, fragment).addToBackStack(null).commit();
+                    ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout,R.anim.frag_fade_right, R.anim.frag_fad_left);
+
+
+         } else if (id == R.id.nav_call_his) {
+
+                    Fragment fragment = new CallHistory();
+                    FragmentManager manager = getSupportFragmentManager();
+                    FragmentTransaction ft = manager.beginTransaction();
+                    ft.replace(R.id.content_frame, fragment).addToBackStack(null).commit();
+                    ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout,R.anim.frag_fade_right, R.anim.frag_fad_left);
+
          } else if (id == R.id.nav_mass_to_admin) {
 
                     Fragment fragment = new MessageToAdmin();
@@ -941,6 +970,12 @@ public class HomeAct extends AppCompatActivity
                         FragmentTransaction ft = manager.beginTransaction();
                         ft.replace(R.id.content_frame, fragment).addToBackStack(null).commit();
                         ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout,R.anim.frag_fade_right, R.anim.frag_fad_left);
+              } else if (id == R.id.nav_my_fav) {
+                                    Fragment fragment = new MyFavourate();
+                                    FragmentManager manager = getSupportFragmentManager();
+                                    FragmentTransaction ft = manager.beginTransaction();
+                                    ft.replace(R.id.content_frame, fragment).addToBackStack(null).commit();
+                                    ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout,R.anim.frag_fade_right, R.anim.frag_fad_left);
 
         } else if (id == R.id.nav_logout) {
 
