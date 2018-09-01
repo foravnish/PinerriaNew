@@ -22,6 +22,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -38,6 +39,7 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.StringRequest;
+import com.makeramen.roundedimageview.RoundedImageView;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -73,8 +75,8 @@ public class MyFavourate extends Fragment {
     Dialog dialog;
     JSONObject jsonObject1;
     ImageView imageNoListing;
-
-
+    JSONObject jsonObject2;
+    JSONArray jsonArray0;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -101,13 +103,11 @@ public class MyFavourate extends Fragment {
 //            ft.replace(R.id.content_frame, fragment).addToBackStack(null).commit();
 //        }
 
-
         Log.d("dsfsdfsdfsdgfsd", MyPrefrences.getUserID(getActivity()));
 
 
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
-                Api.favoriteList+"?myId="+ MyPrefrences.getUserID(getActivity())+"&cityId="+MyPrefrences.getCityID(getActivity())
-                , null, new Response.Listener<JSONObject>() {
+                Api.myFavouriteBusiness+"/"+ MyPrefrences.getUserID(getActivity()), null, new Response.Listener<JSONObject>() {
 
             @Override
             public void onResponse(JSONObject response) {
@@ -125,30 +125,44 @@ public class MyFavourate extends Fragment {
                         expListView.setVisibility(View.VISIBLE);
                         imageNoListing.setVisibility(View.GONE);
 
-                        JSONArray jsonArray0=response.getJSONArray("message");
+                        jsonArray0=response.getJSONArray("message");
                         for (int i=0;i<jsonArray0.length();i++) {
                             JSONObject jsonObject = jsonArray0.getJSONObject(i);
 
+                            map = new HashMap();
+//                            map.put("id", jsonObject.optString("id"));
+//                            map.put("user_id", jsonObject.optString("user_id"));
+//                            map.put("city_name", jsonObject.optString("city_name"));
+//                            map.put("service_keyword", jsonObject.optString("service_keyword"));
+//                            map.put("image", jsonObject.optString("image"));
+//                            map.put("total_rating_user", jsonObject.optString("total_rating_user"));
+//                            map.put("total_rating", jsonObject.optString("total_rating"));
+//                            map.put("my_favourite", jsonObject.optString("my_favourite"));
+//                            map.put("min_price", jsonObject.optString("min_price"));
+//                            map.put("max_price", jsonObject.optString("max_price"));
 
-                                map = new HashMap();
-                                map.put("id", jsonObject.optString("id"));
-                                map.put("bussiness_name", jsonObject.optString("bussiness_name"));
-                                map.put("city_name", jsonObject.optString("city_name"));
-                                map.put("service_keyword", jsonObject.optString("service_keyword"));
-                                map.put("image", jsonObject.optString("image"));
-                                map.put("total_rating_user", jsonObject.optString("total_rating_user"));
-                                map.put("total_rating", jsonObject.optString("total_rating"));
-                                map.put("my_favourite", jsonObject.optString("my_favourite"));
-                                map.put("min_price", jsonObject.optString("min_price"));
-                                map.put("max_price", jsonObject.optString("max_price"));
+                                if (jsonObject.optString("business_name").equals("")) {
+                                   Log.d("fgsdgdfgsfgdfgsdgs","true");
+                                }
+                                else {
+                                    Log.d("fgsdgdfgsfgdfgsdgs","false");
+                                     jsonObject2 = jsonObject.getJSONObject("business_name");
+                                    map.put("id", jsonObject2.optString("id"));
+                                    map.put("bussiness_name", jsonObject2.optString("bussiness_name"));
+                                    map.put("city_name", jsonObject2.optString("city_name"));
+                                    map.put("service_keyword", jsonObject2.optString("service_keyword"));
+                                    map.put("image", jsonObject2.optString("image"));
+                                    map.put("total_rating_user", jsonObject2.optString("total_rating_user"));
+                                    map.put("total_rating", jsonObject2.optString("total_rating"));
+                                    map.put("my_favourite", jsonObject2.optString("my_favourite"));
+                                    map.put("min_price", jsonObject2.optString("min_price"));
+                                    map.put("max_price", jsonObject2.optString("max_price"));
 
+                                    Adapter adapter = new Adapter();
+                                    expListView.setAdapter(adapter);
+                                    AllProducts.add(map);
+                               }
 
-
-
-
-                                Adapter adapter = new Adapter();
-                                expListView.setAdapter(adapter);
-                                AllProducts.add(map);
                         }
                     }
                     else if (response.getString("status").equalsIgnoreCase("failure")){
@@ -184,24 +198,47 @@ public class MyFavourate extends Fragment {
         jsonObjReq.setShouldCache(false);
         AppController.getInstance().addToRequestQueue(jsonObjReq);
 
-
 //        expListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //            @Override
 //            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+////
+//                try {
+//
+//                    Log.d("dfsdfafsdfsdfgsd",jsonArray0.get(i).toString());
+//
+//                    JSONObject jsonObject=jsonArray0.getJSONObject(i);
+//
+//                    if (jsonObject.optString("business_name").equals("")) {
+//                        Log.d("dfdfdfsdfgdjkk","true");
+//                    }
+//                    else{
+//                        Log.d("xdfgdgdfgdfgdfgdg",jsonObject.getJSONObject("business_name").toString());
+//                    }
+//
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
 //
 //
-//                Fragment fragment=new ListingDetails();
+//                Fragment fragment=new Details();
 //                Bundle bundle=new Bundle();
-//                bundle.putString("company_name",AllProducts.get(i).get("company_name"));
-//                bundle.putString("address",AllProducts.get(i).get("address"));
-//                bundle.putString("c1_mobile1",AllProducts.get(i).get("c1_mobile1"));
-//                bundle.putString("name",AllProducts.get(i).get("c1_fname")+" "+AllProducts.get(i).get("c1_fname")+" "+AllProducts.get(i).get("c1_lname"));
-//                FragmentManager manager=getActivity().getSupportFragmentManager();
+//                //bundle.putString("id",AllProducts.get(i).get("id"));
+//                //bundle.putString("subcategory",AllProducts.get(i).get("subcategory"));
+//                try {
+//                    bundle.putString("jsonArray",jsonArray0.get(i).toString());
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//                FragmentManager manager=getFragmentManager();
 //                FragmentTransaction ft=manager.beginTransaction();
 //                fragment.setArguments(bundle);
+//                ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout,R.anim.frag_fade_right, R.anim.frag_fad_left);
 //                ft.replace(R.id.content_frame,fragment).addToBackStack(null).commit();
+//
 //            }
 //        });
+
+
 
 
 
@@ -216,7 +253,7 @@ public class MyFavourate extends Fragment {
         MaterialRatingBar rating;
         CardView cardView;
         ImageView callNow1;
-        NetworkImageView imgaeView;
+        RoundedImageView imgaeView;
         ImageView img1,img2,img3,img4,img5;
         LinearLayout footer_layout;
         TextView price,area,keyword,totlaUsers;
@@ -262,6 +299,7 @@ public class MyFavourate extends Fragment {
             viewholder.name=convertView.findViewById(R.id.name);
 //
             viewholder.imgFav=convertView.findViewById(R.id.imgFav);
+            viewholder.cardView=convertView.findViewById(R.id.cardView);
 //            viewholder.liner=convertView.findViewById(R.id.liner);
 //            viewholder.totlareview=convertView.findViewById(R.id.totlareview);
             viewholder.rating=convertView.findViewById(R.id.rating);
@@ -279,9 +317,9 @@ public class MyFavourate extends Fragment {
             viewholder.area.setText(AllProducts.get(position).get("city_name"));
             viewholder.keyword.setText(AllProducts.get(position).get("service_keyword"));
             viewholder.totlaUsers.setText(" ("+AllProducts.get(position).get("total_rating_user")+" Review's)");
-            if (!AllProducts.get(position).get("total_rating").equals("")) {
-                viewholder.rating.setRating(Float.parseFloat(AllProducts.get(position).get("total_rating")));
-            }
+            //if (!AllProducts.get(position).get("total_rating").equals("")) {
+                //viewholder.rating.setRating(Float.parseFloat(AllProducts.get(position).get("total_rating")));
+            //}
 
             if (AllProducts.get(position).get("min_price").equals("")){
                 viewholder.priceLayout.setVisibility(View.GONE);
@@ -304,6 +342,24 @@ public class MyFavourate extends Fragment {
                     // .transform(transformation)
                     .into(viewholder.imgaeView);
 
+//            viewholder.cardView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//
+//                    Log.d("fgdsfgsdgfsgsfgasd",jsonArray0.get(position).toString());
+//                    Fragment fragment=new Details();
+//                    Bundle bundle=new Bundle();
+//                    //bundle.putString("id",AllProducts.get(i).get("id"));
+//                    //bundle.putString("subcategory",AllProducts.get(i).get("subcategory"));
+//                        bundle.putString("jsonArray",AllProducts.get(position).toString());
+//                    FragmentManager manager=getFragmentManager();
+//                    FragmentTransaction ft=manager.beginTransaction();
+//                    fragment.setArguments(bundle);
+//                    ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout,R.anim.frag_fade_right, R.anim.frag_fad_left);
+//                    ft.replace(R.id.content_frame,fragment).addToBackStack(null).commit();
+//
+//                }
+//            });
 //            viewholder.liner.setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View view) {
@@ -382,11 +438,11 @@ public class MyFavourate extends Fragment {
 //            });
 
 //            viewholder.name.setText(AllProducts.get(position).get("company_name"));
-            viewholder.name.setText(AllProducts.get(position).get("company_name"));
-            viewholder.address.setText(AllProducts.get(position).get("address"));
-            viewholder.totlareview.setText(AllProducts.get(position).get("totlauser") + " Reviews");
+            //viewholder.name.setText(AllProducts.get(position).get("company_name"));
+            //viewholder.address.setText(AllProducts.get(position).get("address"));
+          //  viewholder.totlareview.setText(AllProducts.get(position).get("totlauser") + " Reviews");
 //
-            viewholder.subcatListing.setText(AllProducts.get(position).get("keywords"));
+            //viewholder.subcatListing.setText(AllProducts.get(position).get("keywords"));
 
             viewholder.distance.setVisibility(View.GONE);
 
@@ -394,16 +450,16 @@ public class MyFavourate extends Fragment {
 
 
 
-            if (!AllProducts.get(position).get("totlauser").equals("0")) {
-                viewholder.rating.setRating(Float.parseFloat(AllProducts.get(position).get("rating")));
-            }
+//            if (!AllProducts.get(position).get("totlauser").equals("0")) {
+//                viewholder.rating.setRating(Float.parseFloat(AllProducts.get(position).get("rating")));
+//            }
 
             Typeface face= Typeface.createFromAsset(getActivity().getAssets(), "muli_semibold.ttf");
             Typeface face2= Typeface.createFromAsset(getActivity().getAssets(), "muli.ttf");
             viewholder.name.setTypeface(face);
-            viewholder.address.setTypeface(face2);
-            viewholder.totlareview.setTypeface(face2);
-            viewholder.subcatListing.setTypeface(face2);
+          //  viewholder.address.setTypeface(face2);
+            //viewholder.totlareview.setTypeface(face2);
+          //  viewholder.subcatListing.setTypeface(face2);
             viewholder.distance.setTypeface(face2);
 
 

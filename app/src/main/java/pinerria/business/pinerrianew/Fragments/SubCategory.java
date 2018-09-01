@@ -191,8 +191,6 @@ public class SubCategory extends Fragment {
                             // indicator2.setViewPager(viewPager2);
                             mCustomPagerAdapter2.notifyDataSetChanged();
 
-
-
                         }
 //                        final Handler handler = new Handler();
 //

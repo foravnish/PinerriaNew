@@ -89,14 +89,13 @@ public class MessageFromAdmin extends Fragment {
                         for (int i=0;i<jsonArray.length();i++){
                             JSONObject jsonObject=jsonArray.getJSONObject(i);
 
-
                             HashMap map=new HashMap();
                             map.put("id", jsonObject.optString("id"));
                             map.put("recipient", jsonObject.optString("recipient"));
                             map.put("description", jsonObject.optString("description"));
                             map.put("comment", jsonObject.optString("comment"));
                             map.put("created_date", jsonObject.optString("created_date"));
-
+                            map.put("subject_id", jsonObject.optString("subject_id"));
 
 
                             HelpAdapter adapter=new HelpAdapter();

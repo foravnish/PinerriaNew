@@ -13,6 +13,8 @@ import android.content.IntentFilter;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -70,6 +72,7 @@ import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -132,7 +135,7 @@ public class HomeAct extends AppCompatActivity
     private final static int REQUEST_ID_MULTIPLE_PERMISSIONS=0x2;
     public static  Double latitude=null,longitude=null;
 
-
+    String newVersion;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -171,6 +174,8 @@ public class HomeAct extends AppCompatActivity
         gps_button2=header.findViewById(R.id.gps_button2);
 
 
+      //  new FetchAppVersionFromGooglePlayStore().execute();
+
         db = new DatabaseHelper(HomeAct.this);
 
        // setmRegistrationBroadcastReceiver();
@@ -186,6 +191,7 @@ public class HomeAct extends AppCompatActivity
 //        DrawableCompat.setTint(drawable, Color.GREEN);
 //        DrawableCompat.setTintMode(drawable, PorterDuff.Mode.SRC_OVER);
 //        packageList.setCompoundDrawablesWithIntrinsicBounds(drawable,null,null,null);
+
 
 
 
@@ -1143,5 +1149,52 @@ public class HomeAct extends AppCompatActivity
                 break;
         }
     }
+//    class FetchAppVersionFromGooglePlayStore extends AsyncTask<String, Void, String> {
+//
+//        protected String doInBackground(String... urls) {
+//            try {
+//                return
+//                        Jsoup.connect("https://play.google.com/store/apps/details?id=" + "pinerria.business.pinerrianew" + "&hl=en")
+//                                .timeout(10000)
+//                                .userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6")
+//                                .referrer("http://www.google.com")
+//                                .get()
+//                                .select("div[itemprop=softwareVersion]")
+//                                .first()
+//                                .ownText();
+//
+//            } catch (Exception e) {
+//                return "";
+//            }
+//        }
+//
+//        protected void onPostExecute(String string) {
+//            newVersion = string;
+//            Log.d("new Version", newVersion);
+//
+//            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(HomeAct.this);
+//
+//            alertDialogBuilder.setTitle(HomeAct.this.getString(R.string.app_name));
+//            alertDialogBuilder.setMessage("Your application update is available.");
+//            alertDialogBuilder.setCancelable(false);
+//            alertDialogBuilder.setPositiveButton("UPDATE NOW", new DialogInterface.OnClickListener() {
+//                public void onClick(DialogInterface dialog, int id) {
+//                    HomeAct.this.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + getPackageName())));
+//                    dialog.cancel();
+//                }
+//            });
+//            alertDialogBuilder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialog, int which) {
+//
+//
+//                    dialog.dismiss();
+//                }
+//            });
+//            alertDialogBuilder.show();
+//        }
+//
+//
+//        }
 
 }

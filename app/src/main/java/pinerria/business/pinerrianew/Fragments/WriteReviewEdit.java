@@ -112,7 +112,7 @@ public class WriteReviewEdit extends Fragment {
                                         if (jsonObject.getString("status").equalsIgnoreCase("success")) {
 
 //                                            Toast.makeText(getActivity(), jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
-                                            errorDialog(jsonObject.getString("message"));
+                                            errorDialog("Rating Edited successfully.");
 
                                         } else {
                                             Toast.makeText(getActivity(), jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
@@ -157,7 +157,7 @@ public class WriteReviewEdit extends Fragment {
                     AppController.getInstance().addToRequestQueue(postRequest);
                 }
                 else{
-                    Toast.makeText(getActivity(), "Please give review.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Please give a rating.", Toast.LENGTH_SHORT).show();
                 }
 
 

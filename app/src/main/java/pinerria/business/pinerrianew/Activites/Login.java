@@ -161,14 +161,13 @@ public class Login extends AppCompatActivity {
 
 
 
-
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Util.cancelPgDialog(dialog);
                 Log.e("fdgdfgdfgd", "Login Error: " + error.getMessage());
-                Toast.makeText(getApplicationContext(),"Please Connect to the Internet or Wrong Password", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),"Please Connect to the Internet", Toast.LENGTH_LONG).show();
             }
         }){
 

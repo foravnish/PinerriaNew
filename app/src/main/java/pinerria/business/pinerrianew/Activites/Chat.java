@@ -85,7 +85,7 @@ public class Chat extends AppCompatActivity {
                 Calendar c = Calendar.getInstance();
                 System.out.println("Current time => "+c.getTime());
 
-                SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy, HH:mm:ss");
+                SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy, HH:mm");
                 String formattedDate = df.format(c.getTime());
                 // formattedDate have current date/time
 

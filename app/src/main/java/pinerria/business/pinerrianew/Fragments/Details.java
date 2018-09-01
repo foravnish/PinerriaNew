@@ -166,14 +166,14 @@ public class Details extends Fragment {
             totlaUsers.setText(" ("+jsonObject.optString("total_rating_user")+" Reviews)");
 
 
-            if (jsonObject.optString("call_button").equals("Yes")){
-                price.setVisibility(View.VISIBLE);
-
-            }
-            else if (jsonObject.optString("call_button").equals("No")){
-                price.setVisibility(View.GONE);
-
-            }
+//            if (jsonObject.optString("call_button").equals("Yes")){
+//                price.setVisibility(View.VISIBLE);
+//
+//            }
+//            else if (jsonObject.optString("call_button").equals("No")){
+//                price.setVisibility(View.GONE);
+//
+//            }
             if (!jsonObject.optString("total_rating").equals("")) {
                 rating.setRating(Float.parseFloat(jsonObject.optString("total_rating")));
             }

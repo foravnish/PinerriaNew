@@ -231,15 +231,14 @@ public class WriteReview extends Fragment {
                             map.put("created_date",jsonObject.optString("created_date"));
 
 
-
                             Adapter adapter=new Adapter();
                             expListView.setAdapter(adapter);
                             AllProducts.add(map);
 
-                            if (jsonObject.optString("user_id").equals(MyPrefrences.getUserID(getActivity()))){
-                                editText.setText(jsonObject.optString("review"));
-                                rtbar.setRating(Float.parseFloat(jsonObject.optString("rating")));
-                            }
+//                            if (jsonObject.optString("user_id").equals(MyPrefrences.getUserID(getActivity()))){
+//                                editText.setText(jsonObject.optString("review"));
+//                                rtbar.setRating(Float.parseFloat(jsonObject.optString("rating")));
+//                            }
                         }
                     }
                     else{
@@ -272,8 +271,6 @@ public class WriteReview extends Fragment {
         // Adding request to request queue
         jsonObjReq.setShouldCache(false);
         AppController.getInstance().addToRequestQueue(jsonObjReq);
-
-
 
 
         return view;

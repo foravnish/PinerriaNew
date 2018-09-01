@@ -186,10 +186,10 @@ public class Packages extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
 
-                Log.d("fgdgdfgdfgdfgdgd",jsonObject2.optString("company_name"));
+
 
                 if (MyPrefrences.getUserLogin(getActivity())==true) {
-
+                    Log.d("fgdgdfgdfgdfgdgd",jsonObject2.optString("company_name"));
 
                     if (jsonObject2.optString("company_name").equalsIgnoreCase("")){
 //                        Toast.makeText(getApplicationContext(), "blank", Toast.LENGTH_SHORT).show();

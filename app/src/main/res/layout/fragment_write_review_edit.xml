@@ -82,7 +82,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="4dp"
             android:fontFamily="@font/muli_semibold"
-            android:text="Write a Review"
+            android:text="Rating"
             android:textColor="@color/black"
             android:textSize="14sp" />
 
@@ -126,8 +126,8 @@
                 android:background="@null"
                 android:fontFamily="@font/muli"
                 android:gravity="top"
-                android:hint="Write a review"
-                android:inputType="textMultiLine"
+                android:hint="Review Comments"
+                android:inputType="textCapSentences"
                 android:paddingLeft="2dp"
                 android:paddingTop="5dp"
                 android:textSize="13sp" />

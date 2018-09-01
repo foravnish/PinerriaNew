@@ -8,10 +8,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
 
-
     </style>
-
-
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
@@ -37,6 +34,7 @@
     </style>
 
     <style name="NavigationDrawerStyle">
+
         <item name="android:textSize">15sp</item><!-- text size in menu-->
         <item name="android:listPreferredItemHeightSmall">35dp</item><!-- item size in menu-->
         <item name="listPreferredItemHeightSmall">35dp</item><!-- item size in menu-->

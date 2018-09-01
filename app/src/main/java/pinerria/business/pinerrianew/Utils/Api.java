@@ -11,6 +11,7 @@ public class Api {
     public static String BASEURL="http://pinerria.com/api/";
     public static String BASEURL_FOR_IMAGE="http://pinerria.com/assets/images/business/";
 
+    public static String gethashCode="http://pinerria.com/getHashCode.php";
 
     public static String catToSubCat=BASEURL+"catToSubCat";
     public static String category=BASEURL+"category";
@@ -65,6 +66,7 @@ public class Api {
     public static String myRating  = BASEURL+"myRating";
     public static String updateMyRating  = BASEURL+"updateMyRating";
     public static String myRecievedCall  = BASEURL+"myRecievedCall";
+    public static String myFavouriteBusiness  = BASEURL+"myFavouriteBusiness";
 //    public static String generateHashKey  = "https://pinerria.com/pinerriaold/AndroidApi.php?function=generateHashKey";
 
     public static String URL_FETCH_MESSAGES=BASEURL+"myChatingHistory";

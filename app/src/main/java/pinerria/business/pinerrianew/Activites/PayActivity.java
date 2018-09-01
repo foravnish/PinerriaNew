@@ -27,9 +27,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.ebs.android.sdk.Config;
-import com.ebs.android.sdk.EBSPayment;
-import com.ebs.android.sdk.PaymentRequest;
+
 
 import org.json.JSONArray;
 import org.json.JSONException;

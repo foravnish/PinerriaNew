@@ -253,7 +253,6 @@ public class ComposeMessage extends Fragment {
                 params.put("description", subject.getText().toString());
                 params.put("comment", messages.getText().toString());
 
-
                 Log.d("fdsfdsgfdgdfg",queryFor);
 
                 return params;

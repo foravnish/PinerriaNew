@@ -174,8 +174,7 @@
                                 android:layout_centerHorizontal="true"
                                 android:layout_centerVertical="true"
                                 android:layout_toRightOf="@+id/rating"
-                                android:textColor="#f77501" />
-
+                                android:textColor="@color/pink" />
 
 
 
@@ -273,7 +272,7 @@
                     android:fontFamily="@font/muli_bold"
                     android:singleLine="true"
                     android:text="Display my phone no. to buyers"
-                    android:textColor="@color/star_orange"
+                    android:textColor="@color/pink"
                     android:textSize="17sp" />
 
                 <android.support.v7.widget.SwitchCompat
@@ -283,7 +282,10 @@
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="10dp"
                     android:layout_marginLeft="20dp"
+
+
                     android:checked="true"
+
                     android:textColor="@color/p_black" />
             </LinearLayout>
 

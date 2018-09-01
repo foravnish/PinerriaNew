@@ -14,6 +14,7 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 
 
+import pinerria.business.pinerrianew.PayUMoney.AppEnvironment;
 import pinerria.business.pinerrianew.R;
 
 
@@ -23,7 +24,7 @@ public class AppController extends Application {
     private static AppController mInstance;
     private RequestQueue mRequestQueue;
     private ImageLoader mImageLoader;
-
+    AppEnvironment appEnvironment;
 
     public static synchronized AppController getInstance() {
         return mInstance;
@@ -34,10 +35,14 @@ public class AppController extends Application {
         super.onCreate();
         mInstance = this;
 
-
+        appEnvironment = AppEnvironment.SANDBOX;
 
 
     }
+    public AppEnvironment getAppEnvironment() {
+        return appEnvironment;
+    }
+
 
     public RequestQueue getRequestQueue() {
         if (mRequestQueue == null) {

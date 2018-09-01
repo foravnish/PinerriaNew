@@ -18,14 +18,12 @@
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:passwordToggleEnabled="true"
-            >
+            app:passwordToggleEnabled="true">
 
             <EditText
                 android:id="@+id/addLocation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxLength="10"
                 android:hint="Add New Location"
                 android:layout_marginTop="10dp"
                 android:inputType="textCapSentences"/>
