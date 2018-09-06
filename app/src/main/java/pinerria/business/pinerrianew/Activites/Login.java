@@ -455,6 +455,10 @@ public class Login extends AppCompatActivity {
                         MyPrefrences.setImage(getApplicationContext(),jsonObject1.optString("image").toString());
                         MyPrefrences.setCityID2(getApplicationContext(),jsonObject1.optString("city_id").toString());
                         MyPrefrences.setState(getApplicationContext(),jsonObject1.optString("state_id").toString());
+                        MyPrefrences.setState(getApplicationContext(),jsonObject1.optString("state_id").toString());
+                        MyPrefrences.setCompanyName(getApplicationContext(),jsonObject1.optString("company_name").toString());
+                        MyPrefrences.setEMAILID(getApplicationContext(),jsonObject1.optString("email_address").toString());
+                        MyPrefrences.setTexAddress(getApplicationContext(),jsonObject1.optString("tax_address").toString());
 
 
                         Intent intent = new Intent(Login.this, HomeAct.class);

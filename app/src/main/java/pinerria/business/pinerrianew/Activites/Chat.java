@@ -46,7 +46,7 @@ public class Chat extends AppCompatActivity {
     Firebase reference1, reference2;
     ImageView backBtn;
     TextView toolbarTxtName;
-
+    int val;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,22 +109,22 @@ public class Chat extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
 
-                NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                Intent notificationIntent = new Intent(getApplicationContext(), ChatUSer.class);
-                notificationIntent.putExtra("name", "");
-                notificationIntent.putExtra("value", "1");
-                PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, notificationIntent, 0);
-
-                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(Chat.this)
-                        .setSmallIcon(R.drawable.message)
-                        .setContentTitle("New Message from " + "name")
-                        .setContentText("mgs")
-                        .setOnlyAlertOnce(true)
-                        .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-                        .setContentIntent(contentIntent);
-                mBuilder.setAutoCancel(true);
-                mBuilder.setLocalOnly(false);
-                mNotificationManager.notify(1, mBuilder.build());
+//                NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//                Intent notificationIntent = new Intent(getApplicationContext(), ChatUSer.class);
+//                notificationIntent.putExtra("name", "");
+//                notificationIntent.putExtra("value", "1");
+//                PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, notificationIntent, 0);
+//
+//                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(Chat.this)
+//                        .setSmallIcon(R.drawable.message)
+//                        .setContentTitle("New Message from " + "name")
+//                        .setContentText("mgs")
+//                        .setOnlyAlertOnce(true)
+//                        .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+//                        .setContentIntent(contentIntent);
+//                mBuilder.setAutoCancel(true);
+//                mBuilder.setLocalOnly(false);
+//                mNotificationManager.notify(1, mBuilder.build());
 
 
             }
@@ -144,25 +144,46 @@ public class Chat extends AppCompatActivity {
                 Map map = dataSnapshot.getValue(Map.class);
 
 
+                val=val+1;
                 String message = map.get("message").toString();
                 String userName = map.get("user").toString();
-                String date = map.get("date").toString();
-                // String time = map.get("date").toString();
+
+
+               // String date = map.get("date").toString();
+
+
+                String hr=map.get("date").toString().substring(12,14);
+                String min=map.get("date").toString().substring(15,17);
+                String date=hr+":"+min;
+
+                String day=map.get("date").toString().substring(0,2);
+                String month=map.get("date").toString().substring(3,5);
+                String year=map.get("date").toString().substring(6,10);
+
+                Log.d("fdsgfsdgfdgdfgd", String.valueOf(map.size()));
+                String date2 = day+"-"+month+"-"+year;
+                String dt2;
+
+
+//                if (date2.equals(date2)){
+//                     dt2=";
+//                }
+//                else{
+//                    dt2=date2;
+//                }
 
                 if(userName.equals(UserDetails.username)){
 //                    addMessageBox("You:-\n" + message, date,1);
-                    addMessageBox( message, date,1, getIntent().getStringExtra("name"));
+                    addMessageBox( message, date,date2,1, getIntent().getStringExtra("name"));
                 }
                 else{
 //                    addMessageBox(UserDetails.chatWith + ":-\n" + message, date,2);
-                    addMessageBox(message, date,2,getIntent().getStringExtra("name"));
+                    addMessageBox(message, date,date2,2,getIntent().getStringExtra("name"));
                 }
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-
 
             }
 
@@ -176,8 +197,6 @@ public class Chat extends AppCompatActivity {
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
 
-
-
             }
 
             @Override
@@ -188,7 +207,7 @@ public class Chat extends AppCompatActivity {
 
     }
 
-    public void addMessageBox(String message,String date, int type,String name){
+    public void addMessageBox(String message,String date,String date2, int type,String name){
 
 //        TextView textView = new TextView(Chat.this);
 //        textView.setText(message);
@@ -196,47 +215,54 @@ public class Chat extends AppCompatActivity {
         LinearLayout.LayoutParams lp2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         lp2.weight = 1.0f;
 
+        Log.d("dfsddfdfgdfsdgsg", String.valueOf(val));
 
         View headerView ;
-        TextView txtView,dateTxt;
+        TextView txtView,dateTxt,dateTab;
         if(type == 1) {
             headerView = ((LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE)).inflate(R.layout.header_r, null, false);
             txtView=headerView.findViewById(R.id.txtView);
             dateTxt=headerView.findViewById(R.id.dateTxt);
+            dateTab=headerView.findViewById(R.id.dateTab);
 
             txtView.setText(message);
             dateTxt.setText(date);
+
+            dateTab.setText(date2);
             //lp2.gravity = Gravity.LEFT;
-           // textView.setBackgroundResource(R.drawable.rounded_corner1);
+            // textView.setBackgroundResource(R.drawable.rounded_corner1);
         }
         else{
             headerView = ((LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE)).inflate(R.layout.header_l, null, false);
 
             txtView=headerView.findViewById(R.id.txtView);
             dateTxt=headerView.findViewById(R.id.dateTxt);
+            dateTab=headerView.findViewById(R.id.dateTab);
 
             txtView.setText(message);
             dateTxt.setText(date);
-           // lp2.gravity = Gravity.RIGHT;
+
+            dateTab.setText(date2);
+            // lp2.gravity = Gravity.RIGHT;
             //textView.setBackgroundResource(R.drawable.rounded_corner2);
 
+//
+            NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            Intent notificationIntent = new Intent(getApplicationContext(), ChatUSer.class);
+            notificationIntent.putExtra("name", "");
+            notificationIntent.putExtra("value", "1");
+            PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, notificationIntent, 0);
 
-                NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                Intent notificationIntent = new Intent(getApplicationContext(), ChatUSer.class);
-                notificationIntent.putExtra("name", "");
-                notificationIntent.putExtra("value", "1");
-                PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, notificationIntent, 0);
-
-                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(Chat.this)
-                        .setSmallIcon(R.drawable.message)
-                        .setContentTitle("New Message from " + name)
-                        .setContentText(message)
-                        .setOnlyAlertOnce(true)
-                        .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-                        .setContentIntent(contentIntent);
-                mBuilder.setAutoCancel(true);
-                mBuilder.setLocalOnly(false);
-                mNotificationManager.notify(1, mBuilder.build());
+            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(Chat.this)
+                    .setSmallIcon(R.drawable.message)
+                    .setContentTitle("New Message from " + name)
+                    .setContentText(message)
+                    .setOnlyAlertOnce(true)
+                    .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                    .setContentIntent(contentIntent);
+            mBuilder.setAutoCancel(true);
+            mBuilder.setLocalOnly(false);
+            mNotificationManager.notify(1, mBuilder.build());
 
         }
 
@@ -244,7 +270,6 @@ public class Chat extends AppCompatActivity {
         layout.addView(headerView);
         scrollView.fullScroll(View.FOCUS_DOWN);
     }
-
 
 
 }

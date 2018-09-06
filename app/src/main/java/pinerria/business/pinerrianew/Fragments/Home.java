@@ -95,6 +95,7 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
 
     public  static boolean business;
     public  static boolean jobs;
+    public  static boolean packageData;
    // FabSpeedDial fab;
 
 
@@ -269,7 +270,6 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
                            // indicator2.setViewPager(viewPager2);
                             mCustomPagerAdapter2.notifyDataSetChanged();
 
-
                         }
 //                        final Handler handler = new Handler();
 //
@@ -320,7 +320,6 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
         ///// End baner APi
 
 
-
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
                 Api.catToSubCat+"/"+ MyPrefrences.getUserID(getActivity()), null, new Response.Listener<JSONObject>() {
 
@@ -347,6 +346,15 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
                         else if (response.optString("job").equalsIgnoreCase("No")){
                             jobs =false;
                         }
+
+                        if (response.optString("package").equalsIgnoreCase("Yes")){
+                            packageData =true;
+                        }
+                        else if (response.optString("package").equalsIgnoreCase("No")){
+                            packageData =false;
+                        }
+
+
                         JSONArray jsonArray=response.getJSONArray("message");
                         for (int i=0;i<jsonArray.length();i++){
                             JSONObject jsonObject=jsonArray.getJSONObject(i);

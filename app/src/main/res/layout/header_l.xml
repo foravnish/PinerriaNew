@@ -1,10 +1,23 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <!--android:background="@drawable/rounded_corner2"-->
     <!--android:background="@drawable/buble1"-->
+
+    <TextView
+        android:id="@+id/dateTab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/strock_date"
+        android:gravity="center"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:text="date"
+        android:textColor="@color/white" />
 
 
     <LinearLayout
@@ -12,6 +25,8 @@
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:minWidth="120dp"
+        android:layout_below="@+id/dateTab"
+
         android:orientation="vertical">
 
         <LinearLayout

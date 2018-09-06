@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="350dp"
     android:layout_height="300dp"
-    android:background="#cc2a76da"
+    android:background="@color/pink"
     android:orientation="vertical">
 
 
@@ -18,10 +18,10 @@
         android:layout_gravity="center_vertical"
         android:layout_margin="10dp"
         android:padding="10dp"
-        android:background="@color/pink"
+        android:background="@drawable/strock_btn_login"
         android:gravity="center"
         android:text="Congratulations!"
-        android:textColor="#fff"
+        android:textColor="@color/blue"
         android:textSize="18dp"
         android:textStyle="bold" />
 
@@ -50,7 +50,7 @@
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
-                android:background="@drawable/stroke_pink"
+                android:background="@drawable/strock_btn_login"
                 android:clickable="true"
                 android:text="OK"
                 android:layout_marginTop="20dp"
@@ -58,8 +58,8 @@
                 android:paddingRight="30dp"
                 android:textAllCaps="false"
                 android:layout_gravity="center"
-                android:textColor="@color/white"
-                android:textSize="11sp"
+                android:textColor="@color/blue"
+                android:textSize="18sp"
                 android:textStyle="bold"/>
 
 

@@ -19,11 +19,13 @@ public class MyPrefrences {
     static SharedPreferences subCataPrefences;
     static SharedPreferences username;
     static SharedPreferences emaildid;
+    static SharedPreferences TexAddress;
     static SharedPreferences Mobile;
     static SharedPreferences Notification;
     static SharedPreferences City;
     static SharedPreferences City2;
     static SharedPreferences StateId;
+    static SharedPreferences CompanyName;
     static SharedPreferences CityName;
     static SharedPreferences CityDialog;
     static SharedPreferences Image;
@@ -241,6 +243,20 @@ public class MyPrefrences {
     }
 
 
+    public static void setTexAddress(Context context, String is) {
+        TexAddress = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = TexAddress.edit();
+        editor.putString("TEXADDRESS", is);
+        editor.commit();
+    }
+
+    public static String getTexAddress(Context context) {
+        TexAddress = PreferenceManager.getDefaultSharedPreferences(context);
+        return TexAddress.getString("TEXADDRESS","");
+    }
+
+
+
     public static void setMobile(Context context, String is) {
         Mobile = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = Mobile.edit();
@@ -290,6 +306,19 @@ public class MyPrefrences {
         StateId = PreferenceManager.getDefaultSharedPreferences(context);
         return StateId.getString(STATE,"");
     }
+
+    public static void setCompanyName(Context context, String is) {
+        CompanyName = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = CompanyName.edit();
+        editor.putString("COMPANY", is);
+        editor.commit();
+    }
+
+    public static String getCompanyName(Context context) {
+        CompanyName = PreferenceManager.getDefaultSharedPreferences(context);
+        return CompanyName.getString("COMPANY","");
+    }
+
 
 
     public static void setCityName(Context context, String is) {

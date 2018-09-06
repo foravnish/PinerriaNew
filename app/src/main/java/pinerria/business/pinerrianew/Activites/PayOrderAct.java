@@ -70,7 +70,7 @@ public class PayOrderAct extends AppCompatActivity {
     Button submit;
     CheckBox checkBob;
     String  flag="false";
-    EditText oder_id,user_email,tax_address,gst_number,company_name;
+    EditText oder_id,user_email,tax_address,gst_number,company_name,mobileNo;
 
     ArrayList<HashMap<String, String>> custom_post_parameters;
     private static final int ACC_ID = 27791;// Provided by EBS
@@ -98,12 +98,14 @@ public class PayOrderAct extends AppCompatActivity {
         gst_number=findViewById(R.id.gst_number);
         tax_address=findViewById(R.id.tax_address);
         user_email=findViewById(R.id.user_email);
+        mobileNo= findViewById(R.id.mobileNo);
 
         mAppPreference = new AppPreference();
         merKey= AppEnvironment.SANDBOX.merchant_Key();
         merId=AppEnvironment.SANDBOX.merchant_ID();
         salt=AppEnvironment.SANDBOX.salt();
 
+        mobileNo.setText(MyPrefrences.getMobile(getApplicationContext()));
 
         dialog=new Dialog(PayOrderAct.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -158,7 +160,6 @@ public class PayOrderAct extends AppCompatActivity {
                         String ts = tsLong.toString();
                         Log.d("TimeCurrent",ts);
                         MyPrefrences.setDateTime(getApplicationContext(),ts);
-
 
                         submitOrderApi(jsonObject.optString("payment_id"),jsonObject.optString("amount"));
 
@@ -257,7 +258,7 @@ public class PayOrderAct extends AppCompatActivity {
 
         if (TextUtils.isEmpty(company_name.getText().toString()))
         {
-            Util.errorDialog(PayOrderAct.this,"Type Company Name");
+            Util.errorDialog(PayOrderAct.this,"Enter Company Name");
             return false;
         }
 
@@ -271,14 +272,19 @@ public class PayOrderAct extends AppCompatActivity {
 //                return true;
 //            }
 //        }
+        else if (TextUtils.isEmpty(mobileNo.getText().toString()))
+        {
+            Util.errorDialog(PayOrderAct.this,"Enter Mobile No.");
+            return false;
+        }
 
         else if (TextUtils.isEmpty(tax_address.getText().toString()))
         {
-            Util.errorDialog(PayOrderAct.this,"Type Address");
+            Util.errorDialog(PayOrderAct.this,"Enter Address");
             return false;
         }  else if (TextUtils.isEmpty(user_email.getText().toString()))
         {
-            Util.errorDialog(PayOrderAct.this,"Type Email Id");
+            Util.errorDialog(PayOrderAct.this,"Enter Email Id");
             return false;
         }
 
@@ -537,9 +543,9 @@ public class PayOrderAct extends AppCompatActivity {
         AppEnvironment appEnvironment = ((AppController) getApplication()).getAppEnvironment();
         builder.setAmount(amount)
                 .setTxnId(txnId)
-                .setPhone(phone)
-                .setProductName("Pinerria  "+package_name)
-                .setFirstName(MyPrefrences.getUSENAME(getApplicationContext()))
+                .setPhone(mobileNo.getText().toString())
+                .setProductName("Pinerria "+package_name)
+                .setFirstName(company_name.getText().toString())
                 .setEmail(email)
                 .setsUrl(appEnvironment.surl())
                 .setfUrl(appEnvironment.furl())
@@ -848,7 +854,7 @@ public class PayOrderAct extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 Util.cancelPgDialog(dialog);
-                Log.e("dfsjfdfsdfgd", "Login Response: " + response);
+                Log.e("fgfgfgdfgfhfghg", "Response: " + response);
 
                 try {
                     JSONObject jsonObject = new JSONObject(response);
@@ -916,7 +922,7 @@ public class PayOrderAct extends AppCompatActivity {
 
         dialog4 = new Dialog(PayOrderAct.this);
         dialog4.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog4.setContentView(R.layout.alertdialogcustom_success);
+        dialog4.setContentView(R.layout.alertdialogcustom_pay_success);
         dialog4.setCancelable(false);
 
         Button ok = (Button) dialog4.findViewById(R.id.btn_ok);
@@ -928,11 +934,10 @@ public class PayOrderAct extends AppCompatActivity {
 
         if (status.equalsIgnoreCase("1")){
 
-            heading.setText("Your Payment Successfully Done!");
+            heading.setText("Your Payment Successfully Done ! \nYour intended promo will be visible to others after approval by admin, within two working days.");
             btn.setText("Congratulations!");
             notificationMsg.setVisibility(View.VISIBLE);
         }
-
 
         else if(status.equalsIgnoreCase("2")){
 

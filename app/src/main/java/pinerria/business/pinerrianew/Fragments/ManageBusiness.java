@@ -74,6 +74,7 @@ public class ManageBusiness extends Fragment {
     JSONObject jsonObject;
     private String pass="123456";
     LinearLayout priceLayout;
+    String val;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -203,11 +204,7 @@ public class ManageBusiness extends Fragment {
             @Override
             public void onClick(View view) {
 
-
                     LoginForChat();
-
-
-
 
             }
         });
@@ -363,13 +360,12 @@ public class ManageBusiness extends Fragment {
         return view;
     }
 
-    private void changeStatusBusinessCall(String id ,boolean b) {
+    private void changeStatusBusinessCall(final String id , boolean b) {
 
         Util.showPgDialog(dialog);
-        String val = null;
+
         if (b==true){
             val="Yes";
-
 
         }
         else if (b==false){
@@ -383,6 +379,8 @@ public class ManageBusiness extends Fragment {
             public void onResponse(String response) {
                 Util.cancelPgDialog(dialog);
                 Log.e("statusjob", "Response: " + response);
+                Log.d("dfgfdgdfgdfg",id);
+                Log.d("dfgfdgdfgdfg",val);
 
             }
         }, new Response.ErrorListener() {

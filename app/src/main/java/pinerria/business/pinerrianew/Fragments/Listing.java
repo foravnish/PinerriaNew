@@ -254,6 +254,12 @@ public class Listing extends Fragment {
         }
 
 
+        Log.d("gdfgdfgdfgd1",getArguments().getString("id"));
+        Log.d("gdfgdfgdfgd2",MyPrefrences.getUserID(getActivity()));
+        Log.d("gdfgdfgdfgd3",MyPrefrences.getCityID(getActivity()));
+        Log.d("gdfgdfgdfgd4",getArguments().getString("value"));
+        Log.d("gdfgdfgdfgd5",getArguments().getString("nearMe"));
+
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
                 Api.subCategoryBusiness+"?sort_rating="+wiseData+"&sub_category="+getArguments().getString("id")+"&user_id="+MyPrefrences.getUserID(getActivity())+"&city_id="+MyPrefrences.getCityID(getActivity())+
                 "&latitue="+lat+"&longitue="+longi+"&location_id="+getArguments().getString("value")+"&near_me="+getArguments().getString("nearMe"), null, new Response.Listener<JSONObject>() {
@@ -330,19 +336,10 @@ public class Listing extends Fragment {
 
     public class Viewholder{
         ImageView imgFav,stars;
-//        MaterialFavoriteButton imgFav;
         TextView address,name,price,area,keyword,totlaUsers,distance;
-
-        ImageView callNow1;
-        LinearLayout liner,priceLayout;
+        LinearLayout priceLayout;
         MaterialRatingBar rating;
-//        NetworkImageView imgaeView;
         RoundedImageView imgaeView;
-        CardView cardView;
-     //   ShimmerTextView offersText;
-     //   Shimmer shimmer;
-        ImageView img1,img2,img3,img4,img5;
-        LinearLayout footer_layout;
 
     }
     class Adapter extends BaseAdapter {
@@ -417,7 +414,6 @@ public class Listing extends Fragment {
                 }
 
             }
-
 
 
             Picasso.with(getActivity())

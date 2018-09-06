@@ -104,6 +104,7 @@ public class AddGSTDetails extends AppCompatActivity {
         submit= findViewById(R.id.submit);
         checkBob= findViewById(R.id.checkBob);
 
+
         company_name=findViewById(R.id.company_name);
         gst_number=findViewById(R.id.gst_number);
         tax_address=findViewById(R.id.tax_address);
@@ -215,10 +216,30 @@ public class AddGSTDetails extends AppCompatActivity {
                         tax_address=findViewById(R.id.tax_address);
                         user_email=findViewById(R.id.user_email);
 
-                        company_name.setText(jsonObject.optString("company_name"));
+                        if (jsonObject.optString("company_name").equals("")){
+                            company_name.setText(MyPrefrences.getCompanyName(getApplicationContext()));
+                        }
+                        else {
+                            company_name.setText(jsonObject.optString("company_name"));
+                        }
                         gst_number.setText(jsonObject.optString("gst_number"));
-                        tax_address.setText(jsonObject.optString("tax_address"));
-                        user_email.setText(jsonObject.optString("email_address"));
+
+                        if (jsonObject.optString("tax_address").equals("")){
+                            tax_address.setText(MyPrefrences.getTexAddress(getApplicationContext()));
+                        }
+                        else {
+                            tax_address.setText(jsonObject.optString("tax_address"));
+                        }
+
+
+
+                        if (jsonObject.optString("email_address").equals("")){
+                            user_email.setText(MyPrefrences.getEMAILID(getApplicationContext()));
+                        }
+                        else {
+                            user_email.setText(jsonObject.optString("email_address"));
+                        }
+
 
                     }
                     else{
@@ -260,7 +281,7 @@ public class AddGSTDetails extends AppCompatActivity {
 
         if (TextUtils.isEmpty(company_name.getText().toString()))
         {
-            Util.errorDialog(AddGSTDetails.this,"Type Company Name");
+            Util.errorDialog(AddGSTDetails.this,"Enter Company Name");
             return false;
         }
 
@@ -277,11 +298,12 @@ public class AddGSTDetails extends AppCompatActivity {
 
         else if (TextUtils.isEmpty(tax_address.getText().toString()))
         {
-            Util.errorDialog(AddGSTDetails.this,"Type Address");
+            Util.errorDialog(AddGSTDetails.this,"Enter Address");
             return false;
-        }  else if (TextUtils.isEmpty(user_email.getText().toString()))
+        }
+        else if (TextUtils.isEmpty(user_email.getText().toString()))
         {
-            Util.errorDialog(AddGSTDetails.this,"Type Email Id");
+            Util.errorDialog(AddGSTDetails.this,"Enter Email Id");
             return false;
         }
 
@@ -308,9 +330,7 @@ public class AddGSTDetails extends AppCompatActivity {
 
                         if (type.equalsIgnoreCase("package")){
 
-
                             paymentGatway(getIntent().getStringExtra("amount"));
-
 
 
 //                        callEbsK
@@ -678,7 +698,7 @@ public class AddGSTDetails extends AppCompatActivity {
                 .setTxnId(txnId)
                 .setPhone(phone)
                 .setProductName("Pinerria  "+package_name)
-                .setFirstName(MyPrefrences.getUSENAME(getApplicationContext()))
+                .setFirstName("xyz")
                 .setEmail(email)
                 .setsUrl(appEnvironment.surl())
                 .setfUrl(appEnvironment.furl())
@@ -996,6 +1016,7 @@ public class AddGSTDetails extends AppCompatActivity {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     if (jsonObject.getString("status").equalsIgnoreCase("success")) {
+
 
 
                         Intent intent=new Intent(AddGSTDetails.this,HomeAct.class);

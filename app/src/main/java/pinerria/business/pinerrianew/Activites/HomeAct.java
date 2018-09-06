@@ -73,7 +73,11 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -136,13 +140,13 @@ public class HomeAct extends AppCompatActivity
     public static  Double latitude=null,longitude=null;
 
     String newVersion;
+    String currentVersion;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
 
 
         profile=findViewById(R.id.profile);
@@ -173,8 +177,13 @@ public class HomeAct extends AppCompatActivity
         gps_button=header.findViewById(R.id.gps_button);
         gps_button2=header.findViewById(R.id.gps_button2);
 
+        try {
+            currentVersion = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
 
-      //  new FetchAppVersionFromGooglePlayStore().execute();
+        new FetchAppVersionFromGooglePlayStore().execute();
 
         db = new DatabaseHelper(HomeAct.this);
 
@@ -1149,6 +1158,76 @@ public class HomeAct extends AppCompatActivity
                 break;
         }
     }
+
+
+
+
+    private class FetchAppVersionFromGooglePlayStore extends AsyncTask<Void, String, String> {
+        @Override
+        protected String doInBackground(Void... voids) {
+
+            String newVersion = null;
+
+            try {
+                Document document = Jsoup.connect("https://play.google.com/store/apps/details?id="+HomeAct.this.getPackageName() + "&hl=en")
+                        .timeout(30000)
+                        .userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6")
+                        .referrer("http://www.google.com")
+                        .get();
+                if (document != null) {
+                    Elements element = document.getElementsContainingOwnText("Current Version");
+                    for (Element ele : element) {
+                        if (ele.siblingElements() != null) {
+                            Elements sibElemets = ele.siblingElements();
+                            for (Element sibElemet : sibElemets) {
+                                newVersion = sibElemet.text();
+                            }
+                        }
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return newVersion;
+
+        }
+
+
+        @Override
+        protected void onPostExecute(String onlineVersion) {
+            super.onPostExecute(onlineVersion);
+            Log.d("update", "Current version " + currentVersion + "playstore version " + onlineVersion);
+            if (onlineVersion != null && !onlineVersion.isEmpty()) {
+                if (Float.valueOf(currentVersion) < Float.valueOf(onlineVersion)) {
+                    //show dialog
+
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(HomeAct.this);
+
+                    alertDialogBuilder.setTitle(HomeAct.this.getString(R.string.app_name));
+                    alertDialogBuilder.setMessage("Your application update is available.");
+                    alertDialogBuilder.setCancelable(false);
+                    alertDialogBuilder.setPositiveButton("UPDATE NOW", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            HomeAct.this.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + getPackageName())));
+                            dialog.cancel();
+                        }
+                    });
+                    alertDialogBuilder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+
+                            dialog.dismiss();
+                        }
+                    });
+                    alertDialogBuilder.show();
+                }
+
+            }
+
+        }
+
+
 //    class FetchAppVersionFromGooglePlayStore extends AsyncTask<String, Void, String> {
 //
 //        protected String doInBackground(String... urls) {
@@ -1193,8 +1272,10 @@ public class HomeAct extends AppCompatActivity
 //            });
 //            alertDialogBuilder.show();
 //        }
-//
-//
-//        }
+
+
+    }
+
+
 
 }
