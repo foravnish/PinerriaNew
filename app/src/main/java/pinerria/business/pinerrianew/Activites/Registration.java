@@ -682,8 +682,6 @@ public class Registration extends AppCompatActivity {
             Log.d("dfdsgsdgdfgdfh",idstate);
 
 
-
-
             com.squareup.okhttp.Request request = new com.squareup.okhttp.Request.Builder()
 //                     .url("http://divpreetsingh.info/app/ManiUploadsImageHere")
                     .header("Authorization", "Client-ID " + "...")

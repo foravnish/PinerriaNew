@@ -63,6 +63,7 @@
             android:name=".Activites.HomeAct"
             android:label="@string/title_activity_home"
             android:screenOrientation="portrait"
+
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activites.ProfilePage"

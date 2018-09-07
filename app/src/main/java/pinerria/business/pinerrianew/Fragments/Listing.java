@@ -21,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -56,6 +57,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -106,6 +108,7 @@ public class Listing extends Fragment {
     String nearMeValue;
 
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -142,6 +145,8 @@ public class Listing extends Fragment {
 
         Log.d("fgsdgsdfgsdfgdfsgdgd", String.valueOf(HomeAct.latitude));
         Log.d("fgsdgsdfgsdfgdfsgdgd", String.valueOf(HomeAct.longitude));
+
+
 
         nearMeLayout.setOnClickListener(new View.OnClickListener() {
             @Override

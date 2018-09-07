@@ -82,6 +82,8 @@ public class Chat extends AppCompatActivity {
             public void onClick(View v) {
                 String messageText = messageArea.getText().toString();
 
+                Log.d("gdfgdfgdfgd",messageText);
+
                 Calendar c = Calendar.getInstance();
                 System.out.println("Current time => "+c.getTime());
 
@@ -144,6 +146,8 @@ public class Chat extends AppCompatActivity {
                 Map map = dataSnapshot.getValue(Map.class);
 
 
+                Log.d("fsddsgdgdf","true");
+
                 val=val+1;
                 String message = map.get("message").toString();
                 String userName = map.get("user").toString();
@@ -154,14 +158,14 @@ public class Chat extends AppCompatActivity {
 
                 String hr=map.get("date").toString().substring(12,14);
                 String min=map.get("date").toString().substring(15,17);
-                String date=hr+":"+min;
+                String time=hr+":"+min;
 
                 String day=map.get("date").toString().substring(0,2);
                 String month=map.get("date").toString().substring(3,5);
                 String year=map.get("date").toString().substring(6,10);
 
                 Log.d("fdsgfsdgfdgdfgd", String.valueOf(map.size()));
-                String date2 = day+"-"+month+"-"+year;
+                String date = day+"-"+month+"-"+year;
                 String dt2;
 
 
@@ -174,11 +178,11 @@ public class Chat extends AppCompatActivity {
 
                 if(userName.equals(UserDetails.username)){
 //                    addMessageBox("You:-\n" + message, date,1);
-                    addMessageBox( message, date,date2,1, getIntent().getStringExtra("name"));
+                    addMessageBox( message, time,date,1, getIntent().getStringExtra("name"));
                 }
                 else{
 //                    addMessageBox(UserDetails.chatWith + ":-\n" + message, date,2);
-                    addMessageBox(message, date,date2,2,getIntent().getStringExtra("name"));
+                    addMessageBox(message, time,date,2,getIntent().getStringExtra("name"));
                 }
             }
 
@@ -207,7 +211,7 @@ public class Chat extends AppCompatActivity {
 
     }
 
-    public void addMessageBox(String message,String date,String date2, int type,String name){
+    public void addMessageBox(String message,String time,String date, int type,String name){
 
 //        TextView textView = new TextView(Chat.this);
 //        textView.setText(message);
@@ -226,9 +230,9 @@ public class Chat extends AppCompatActivity {
             dateTab=headerView.findViewById(R.id.dateTab);
 
             txtView.setText(message);
-            dateTxt.setText(date);
+            dateTxt.setText(time);
 
-            dateTab.setText(date2);
+            dateTab.setText(date);
             //lp2.gravity = Gravity.LEFT;
             // textView.setBackgroundResource(R.drawable.rounded_corner1);
         }
@@ -240,9 +244,9 @@ public class Chat extends AppCompatActivity {
             dateTab=headerView.findViewById(R.id.dateTab);
 
             txtView.setText(message);
-            dateTxt.setText(date);
+            dateTxt.setText(time);
 
-            dateTab.setText(date2);
+            dateTab.setText(date);
             // lp2.gravity = Gravity.RIGHT;
             //textView.setBackgroundResource(R.drawable.rounded_corner2);
 

@@ -1117,7 +1117,7 @@ public class AddProduct extends AppCompatActivity {
 
                     MyPrefrences.setBusinesID(getApplicationContext(),json.optString("message"));
 
-                    Toast.makeText(getApplicationContext(), "Business Added Successfully...", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Business Added Successfully. The changes will reflect after admin approval,", Toast.LENGTH_LONG).show();
 
                     Intent intent=new Intent(AddProduct.this,HomeAct.class);
                     intent.putExtra("userType","my_product");
@@ -1275,7 +1275,7 @@ public class AddProduct extends AppCompatActivity {
 
                     Log.d("dsfdsgdgdfgdfgdfgdfgd", String.valueOf(json));
 
-                    Toast.makeText(getApplicationContext(), "Business Edit Successfully...", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Business Edit Successfully. The changes will reflect after admin approval.", Toast.LENGTH_LONG).show();
 
                     Intent intent=new Intent(AddProduct.this,HomeAct.class);
                     intent.putExtra("userType","my_product");
@@ -1436,7 +1436,7 @@ public class AddProduct extends AppCompatActivity {
 
 
 
-                    Toast.makeText(getApplicationContext(), "Business Edit Successfully...", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Business Edit Successfully. The changes will reflect after admin approval.", Toast.LENGTH_LONG).show();
 
                     Intent intent=new Intent(AddProduct.this,HomeAct.class);
                     intent.putExtra("userType","my_product");

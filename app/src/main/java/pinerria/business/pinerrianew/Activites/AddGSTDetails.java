@@ -128,6 +128,7 @@ public class AddGSTDetails extends AppCompatActivity {
 
         Log.d("fgdfgdfgdfgdfgd",getIntent().getStringExtra("amount"));
 
+
         checkBob.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -144,6 +145,7 @@ public class AddGSTDetails extends AppCompatActivity {
                     gst_number.setText("");
                     gst_number.setFocusable(true);
                     gst_number.setFocusableInTouchMode(true);
+
                 }
             }
         });
@@ -285,17 +287,6 @@ public class AddGSTDetails extends AppCompatActivity {
             return false;
         }
 
-
-//        else if (TextUtils.isEmpty(gst_number.getText().toString())) {
-//            if (flag.equals("true")) {
-//                Util.errorDialog(PayOrderAct.this, "GST No ");
-//                return false;
-//            }
-//            else{
-//                return true;
-//            }
-//        }
-
         else if (TextUtils.isEmpty(tax_address.getText().toString()))
         {
             Util.errorDialog(AddGSTDetails.this,"Enter Address");
@@ -306,7 +297,11 @@ public class AddGSTDetails extends AppCompatActivity {
             Util.errorDialog(AddGSTDetails.this,"Enter Email Id");
             return false;
         }
-
+        else if (flag=="false" && TextUtils.isEmpty(gst_number.getText().toString()))
+        {
+            Util.errorDialog(AddGSTDetails.this,"Enter GST Number");
+            return false;
+        }
 
         return true;
 
@@ -1102,7 +1097,7 @@ public class AddGSTDetails extends AppCompatActivity {
 
         if (status.equalsIgnoreCase("1")){
 
-            heading.setText("Your have Package Purchase Successfully! , Now Your Listing appearing in top.\n");
+            heading.setText("Your Payment Successfully Done ! \nYour business listing and job listing will appear in premium slots now.\n\nNow you can also send a promo message to other users in your city, subject to admin approval.  Enter your promo text below:");
             btn.setText("Congratulations!");
             notificationMsg.setVisibility(View.VISIBLE);
         }
@@ -1110,7 +1105,7 @@ public class AddGSTDetails extends AppCompatActivity {
 
         else if(status.equalsIgnoreCase("2")){
 
-            heading.setText("Payment not successful.  Hence, your ad will not be visible to your clients.");
+            heading.setText("Your payment has not been successful.  Please try again");
             btn.setText("Error Message!");
             notificationMsg.setVisibility(View.GONE);
         }

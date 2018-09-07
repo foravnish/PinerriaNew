@@ -770,14 +770,14 @@ public class PayOrderAct extends AppCompatActivity {
                     Log.d("responseprint","success "+payuResponse);
                     Log.d("responseprint","success "+merchantResponse);
 
-                    new AlertDialog.Builder(PayOrderAct.this)
-                            .setCancelable(false)
-                            .setMessage("Payment Success...")
-                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int whichButton) {
-                                    dialog.dismiss();
-                                }
-                            }).show();
+//                    new AlertDialog.Builder(PayOrderAct.this)
+//                            .setCancelable(false)
+//                            .setMessage("Payment Success...")
+//                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+//                                public void onClick(DialogInterface dialog, int whichButton) {
+//                                    dialog.dismiss();
+//                                }
+//                            }).show();
                     //  new BuyPackagesApi2(getApplicationContext(),"success","payment_success").execute();
 
                     //  placeOrder();
@@ -934,18 +934,17 @@ public class PayOrderAct extends AppCompatActivity {
 
         if (status.equalsIgnoreCase("1")){
 
-            heading.setText("Your Payment Successfully Done ! \nYour intended promo will be visible to others after approval by admin, within two working days.");
+            heading.setText("Your Payment Successfully Done ! \n\nYour intended promo will be visible to others after approval by admin, within two working days.");
             btn.setText("Congratulations!");
-            notificationMsg.setVisibility(View.VISIBLE);
+            notificationMsg.setVisibility(View.GONE);
         }
 
         else if(status.equalsIgnoreCase("2")){
 
-            heading.setText("Payment not successful.  Hence, your ad will not be visible to your clients.");
+            heading.setText("Your payment has not been successful.  Please try again");
             btn.setText("Error Message!");
             notificationMsg.setVisibility(View.GONE);
         }
-
 
         ok.setOnClickListener(new View.OnClickListener() {
             @Override

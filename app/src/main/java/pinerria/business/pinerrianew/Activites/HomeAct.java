@@ -40,6 +40,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
@@ -680,17 +681,35 @@ public class HomeAct extends AppCompatActivity
 
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
 
-        EditText searchEditText = (EditText) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        final EditText searchEditText = (EditText) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
 
         SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchEditText.setTextColor(getResources().getColor(R.color.black));
         searchEditText.setHintTextColor(getResources().getColor(R.color.black));
         searchView.setQueryHint("Search Business");
+
+
+        searchEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                searchEditText.setFocusable(true);
+                searchEditText.setFocusableInTouchMode(true);
+
+            }
+        });
+//        searchEditText.setFocusable(true);
+//        searchEditText.setFocusableInTouchMode(true);
+
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
 //                Toast.makeText(getApplicationContext(), query, Toast.LENGTH_SHORT).show();
+
+                Log.d("dfgdfgdfgdgd","true");
+
+                getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
                 Fragment fragment = new Listing();
                 Bundle bundle = new Bundle();
@@ -705,6 +724,12 @@ public class HomeAct extends AppCompatActivity
                 ft.replace(R.id.content_frame, fragment).addToBackStack(null).commit();
 
                 createNote(query.toString());
+
+                searchEditText.setFocusable(false);
+                searchEditText.setFocusableInTouchMode(false);
+
+
+
 
                 return true;
             }

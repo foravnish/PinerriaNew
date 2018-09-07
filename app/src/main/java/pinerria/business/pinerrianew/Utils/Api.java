@@ -67,7 +67,8 @@ public class Api {
     public static String updateMyRating  = BASEURL+"updateMyRating";
     public static String myRecievedCall  = BASEURL+"myRecievedCall";
     public static String myFavouriteBusiness  = BASEURL+"myFavouriteBusiness";
-//    public static String generateHashKey  = "https://pinerria.com/pinerriaold/AndroidApi.php?function=generateHashKey";
+    public static String checkPrevoiusUserpackages=BASEURL+"checkPrevoiusUserpackages";
+
 
     public static String URL_FETCH_MESSAGES=BASEURL+"myChatingHistory";
     public static String URL_SEND_MESSAGE=BASEURL+"saveChatData";
@@ -126,6 +127,7 @@ public class Api {
     public static String dataToBuyerCallHistory=BASEURL+"dataToBuyerCallHistory";
     public static String forgetPassword=BASEURL+"forgetPassword";
     public static String messageToAdmin=BASEURL+"messageToAdmin";
+
 
 
     public static String BASE_URL = "http://bizzcityinfo.com/";

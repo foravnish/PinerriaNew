@@ -25,11 +25,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,6 +42,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import pinerria.business.pinerrianew.Activites.AddGSTDetails;
@@ -183,54 +188,151 @@ public class Packages extends Fragment {
 
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
 
-
+                Util.showPgDialog(dialog);
 
 
                 if (MyPrefrences.getUserLogin(getActivity())==true) {
 
 
 
-                    if (Home.packageData==true){
-                     Util.errorDialog(getActivity(),"You have already package purchased.");
-                    }
-                    else if (Home.packageData==false){
-                        if (jsonObject2.optString("company_name").equalsIgnoreCase("")){
-//                        Toast.makeText(getApplicationContext(), "blank", Toast.LENGTH_SHORT).show();
-//
-//                        Long tsLong = System.currentTimeMillis()/1000;
-//                        String ts = tsLong.toString();
-//                        Log.d("TimeCurrent",ts);
-//                        MyPrefrences.setDateTime(getActivity(),ts);
 
-                            Intent intent=new Intent(getActivity(),AddGSTDetails.class);
-                            intent.putExtra("type","packageBefore");
-                            intent.putExtra("amount","");
-                            startActivity(intent);
-                            getActivity().overridePendingTransition(R.anim.fadein, R.anim.fadeout);
-                        }
-                        else{
 
-                            Intent intent=new Intent(getActivity(), PayActivity.class);
+
+                    RequestQueue queue = Volley.newRequestQueue(getActivity());
+                    StringRequest strReq = new StringRequest(Request.Method.POST,
+                            Api.checkPrevoiusUserpackages, new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response2) {
+                            Util.cancelPgDialog(dialog);
+                            Log.e("dfsjfdfsdfgd", "Login Response: " + response2);
+
                             try {
-                                intent.putExtra("jsonArray",jsonArray.get(i).toString());
-                                intent.putExtra("userInfo",userInfoAyyay.get(0).toString());
+                                JSONObject response=new JSONObject(response2);
+
+
+
+                                if (response.getString("status").equalsIgnoreCase("success")){
+
+
+                                    Util.errorDialog(getActivity(),""+response.getString("message"));
+
+
+                                }
+                                else{
+                                    if (jsonObject2.optString("company_name").equalsIgnoreCase("")){
+
+                                        Intent intent=new Intent(getActivity(),AddGSTDetails.class);
+                                        intent.putExtra("type","packageBefore");
+                                        intent.putExtra("amount","");
+                                        startActivity(intent);
+                                        getActivity().overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+                                    }
+                                    else{
+
+                                        Intent intent=new Intent(getActivity(), PayActivity.class);
+                                        try {
+                                            intent.putExtra("jsonArray",jsonArray.get(i).toString());
+                                            intent.putExtra("userInfo",userInfoAyyay.get(0).toString());
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                        startActivity(intent);
+                                        getActivity().overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+
+                                    }
+                                }
+
+
+
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-                            startActivity(intent);
-                            getActivity().overridePendingTransition(R.anim.fadein, R.anim.fadeout);
 
                         }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Util.cancelPgDialog(dialog);
+                            Log.e("fdgdfgdfgd", "Login Error: " + error.getMessage());
+                            Toast.makeText(getActivity(),"Please Connect to the Internet or Wrong Password", Toast.LENGTH_LONG).show();
+                        }
+                    }){
+
+                        @Override
+                        protected Map<String, String> getParams() throws AuthFailureError {
+                            Log.e("fgdfgdfgdf","Inside getParams");
+
+                            // Posting parameters to login url
+                            Map<String, String> params = new HashMap<>();
+                            params.put("user_id", MyPrefrences.getUserID(getActivity()));
+
+                            return params;
+                        }
+
+//                        @Override
+//                        public Map<String, String> getHeaders() throws AuthFailureError {
+//                            Log.e("fdgdfgdfgdfg","Inside getHeaders()");
+//                            Map<String,String> headers=new HashMap<>();
+//                            headers.put("Content-Type","application/x-www-form-urlencoded");
+//                            return headers;
+//                        }
+                    };
+                    // Adding request to request queue
+                    queue.add(strReq);
 
 
-                    }
+
+
+
+
+
+
+
+
+
+
+
+
+//
+//                    if (Home.packageData==true){
+//                     Util.errorDialog(getActivity(),"You have already package purchased.");
+//                    }
+//                    else if (Home.packageData==false){
+//                        if (jsonObject2.optString("company_name").equalsIgnoreCase("")){
+////                        Toast.makeText(getApplicationContext(), "blank", Toast.LENGTH_SHORT).show();
+////
+////                        Long tsLong = System.currentTimeMillis()/1000;
+////                        String ts = tsLong.toString();
+////                        Log.d("TimeCurrent",ts);
+////                        MyPrefrences.setDateTime(getActivity(),ts);
+//
+//                            Intent intent=new Intent(getActivity(),AddGSTDetails.class);
+//                            intent.putExtra("type","packageBefore");
+//                            intent.putExtra("amount","");
+//                            startActivity(intent);
+//                            getActivity().overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+//                        }
+//                        else{
+//
+//                            Intent intent=new Intent(getActivity(), PayActivity.class);
+//                            try {
+//                                intent.putExtra("jsonArray",jsonArray.get(i).toString());
+//                                intent.putExtra("userInfo",userInfoAyyay.get(0).toString());
+//                            } catch (JSONException e) {
+//                                e.printStackTrace();
+//                            }
+//                            startActivity(intent);
+//                            getActivity().overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+//
+//                        }
+//
+//                    }
 
 
 
                     Log.d("fgdgdfgdfgdfgdgd",jsonObject2.optString("company_name"));
-
 
 
 
