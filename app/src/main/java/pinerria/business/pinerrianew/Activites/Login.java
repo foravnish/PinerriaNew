@@ -75,7 +75,6 @@ public class Login extends AppCompatActivity {
         btn_forgot_pwd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 final Dialog dialog2 = new Dialog(Login.this);
 //                dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
                 dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -414,7 +413,6 @@ public class Login extends AppCompatActivity {
         };
         // Adding request to request queue
         queue.add(strReq);
-
 
     }
 

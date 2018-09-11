@@ -865,13 +865,11 @@ public class PayOrderAct extends AppCompatActivity {
                         startActivity(intent);
                         overridePendingTransition(R.anim.fadein, R.anim.fadeout);
                         finish();
-
-                    }
+                }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             }
         }, new Response.ErrorListener() {
             @Override

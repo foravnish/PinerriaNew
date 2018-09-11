@@ -230,7 +230,7 @@ public class Chat extends AppCompatActivity {
             dateTab=headerView.findViewById(R.id.dateTab);
 
             txtView.setText(message);
-            dateTxt.setText(time);
+            dateTxt.setText(date+", "+time);
 
             dateTab.setText(date);
             //lp2.gravity = Gravity.LEFT;
@@ -244,7 +244,7 @@ public class Chat extends AppCompatActivity {
             dateTab=headerView.findViewById(R.id.dateTab);
 
             txtView.setText(message);
-            dateTxt.setText(time);
+            dateTxt.setText(date+", "+time);
 
             dateTab.setText(date);
             // lp2.gravity = Gravity.RIGHT;

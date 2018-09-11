@@ -67,8 +67,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         //Todo notification
 
 
-
-
             NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
             inboxStyle.addLine(remoteMessage.getNotification().getBody());
             Notification notification;
@@ -98,9 +96,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
 
     }
-
-
-
 
 
 

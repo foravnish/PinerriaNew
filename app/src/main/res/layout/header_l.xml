@@ -15,6 +15,7 @@
         android:background="@drawable/strock_date"
         android:gravity="center"
         android:paddingLeft="10dp"
+        android:visibility="gone"
         android:paddingRight="10dp"
         android:text="date"
         android:textColor="@color/white" />
