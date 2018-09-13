@@ -108,6 +108,7 @@ public class WriteReview extends Fragment {
         Util.showPgDialog(dialog);
 
         Log.d("sdfsdgsfgdfgd",getArguments().getString("id"));
+        Log.d("sdfsdgsfgdfgd",getArguments().getString("user_id"));
 
 //        if (MyPrefrences.getUserLogin(getActivity())==false){
 //            Toast.makeText(getActivity(), "login", Toast.LENGTH_SHORT).show();
@@ -136,63 +137,72 @@ public class WriteReview extends Fragment {
             @Override
             public void onClick(View view) {
 
-                if (!rate.isEmpty()) {
-                    Util.showPgDialog(dialog);
-                    StringRequest postRequest = new StringRequest(Request.Method.POST, Api.userBusinessReviewSubmit,
-                            new Response.Listener<String>() {
-                                @Override
-                                public void onResponse(String response) {
-                                    // response
-                                    Log.d("Response", response);
-                                    Util.cancelPgDialog(dialog);
-                                    try {
-                                        JSONObject jsonObject = new JSONObject(response);
-                                        if (jsonObject.getString("status").equalsIgnoreCase("success")) {
 
-//                                            Toast.makeText(getActivity(), jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
-                                            errorDialog("Thank you for Your Rating");
+                if (getArguments().getString("user_id").equals(MyPrefrences.getUserID(getActivity()))){
 
-                                        } else {
+                    Util.errorDialog(getActivity(),"This is Your Listing, You cant't give review");
+                }
+                else {
+
+                    if (!rate.isEmpty()) {
+                        Util.showPgDialog(dialog);
+                        StringRequest postRequest = new StringRequest(Request.Method.POST, Api.userBusinessReviewSubmit,
+                                new Response.Listener<String>() {
+                                    @Override
+                                    public void onResponse(String response) {
+                                        // response
+                                        Log.d("Response", response);
+                                        Util.cancelPgDialog(dialog);
+                                        try {
+                                            JSONObject jsonObject = new JSONObject(response);
+                                            if (jsonObject.getString("status").equalsIgnoreCase("success")) {
+
                                             Toast.makeText(getActivity(), jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+//                                                errorDialog("Thank you for Your Rating");
+                                            } else {
+
+                                                Toast.makeText(getActivity(), jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                                            }
+
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
                                         }
 
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
                                     }
+                                },
+                                new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        // error
+                                        Toast.makeText(getActivity(), "Error! Please connect to the Internet.", Toast.LENGTH_SHORT).show();
+                                        Util.cancelPgDialog(dialog);
+                                    }
+                                }
+                        ) {
 
-                                }
-                            },
-                            new Response.ErrorListener() {
-                                @Override
-                                public void onErrorResponse(VolleyError error) {
-                                    // error
-                                    Toast.makeText(getActivity(), "Error! Please connect to the Internet.", Toast.LENGTH_SHORT).show();
-                                    Util.cancelPgDialog(dialog);
-                                }
+
+                            @Override
+                            protected Map<String, String> getParams() {
+                                Map<String, String> params = new HashMap<String, String>();
+                                params.put("business_id", getArguments().getString("id"));
+                                params.put("review", editText.getText().toString());
+                                params.put("rating", rate);
+                                params.put("user_id", MyPrefrences.getUserID(getActivity()));
+                                Log.d("sdfsfsdfsdgfs", MyPrefrences.getUserID(getActivity()));
+                                Log.d("sdfsfsdfsdgfs", getArguments().getString("id"));
+
+                                return params;
                             }
-                    ) {
+                        };
+                        postRequest.setRetryPolicy(new DefaultRetryPolicy(27000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                        postRequest.setShouldCache(false);
+
+                        AppController.getInstance().addToRequestQueue(postRequest);
+                    } else {
+                        Toast.makeText(getActivity(), "Please give a Rating", Toast.LENGTH_SHORT).show();
+                    }
 
 
-                        @Override
-                        protected Map<String, String> getParams() {
-                            Map<String, String> params = new HashMap<String, String>();
-                            params.put("business_id", getArguments().getString("id"));
-                            params.put("review", editText.getText().toString());
-                            params.put("rating", rate);
-                            params.put("user_id", MyPrefrences.getUserID(getActivity()));
-                            Log.d("sdfsfsdfsdgfs", MyPrefrences.getUserID(getActivity()));
-                            Log.d("sdfsfsdfsdgfs", getArguments().getString("id"));
-
-                            return params;
-                        }
-                    };
-                    postRequest.setRetryPolicy(new DefaultRetryPolicy(27000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-                    postRequest.setShouldCache(false);
-
-                    AppController.getInstance().addToRequestQueue(postRequest);
-                }
-                else{
-                    Toast.makeText(getActivity(), "Please give a Rating", Toast.LENGTH_SHORT).show();
                 }
 
             }

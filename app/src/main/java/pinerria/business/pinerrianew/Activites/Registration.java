@@ -353,22 +353,27 @@ public class Registration extends AppCompatActivity {
 
         if (TextUtils.isEmpty(namePerson.getText().toString()))
         {
-            Util.errorDialog(Registration.this,"Type Your Name");
+            Util.errorDialog(Registration.this,"Enter Your Name");
             return false;
         }
         else if (TextUtils.isEmpty(mobile.getText().toString()))
         {
-            Util.errorDialog(Registration.this,"Type Mobile No.");
+            Util.errorDialog(Registration.this,"Enter Mobile No.");
+            return false;
+        }
+        else if (mobile.getText().toString().length()<10)
+        {
+            Util.errorDialog(Registration.this,"Enter 10 digit Mobile No.");
             return false;
         }
         else if (TextUtils.isEmpty(password.getText().toString()))
         {
-            Util.errorDialog(Registration.this,"Type Password ");
+            Util.errorDialog(Registration.this,"Enter Password ");
             return false;
         }
         else if (TextUtils.isEmpty(rePass.getText().toString()))
         {
-            Util.errorDialog(Registration.this,"Type Confirm Password");
+            Util.errorDialog(Registration.this,"Enter Confirm Password");
             return false;
         }
         else if (!rePass.getText().toString().equals(password.getText().toString())){

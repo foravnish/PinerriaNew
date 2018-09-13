@@ -79,7 +79,7 @@ public class PayOrderAct extends AppCompatActivity {
     private PayUmoneySdkInitializer.PaymentParam mPaymentParams;
     private AppPreference mAppPreference;
     String merKey,merId,salt;
-
+    String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
 
 
     @Override
@@ -195,6 +195,9 @@ public class PayOrderAct extends AppCompatActivity {
 
                          }
 
+                         else{
+                             Util.errorDialog(PayOrderAct.this,jsonObject.getString("message"));
+                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -261,23 +264,6 @@ public class PayOrderAct extends AppCompatActivity {
             Util.errorDialog(PayOrderAct.this,"Enter Company Name");
             return false;
         }
-
-
-//        else if (TextUtils.isEmpty(gst_number.getText().toString())) {
-//            if (flag.equals("true")) {
-//                Util.errorDialog(PayOrderAct.this, "GST No ");
-//                return false;
-//            }
-//            else{
-//                return true;
-//            }
-//        }
-        else if (TextUtils.isEmpty(mobileNo.getText().toString()))
-        {
-            Util.errorDialog(PayOrderAct.this,"Enter Mobile No.");
-            return false;
-        }
-
         else if (TextUtils.isEmpty(tax_address.getText().toString()))
         {
             Util.errorDialog(PayOrderAct.this,"Enter Address");
@@ -287,7 +273,22 @@ public class PayOrderAct extends AppCompatActivity {
             Util.errorDialog(PayOrderAct.this,"Enter Email Id");
             return false;
         }
+        else if (!user_email.getText().toString().trim().matches(emailPattern))
+        {
+            Util.errorDialog(PayOrderAct.this,"Enter valid Email Id");
+            return false;
+        }
 
+        else if (TextUtils.isEmpty(mobileNo.getText().toString()))
+        {
+            Util.errorDialog(PayOrderAct.this,"Enter Mobile No.");
+            return false;
+        }
+        else if (mobileNo.getText().toString().length()<10)
+        {
+            Util.errorDialog(PayOrderAct.this,"Enter 10 digit Mobile No.");
+            return false;
+        }
 
         return true;
 

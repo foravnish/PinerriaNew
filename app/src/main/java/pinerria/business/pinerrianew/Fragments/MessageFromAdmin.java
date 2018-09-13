@@ -166,7 +166,7 @@ public class MessageFromAdmin extends Fragment {
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
 
-            view=inflater.inflate(R.layout.custonlistview_enquiry,viewGroup,false);
+            view=inflater.inflate(R.layout.custon_mess_from_admin,viewGroup,false);
 
             send_date=view.findViewById(R.id.send_date);
             message=view.findViewById(R.id.message);
@@ -179,7 +179,7 @@ public class MessageFromAdmin extends Fragment {
             send_date.setText("Date: "+DataList.get(i).get("created_date"));
             message.setText("Message: "+DataList.get(i).get("comment"));
             subject.setText("Subject: "+DataList.get(i).get("subject_id"));
-            queryFor.setText("Query for: "+DataList.get(i).get("description"));
+            queryFor.setText("Action Type: "+DataList.get(i).get("description"));
             //receiver_id.setText("To, "+DataList.get(i).get("receiver_id"));
             id.setText("Enquiry Id: "+DataList.get(i).get("id"));
             messageTxt.setText("Message From Admin");

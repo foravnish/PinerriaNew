@@ -290,7 +290,8 @@ public class ViewJobs extends Fragment {
             salary.setText(currency);
 
             experience.setText(AllProducts.get(position).get("experience"));
-            address.setText(AllProducts.get(position).get("city_name")+", "+AllProducts.get(position).get("state_name")+", "+AllProducts.get(position).get("zone_name")+", India");
+            address.setText(AllProducts.get(position).get("city_name"));
+//            address.setText(AllProducts.get(position).get("city_name")+", "+AllProducts.get(position).get("state_name")+", "+AllProducts.get(position).get("zone_name"));
             full_part_time.setText(AllProducts.get(position).get("full_part_time"));
             jobId.setText(AllProducts.get(position).get("user_name"));
             String year=AllProducts.get(position).get("created_date").substring(0,4);

@@ -93,7 +93,7 @@ public class DetailForJob extends Fragment {
             comName.setText(jsonObject.optString("user_name").toUpperCase());
             heading.setText(jsonObject.optString("heading"));
             description.setText(jsonObject.optString("description"));
-            address.setText(jsonObject.optString("city_name")+" "+jsonObject.optString("state_name"));
+            address.setText(jsonObject.optString("city_name"));
             phone.setText(jsonObject.optString("mobile"));
 
 
@@ -103,7 +103,7 @@ public class DetailForJob extends Fragment {
             salary.setText(currency);
 
             experience.setText(jsonObject.optString("experience"));
-            address.setText(jsonObject.optString("city_name")+", "+jsonObject.optString("state_name")+", "+jsonObject.optString("zone_name")+", India");
+          //  address.setText(jsonObject.optString("city_name")+", "+jsonObject.optString("zone_name"));
             full_part_time.setText(jsonObject.optString("full_part_time"));
             jobId.setText(jsonObject.optString("user_name"));
             String year=jsonObject.optString("created_date").substring(0,4);
@@ -117,7 +117,7 @@ public class DetailForJob extends Fragment {
                     Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
                     sharingIntent.setType("text/plain");
 //                String shareBody =comName.getText().toString()+ " "+phone.getText().toString();
-                    String shareBody ="Hey, This Job is good, "+comName.getText().toString()+ " "+phone.getText().toString()+", Sharing";
+                    String shareBody = "Hello, \nThis seems to be an interesting job for you. Please check it out.’, "+comName.getText().toString()+ " "+phone.getText().toString()+", Sharing";
 
                     sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Details");
                     sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT,shareBody);
@@ -188,8 +188,7 @@ public class DetailForJob extends Fragment {
 
 
 
-            if (jsonObject.optString("mobile_status").equals("1")){
-
+            if (jsonObject.optString("mobile_status").equals("Yes")){
                 call.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

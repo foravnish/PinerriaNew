@@ -190,16 +190,12 @@ public class Packages extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
 
-                Util.showPgDialog(dialog);
+
 
 
                 if (MyPrefrences.getUserLogin(getActivity())==true) {
 
-
-
-
-
-
+                    Util.showPgDialog(dialog);
                     RequestQueue queue = Volley.newRequestQueue(getActivity());
                     StringRequest strReq = new StringRequest(Request.Method.POST,
                             Api.checkPrevoiusUserpackages, new Response.Listener<String>() {
@@ -282,59 +278,7 @@ public class Packages extends Fragment {
                     // Adding request to request queue
                     queue.add(strReq);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-//
-//                    if (Home.packageData==true){
-//                     Util.errorDialog(getActivity(),"You have already package purchased.");
-//                    }
-//                    else if (Home.packageData==false){
-//                        if (jsonObject2.optString("company_name").equalsIgnoreCase("")){
-////                        Toast.makeText(getApplicationContext(), "blank", Toast.LENGTH_SHORT).show();
-////
-////                        Long tsLong = System.currentTimeMillis()/1000;
-////                        String ts = tsLong.toString();
-////                        Log.d("TimeCurrent",ts);
-////                        MyPrefrences.setDateTime(getActivity(),ts);
-//
-//                            Intent intent=new Intent(getActivity(),AddGSTDetails.class);
-//                            intent.putExtra("type","packageBefore");
-//                            intent.putExtra("amount","");
-//                            startActivity(intent);
-//                            getActivity().overridePendingTransition(R.anim.fadein, R.anim.fadeout);
-//                        }
-//                        else{
-//
-//                            Intent intent=new Intent(getActivity(), PayActivity.class);
-//                            try {
-//                                intent.putExtra("jsonArray",jsonArray.get(i).toString());
-//                                intent.putExtra("userInfo",userInfoAyyay.get(0).toString());
-//                            } catch (JSONException e) {
-//                                e.printStackTrace();
-//                            }
-//                            startActivity(intent);
-//                            getActivity().overridePendingTransition(R.anim.fadein, R.anim.fadeout);
-//
-//                        }
-//
-//                    }
-
-
-
                     Log.d("fgdgdfgdfgdfgdgd",jsonObject2.optString("company_name"));
-
-
 
                 }
                 else{
@@ -365,7 +309,6 @@ public class Packages extends Fragment {
                     alert.show();
 
                 }
-
 
             }
         });

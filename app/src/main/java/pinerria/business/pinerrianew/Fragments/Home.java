@@ -804,10 +804,9 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
                     else{
 //                        Toast.makeText(getActivity(), AllBaner.get(position).getOrgby().toString(), Toast.LENGTH_SHORT).show();
 
-
-                        Intent intent=new Intent(getActivity(), WebViewOpen.class);
-                        intent.putExtra("link",AllBaner.get(position).getPhoto().toString());
-                        startActivity(intent);
+                            Intent intent=new Intent(getActivity(), WebViewOpen.class);
+                            intent.putExtra("link",AllBaner.get(position).getPhoto().toString());
+                            startActivity(intent);
 
 //                        Fragment fragment=new WebViewOpen();
 //                        Bundle bundle=new Bundle();

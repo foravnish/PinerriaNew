@@ -865,12 +865,17 @@ public class AddProduct extends AppCompatActivity {
 
         if (TextUtils.isEmpty(nameBusiness.getText().toString()))
         {
-           Util.errorDialog(AddProduct.this,"Type Business Name");
+           Util.errorDialog(AddProduct.this,"Enter Business Name");
             return false;
         }
         else if (TextUtils.isEmpty(mobile.getText().toString()))
         {
-            Util.errorDialog(AddProduct.this,"Type Mobile No");
+            Util.errorDialog(AddProduct.this,"Enter Mobile No");
+            return false;
+        }
+        else if (mobile.getText().toString().length()<10)
+        {
+            Util.errorDialog(AddProduct.this,"Enter 10 digit Mobile No.");
             return false;
         }
 //        else if (TextUtils.isEmpty(email.getText().toString()))
@@ -881,7 +886,7 @@ public class AddProduct extends AppCompatActivity {
 //        }
         else if (TextUtils.isEmpty(address.getText().toString()))
         {
-            Util.errorDialog(AddProduct.this,"Type Address");
+            Util.errorDialog(AddProduct.this,"Enter Address");
             return false;
         }
 //        else if (TextUtils.isEmpty(zip.getText().toString()))
@@ -892,7 +897,7 @@ public class AddProduct extends AppCompatActivity {
 //        }
         else if (TextUtils.isEmpty(keyword.getText().toString()))
         {
-            Util.errorDialog(AddProduct.this,"Type Keyword");
+            Util.errorDialog(AddProduct.this,"Enter Keyword");
             return false;
         }
         if (checkBobPrice.isChecked()) {

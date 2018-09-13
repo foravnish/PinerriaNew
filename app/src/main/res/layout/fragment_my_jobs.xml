@@ -141,10 +141,10 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.1"
-                                android:textSize="14dp"
+                                android:textSize="4dp"
                                 android:singleLine="true"
                                 android:gravity="left"
-                                android:layout_marginLeft="18dp"
+                                android:layout_marginLeft="50dp"
                                 android:text=":"
                                 android:textColor="@color/grayText" />
 
@@ -156,6 +156,7 @@
                                 android:textSize="12dp"
                                 android:singleLine="true"
                                 android:gravity="left"
+                                android:layout_marginLeft="10dp"
                                 android:text="Bushiness"
                                 android:textColor="@color/md_grey_900" />
 
@@ -163,14 +164,12 @@
                                 android:id="@+id/switchJob"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_alignParentRight="true"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:text="Display job"
+                                app:switchPadding="5dp"
                                 android:textColor="@color/grayText" />
                         </LinearLayout>
-
-
-
-
-
 
 
                         <LinearLayout
@@ -218,7 +217,7 @@
                                 android:layout_weight="0.6"
                                 android:gravity="center"
                                 android:layout_marginRight="10dp"
-                                android:text="Manage Job"
+                                android:text="Edit Job"
                                 android:textColor="#fff"
                                 android:layout_marginBottom="10dp"/>
 

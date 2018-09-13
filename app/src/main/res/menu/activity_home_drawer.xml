@@ -80,7 +80,7 @@
         <item
             android:id="@+id/nav_package"
             android:icon="@drawable/package_icon"
-            android:title="Packages" />
+            android:title="Make Premium" />
     </group>
 
     <group android:checkableBehavior="single"

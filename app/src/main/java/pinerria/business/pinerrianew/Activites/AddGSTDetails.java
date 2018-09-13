@@ -81,6 +81,7 @@ public class AddGSTDetails extends AppCompatActivity {
     CheckBox checkBob;
     String  flag="false";
     EditText oder_id,user_email,tax_address,gst_number,company_name;
+    String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
 
     ArrayList<HashMap<String, String>> custom_post_parameters;
     private static final int ACC_ID = 27791;// Provided by EBS
@@ -295,6 +296,11 @@ public class AddGSTDetails extends AppCompatActivity {
         else if (TextUtils.isEmpty(user_email.getText().toString()))
         {
             Util.errorDialog(AddGSTDetails.this,"Enter Email Id");
+            return false;
+        }
+        else if (!user_email.getText().toString().trim().matches(emailPattern))
+        {
+            Util.errorDialog(AddGSTDetails.this,"Enter valid Email Id");
             return false;
         }
         else if (flag=="false" && TextUtils.isEmpty(gst_number.getText().toString()))

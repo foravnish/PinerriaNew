@@ -847,28 +847,35 @@ public class Listing extends Fragment {
 //        });
 
 
-        Log.d("fgdgdfgdfgdfg", String.valueOf(jsonArrayLocation));
-        dialog1.show();
-        AllProductsLocation.clear();
-        for (int i=0;i<jsonArrayLocation.length();i++){
-            JSONObject jsonObject= null;
-            try {
-                jsonObject = jsonArrayLocation.getJSONObject(i);
-            } catch (JSONException e) {
-                e.printStackTrace();
+        try {
+            Log.d("fgdgdfgdfgdfg", String.valueOf(jsonArrayLocation));
+            dialog1.show();
+            AllProductsLocation.clear();
+            for (int i=0;i<jsonArrayLocation.length();i++){
+                JSONObject jsonObject= null;
+                try {
+                    jsonObject = jsonArrayLocation.getJSONObject(i);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                HashMap<String,String> map=new HashMap();
+                map.put("location_id",jsonObject.optString("location_id"));
+                map.put("location",jsonObject.optString("location_name"));
+
+
+                AdapterLocation  adapter=new AdapterLocation ();
+                lvExp.setAdapter(adapter);
+                AllProductsLocation.add(map);
+
             }
+        } catch (Exception e) {
 
-            HashMap<String,String> map=new HashMap();
-            map.put("location_id",jsonObject.optString("location_id"));
-            map.put("location",jsonObject.optString("location_name"));
+            dialog1.dismiss();
 
-
-            AdapterLocation  adapter=new AdapterLocation ();
-            lvExp.setAdapter(adapter);
-            AllProductsLocation.add(map);
-
+            Toast.makeText(getActivity(), "There are no Area Here.", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
         }
-
 
 
 //        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,

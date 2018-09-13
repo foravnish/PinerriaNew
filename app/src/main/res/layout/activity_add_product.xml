@@ -12,7 +12,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         android:elevation="5dp"
         android:theme="@style/ToolbarColoredBackArrow">
 
@@ -464,7 +463,10 @@
                     android:layout_marginRight="10dp"
                     android:layout_marginLeft="20dp"
                     android:checked="true"
+                    app:thumbTint="@color/blue"
+                    android:background="@color/white"
                     android:textColor="@color/p_black" />
+
             </LinearLayout>
 
 

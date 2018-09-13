@@ -76,6 +76,7 @@
                         android:layout_weight="7"
                         android:textColor="@color/grayText"
                         android:textSize="15dp"
+                        android:visibility="gone"
                         android:textStyle="bold"
                         android:text="Action"/>
 
@@ -90,9 +91,10 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textColor="@color/grayText"
-                            android:textSize="20dp"
+                            android:textSize="18dp"
                             android:textStyle="bold"
-                            android:text="Open"/> </LinearLayout>
+                            android:text="Open"/>
+                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -105,7 +107,6 @@
                             android:textSize="15dp"
                             android:textStyle="bold"
                             android:layout_marginTop="3dp"
-                            android:visibility="gone"
                             android:drawablePadding="10dp"
                             android:textColor="@color/grayText"
                             android:text="Admin Reply"/>

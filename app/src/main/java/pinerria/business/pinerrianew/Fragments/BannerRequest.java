@@ -38,6 +38,7 @@ import java.util.Map;
 
 import pinerria.business.pinerrianew.Activites.HomeAct;
 import pinerria.business.pinerrianew.Activites.PayActivity;
+import pinerria.business.pinerrianew.Activites.Registration;
 import pinerria.business.pinerrianew.R;
 import pinerria.business.pinerrianew.Utils.Api;
 import pinerria.business.pinerrianew.Utils.MyPrefrences;
@@ -58,6 +59,8 @@ public class BannerRequest extends Fragment {
     EditText pName,cName,mobile,email,require;
     Button submitReq;
     Dialog dialog;
+    String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -166,22 +169,32 @@ public class BannerRequest extends Fragment {
 
         if (TextUtils.isEmpty(pName.getText().toString()))
         {
-           Util.errorDialog(getActivity(),"Type Person Name");
+           Util.errorDialog(getActivity(),"Enter Person Name");
             return false;
         }
         else if (TextUtils.isEmpty(mobile.getText().toString()))
         {
-            Util.errorDialog(getActivity(),"Type Mobile No");
+            Util.errorDialog(getActivity(),"Enter Mobile No");
+            return false;
+        }
+        else if (mobile.getText().toString().length()<10)
+        {
+            Util.errorDialog(getActivity(),"Enter 10 digit Mobile No.");
             return false;
         }
         else if (TextUtils.isEmpty(email.getText().toString()))
         {
-            Util.errorDialog(getActivity(),"Type Email Id");
+            Util.errorDialog(getActivity(),"Enter Email Id");
+            return false;
+        }
+        else if (!email.getText().toString().trim().matches(emailPattern))
+        {
+            Util.errorDialog(getActivity(),"Enter valid Email Id");
             return false;
         }
         else if (TextUtils.isEmpty(require.getText().toString()))
         {
-            Util.errorDialog(getActivity(),"Type Requirement");
+            Util.errorDialog(getActivity(),"Enter Requirement");
             return false;
         }
 

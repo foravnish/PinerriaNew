@@ -247,7 +247,13 @@ public class PayActivity extends AppCompatActivity {
 
                     }
                     else{
-                        Util.errorDialog(PayActivity.this,jsonObject.optString("message"));
+                        Intent intent=new Intent(PayActivity.this,AddGSTDetails.class);
+                        intent.putExtra("type","package");
+                        intent.putExtra("amount",p_amt+"");
+                        startActivity(intent);
+                        overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+
+                    //    Util.errorDialog(PayActivity.this,jsonObject.optString("message"));
 
                         //Toast.makeText(getApplicationContext(),jsonObject.getString("message") , Toast.LENGTH_SHORT).show();
                     }

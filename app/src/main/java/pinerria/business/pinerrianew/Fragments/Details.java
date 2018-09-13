@@ -162,7 +162,7 @@ public class Details extends Fragment {
 
             comName.setText(jsonObject.optString("user_name"));
             nameUser.setText(jsonObject.optString("bussiness_name"));
-            address.setText(jsonObject.optString("address")+" "+jsonObject.optString("city_name")+" "+jsonObject.optString("state_name"));
+            address.setText(jsonObject.optString("address")+" "+jsonObject.optString("city_name"));
             phone.setText(jsonObject.optString("primary_mobile"));
 
             totlaUsers.setText(" ("+jsonObject.optString("total_rating_user")+" Reviews)");
@@ -193,6 +193,7 @@ public class Details extends Fragment {
                 }
 
             }
+
 
 
             ViewGalleryApi(jsonObject.optString("user_id"));
@@ -392,8 +393,9 @@ public class Details extends Fragment {
                         Fragment fragment = new WriteReview();
                         Bundle bundle = new Bundle();
                         bundle.putString("id", jsonObject.optString("id"));
+                        bundle.putString("user_id", jsonObject.optString("user_id"));
                         bundle.putString("company_name", jsonObject.optString("bussiness_name"));
-                        bundle.putString("address", jsonObject.optString("address")+" "+jsonObject.optString("city_name")+" "+jsonObject.optString("state_name"));
+                        bundle.putString("address", jsonObject.optString("address")+" "+jsonObject.optString("city_name"));
                         FragmentManager manager = getActivity().getSupportFragmentManager();
                         FragmentTransaction ft = manager.beginTransaction();
                         fragment.setArguments(bundle);
@@ -425,7 +427,7 @@ public class Details extends Fragment {
                         //Creating dialog box
                         AlertDialog alert = builder.create();
                         //Setting the title manually
-                        alert.setTitle("BizzCityInfo");
+                        alert.setTitle("Pinerria");
                         alert.show();
 
 

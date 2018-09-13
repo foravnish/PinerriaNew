@@ -1,8 +1,11 @@
 package pinerria.business.pinerrianew.Fragments;
 
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -40,6 +43,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import pinerria.business.pinerrianew.Activites.HomeAct;
+import pinerria.business.pinerrianew.Activites.Login;
 import pinerria.business.pinerrianew.R;
 import pinerria.business.pinerrianew.Utils.Api;
 import pinerria.business.pinerrianew.Utils.AppController;
@@ -86,11 +90,49 @@ public class MessageToAdmin extends Fragment {
             @Override
             public void onClick(View view) {
 
-                Fragment fragment = new ComposeMessage();
-                FragmentManager manager = getFragmentManager();
-                FragmentTransaction ft = manager.beginTransaction();
-                ft.replace(R.id.content_frame, fragment).addToBackStack(null).commit();
-                ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout,R.anim.frag_fade_right, R.anim.frag_fad_left);
+
+
+
+                if (MyPrefrences.getUserLogin(getActivity())==true) {
+                    Fragment fragment = new ComposeMessage();
+                    FragmentManager manager = getFragmentManager();
+                    FragmentTransaction ft = manager.beginTransaction();
+                    ft.replace(R.id.content_frame, fragment).addToBackStack(null).commit();
+                    ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout,R.anim.frag_fade_right, R.anim.frag_fad_left);
+
+
+                }
+                else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setMessage("Please Login to Send Message to Admin")
+                            .setCancelable(false)
+                            .setPositiveButton("Login", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+
+                                    Intent intent = new Intent(getActivity(), Login.class);
+                                    startActivity(intent);
+                                    getActivity().overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+                                    getActivity().finish();
+                                }
+                            })
+                            .setNegativeButton("Not Now", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    //  Action for 'NO' Button
+                                    dialog.cancel();
+
+
+                                }
+                            });
+                    AlertDialog alert = builder.create();
+                    //Setting the title manually
+                    alert.setTitle("Pinerria");
+                    alert.show();
+
+                }
+
+
+
+
             }
         });
 
@@ -99,10 +141,52 @@ public class MessageToAdmin extends Fragment {
             public void onClick(View view) {
                // DialogFromAdmin();
              //   Util.showPgDialog(dialog);
-                Fragment fragment= new MessageFromAdmin();
-                FragmentManager fragmentManager=getActivity().getSupportFragmentManager();
-                FragmentTransaction ft=fragmentManager.beginTransaction();
-                ft.replace(R.id.content_frame,fragment).addToBackStack(null).commit();
+
+
+
+
+                if (MyPrefrences.getUserLogin(getActivity())==true) {
+
+
+                    Fragment fragment= new MessageFromAdmin();
+                    FragmentManager fragmentManager=getActivity().getSupportFragmentManager();
+                    FragmentTransaction ft=fragmentManager.beginTransaction();
+                    ft.replace(R.id.content_frame,fragment).addToBackStack(null).commit();
+
+
+                }
+                else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setMessage("Please Login to Message from Admin")
+                            .setCancelable(false)
+                            .setPositiveButton("Login", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+
+                                    Intent intent = new Intent(getActivity(), Login.class);
+                                    startActivity(intent);
+                                    getActivity().overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+                                    getActivity().finish();
+                                }
+                            })
+                            .setNegativeButton("Not Now", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    //  Action for 'NO' Button
+                                    dialog.cancel();
+
+
+                                }
+                            });
+                    AlertDialog alert = builder.create();
+                    //Setting the title manually
+                    alert.setTitle("Pinerria");
+                    alert.show();
+
+                }
+
+
+
+
+
 
             }
         });
@@ -396,7 +480,7 @@ public class MessageToAdmin extends Fragment {
             send_date.setText("Date: "+DataList.get(i).get("created_date"));
             message.setText("Message: "+DataList.get(i).get("comment"));
             subject.setText("Subject: "+DataList.get(i).get("subject_id"));
-            queryFor.setText("Query for: "+DataList.get(i).get("description"));
+            queryFor.setText("Subject: "+DataList.get(i).get("description"));
             //receiver_id.setText("To, "+DataList.get(i).get("receiver_id"));
             id.setText("Enquiry Id: "+DataList.get(i).get("id"));
 
