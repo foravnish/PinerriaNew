@@ -39,6 +39,7 @@ public class ChatUSer extends AppCompatActivity {
     TextView noUsersText;
     ArrayList<String> al = new ArrayList<>();
     ArrayList<String> al2 = new ArrayList<>();
+    ArrayList<String> userId = new ArrayList<>();
     int totalUsers = 0;
     ProgressDialog pd;
     ImageView backBtn;
@@ -96,6 +97,7 @@ public class ChatUSer extends AppCompatActivity {
                 UserDetails.chatWith = al2.get(position);
                 Intent intent=new Intent(ChatUSer.this, Chat.class);
                 intent.putExtra("name",al.get(position));
+                intent.putExtra("id",userId.get(position));
                 intent.putExtra("value","0");
                 startActivity(intent);
             }
@@ -189,6 +191,7 @@ public class ChatUSer extends AppCompatActivity {
                     if ( resobj.get(key) instanceof JSONObject ) {
                         xx = new JSONObject(resobj.get(key).toString());
                         Log.d("redfdsfssdffdfds1",xx.getString("name"));
+                        Log.d("redfdsfssdffdfds2",xx.getString("userId"));
 
                     }
 
@@ -206,6 +209,7 @@ public class ChatUSer extends AppCompatActivity {
 //                    Log.d("gfdgdfgdfgd", String.valueOf(value));
                     //  Log.d("gfdgdfgdfgd", String.valueOf(xx.getJSONObject("name")));
                     al.add(xx.getString("name"));
+                    userId.add(xx.getString("userId"));
                     al2.add(key);
 
                 }

@@ -220,6 +220,7 @@ public class MessageToAdmin extends Fragment {
                             map.put("description", jsonObject.optString("description"));
                             map.put("comment", jsonObject.optString("comment"));
                             map.put("created_date", jsonObject.optString("created_date"));
+                            map.put("subject_id", jsonObject.optString("subject_id"));
 
 
 
@@ -481,7 +482,7 @@ public class MessageToAdmin extends Fragment {
             message.setText("Message: "+DataList.get(i).get("comment"));
             subject.setText("Subject: "+DataList.get(i).get("subject_id"));
             queryFor.setText("Subject: "+DataList.get(i).get("description"));
-            //receiver_id.setText("To, "+DataList.get(i).get("receiver_id"));
+            receiver_id.setText("Action: "+DataList.get(i).get("subject_id"));
             id.setText("Enquiry Id: "+DataList.get(i).get("id"));
 
             return view;

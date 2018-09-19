@@ -102,6 +102,7 @@ public class Registration extends AppCompatActivity {
     List<String> keyData=new ArrayList<>();
     List<String> valData=new ArrayList<>();
     String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+    JSONObject jsonObject1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -414,6 +415,7 @@ public class Registration extends AppCompatActivity {
             if (json != null) {
 
 
+                Log.d("fgdfgdfgdfgdfgdfg", String.valueOf(json));
                 if (json.optString("status").equalsIgnoreCase("success")) {
 
 
@@ -491,6 +493,8 @@ public class Registration extends AppCompatActivity {
 
 
 
+                        JSONArray jsonArray=jsonObject.getJSONArray("message");
+                        jsonObject1 = jsonArray.getJSONObject(0);
 
 
                         //TODO Registration for Firebase
@@ -508,12 +512,14 @@ public class Registration extends AppCompatActivity {
 
                                 Firebase reference = new Firebase("https://pinerria-home-business.firebaseio.com/users");
                                 Firebase reference2 = new Firebase("https://pinerria-home-business.firebaseio.com/users");
+                                Firebase reference3 = new Firebase("https://pinerria-home-business.firebaseio.com/users");
 
 
                                 if(s.equals("null")) {
 
                                     reference.child(mob).child("password").setValue(pass);
                                     reference2.child(mob).child("name").setValue(namePerson.getText().toString());
+                                    reference3.child(mob).child("userId").setValue(jsonObject1.optString("id").toString());
 
 
                                     Toast.makeText(getApplicationContext(), "Registration Successfully... Please Login.", Toast.LENGTH_SHORT).show();
@@ -529,6 +535,7 @@ public class Registration extends AppCompatActivity {
 
                                             reference.child(mob).child("password").setValue(pass);
                                             reference2.child(mob).child("name").setValue(namePerson.getText().toString());
+                                            reference3.child(mob).child("userId").setValue(jsonObject1.optString("id").toString());
 
                                             Toast.makeText(getApplicationContext(), "Registration Successfully... Please Login.", Toast.LENGTH_SHORT).show();
                                             startActivity(new Intent(Registration.this,   Login.class));

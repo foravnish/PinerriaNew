@@ -96,6 +96,7 @@ public class MessageFromAdmin extends Fragment {
                             map.put("comment", jsonObject.optString("comment"));
                             map.put("created_date", jsonObject.optString("created_date"));
                             map.put("subject_id", jsonObject.optString("subject_id"));
+                            map.put("res_status", jsonObject.optString("res_status"));
 
 
                             HelpAdapter adapter=new HelpAdapter();
@@ -143,7 +144,7 @@ public class MessageFromAdmin extends Fragment {
 
     class HelpAdapter extends BaseAdapter {
         LayoutInflater inflater;
-        TextView id,receiver_id,queryFor,subject,message,send_date,messageTxt;
+        TextView id,receiver_id,queryFor,subject,message,send_date,messageTxt,status;
 
         HelpAdapter(){
             inflater=(LayoutInflater)getActivity().getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -175,11 +176,13 @@ public class MessageFromAdmin extends Fragment {
             receiver_id=view.findViewById(R.id.receiver_id);
             id=view.findViewById(R.id.id);
             messageTxt=view.findViewById(R.id.messageTxt);
+            status=view.findViewById(R.id.status);
 
             send_date.setText("Date: "+DataList.get(i).get("created_date"));
             message.setText("Message: "+DataList.get(i).get("comment"));
-            subject.setText("Subject: "+DataList.get(i).get("subject_id"));
-            queryFor.setText("Action Type: "+DataList.get(i).get("description"));
+            queryFor.setText("Subject: "+DataList.get(i).get("subject_id"));
+            subject.setText("Action Type: "+DataList.get(i).get("description"));
+            status.setText("Status: "+DataList.get(i).get("res_status"));
             //receiver_id.setText("To, "+DataList.get(i).get("receiver_id"));
             id.setText("Enquiry Id: "+DataList.get(i).get("id"));
             messageTxt.setText("Message From Admin");

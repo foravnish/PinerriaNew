@@ -584,7 +584,7 @@ public class HomeAct extends AppCompatActivity
                 packageList.startAnimation(myAnim);
 
 
-                Fragment fragment = new Packages();
+                Fragment fragment = new MessageToAdmin();
                 FragmentManager manager = getSupportFragmentManager();
                 FragmentTransaction ft = manager.beginTransaction();
                 ft.replace(R.id.content_frame, fragment).commit();

@@ -108,10 +108,10 @@
                     android:layout_alignParentRight="true"
                     android:layout_gravity="center"
                     android:drawableTint="@color/white"
-                    android:drawableTop="@drawable/packnew"
+                    android:drawableTop="@drawable/message_footer"
                     android:gravity="center"
                     android:backgroundTint="@color/white"
-                    android:text="Package"
+                    android:text="Message"
                     android:layout_marginRight="25dp"
                     android:textColor="@color/white"
                     android:textSize="13dp" />

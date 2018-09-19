@@ -68,6 +68,7 @@ public class Api {
     public static String myRecievedCall  = BASEURL+"myRecievedCall";
     public static String myFavouriteBusiness  = BASEURL+"myFavouriteBusiness";
     public static String checkPrevoiusUserpackages=BASEURL+"checkPrevoiusUserpackages";
+    public static String sendNotificationByUser=BASEURL+"sendNotificationByUser";
 
 
     public static String URL_FETCH_MESSAGES=BASEURL+"myChatingHistory";

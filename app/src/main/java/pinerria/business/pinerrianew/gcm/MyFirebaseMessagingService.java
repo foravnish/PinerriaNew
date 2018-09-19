@@ -67,35 +67,35 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         //Todo notification
 
 
-            NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
-            inboxStyle.addLine(remoteMessage.getNotification().getBody());
-            Notification notification;
-            final NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
-                    getApplicationContext());
-
-            Intent notificationIntent = new Intent(getApplicationContext(), HomeAct.class);
-            notificationIntent.putExtra("userType","");
-            PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, notificationIntent, 0);
-
-
-            notification = mBuilder.setSmallIcon(R.mipmap.logo_noti).setTicker("Pinerria").setWhen(0)
-                    .setAutoCancel(true)
-                    .setContentTitle("Pinerria")
-                    .setTicker("Pineria")
-//                .setContentIntent(resultPendingIntent)
-                    .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
-                    .setStyle(inboxStyle)
-//                .setWhen(getTimeMilliSec(timeStamp))
-                    .setSmallIcon(R.mipmap.logo_noti)
-                    .setContentIntent(contentIntent)
-                   // .setStyle(new NotificationCompat.BigPictureStyle().bigPicture(image))
-//                .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), icon))
-                    .setContentText(remoteMessage.getNotification().getBody())
-                    .build();
-
-
-            NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.notify(0, notification);
+//            NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+//            inboxStyle.addLine(remoteMessage.getNotification().getBody());
+//            Notification notification;
+//            final NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
+//                    getApplicationContext());
+//
+//            Intent notificationIntent = new Intent(getApplicationContext(), HomeAct.class);
+//            notificationIntent.putExtra("userType","");
+//            PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, notificationIntent, 0);
+//
+//
+//            notification = mBuilder.setSmallIcon(R.mipmap.logo_noti).setTicker("Pinerria").setWhen(0)
+//                    .setAutoCancel(true)
+//                    .setContentTitle("Pinerria")
+//                    .setTicker("Pineria")
+////                .setContentIntent(resultPendingIntent)
+//                    .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
+//                    .setStyle(inboxStyle)
+////                .setWhen(getTimeMilliSec(timeStamp))
+//                    .setSmallIcon(R.mipmap.logo_noti)
+//                    .setContentIntent(contentIntent)
+//                   // .setStyle(new NotificationCompat.BigPictureStyle().bigPicture(image))
+////                .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), icon))
+//                    .setContentText(remoteMessage.getNotification().getBody())
+//                    .build();
+//
+//
+//            NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+//            notificationManager.notify(0, notification);
 
 
     }

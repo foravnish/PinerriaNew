@@ -18,7 +18,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -27,6 +33,8 @@ import com.firebase.client.ValueEventListener;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
@@ -36,7 +44,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import pinerria.business.pinerrianew.R;
+import pinerria.business.pinerrianew.Utils.Api;
+import pinerria.business.pinerrianew.Utils.AppController;
 import pinerria.business.pinerrianew.Utils.MyPrefrences;
+import pinerria.business.pinerrianew.Utils.Util;
 
 
 public class Chat extends AppCompatActivity {
@@ -60,6 +71,8 @@ public class Chat extends AppCompatActivity {
         scrollView = (ScrollView)findViewById(R.id.scrollView);
         backBtn = (ImageView) findViewById(R.id.backBtn);
         toolbarTxtName = (TextView) findViewById(R.id.toolbarTxtName);
+
+        Log.d("gdfgdgsdgdfgdfgd",getIntent().getStringExtra("id"));
 
         Firebase.setAndroidContext(this);
 //        reference1 = new Firebase("https://android-chat-app-e711d.firebaseio.com/messages/" + UserDetails.username + "_" + UserDetails.chatWith);
@@ -98,6 +111,7 @@ public class Chat extends AppCompatActivity {
 
 
                 if(!messageText.equals("")){
+
                     Map<String, String> map = new HashMap<String, String>();
                     map.put("message", messageText);
                     map.put("user", UserDetails.username);
@@ -105,7 +119,12 @@ public class Chat extends AppCompatActivity {
 
                     reference1.push().setValue(map);
                     reference2.push().setValue(map);
+
+                    chatNotificationApi(messageArea.getText().toString());
+
                     messageArea.setText("");
+
+
                 }
             }
         });
@@ -216,6 +235,60 @@ public class Chat extends AppCompatActivity {
         });
 
     }
+
+    private void chatNotificationApi(final String msg) {
+      //  Util.showPgDialog(dialog);
+        StringRequest postRequest = new StringRequest(Request.Method.POST, Api.sendNotificationByUser,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // response
+                        Log.d("Response", response);
+                     //   Util.cancelPgDialog(dialog);
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            if (jsonObject.getString("status").equalsIgnoreCase("success")) {
+
+//                                Toast.makeText(getActivity(), jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+//                                errorDialog("Rating Edited successfully.");
+
+                            } else {
+                               // Toast.makeText(getActivity(), jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error
+                       // Toast.makeText(getActivity(), "Error! Please connect to the Internet.", Toast.LENGTH_SHORT).show();
+                       // Util.cancelPgDialog(dialog);
+                    }
+                }
+        ) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("user_id",MyPrefrences.getUserID(getApplicationContext()));
+                params.put("reciever_id",getIntent().getStringExtra("id"));
+                params.put("message",msg);
+
+                return params;
+            }
+        };
+        postRequest.setRetryPolicy(new DefaultRetryPolicy(27000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        postRequest.setShouldCache(false);
+
+        AppController.getInstance().addToRequestQueue(postRequest);
+
+    }
+
 
     public void addMessageBox(String message,String time,String date, int type,String name){
 
