@@ -463,10 +463,11 @@
                     android:layout_marginRight="10dp"
                     android:layout_marginLeft="20dp"
                     android:checked="true"
-                    app:thumbTint="@color/blue"
-                    android:background="@color/white"
+                    android:background="@drawable/strock_blue_switch"
                     android:textColor="@color/p_black" />
 
+                <!--app:thumbTint="@color/blue"-->
+                <!--android:background="@color/white"-->
             </LinearLayout>
 
 

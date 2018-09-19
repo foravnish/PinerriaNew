@@ -234,8 +234,6 @@ public class AddGSTDetails extends AppCompatActivity {
                             tax_address.setText(jsonObject.optString("tax_address"));
                         }
 
-
-
                         if (jsonObject.optString("email_address").equals("")){
                             user_email.setText(MyPrefrences.getEMAILID(getApplicationContext()));
                         }
@@ -288,6 +286,12 @@ public class AddGSTDetails extends AppCompatActivity {
             return false;
         }
 
+        else if (flag=="false" && TextUtils.isEmpty(gst_number.getText().toString()))
+        {
+            Util.errorDialog(AddGSTDetails.this,"Enter GST Number");
+            return false;
+        }
+
         else if (TextUtils.isEmpty(tax_address.getText().toString()))
         {
             Util.errorDialog(AddGSTDetails.this,"Enter Address");
@@ -301,11 +305,6 @@ public class AddGSTDetails extends AppCompatActivity {
         else if (!user_email.getText().toString().trim().matches(emailPattern))
         {
             Util.errorDialog(AddGSTDetails.this,"Enter valid Email Id");
-            return false;
-        }
-        else if (flag=="false" && TextUtils.isEmpty(gst_number.getText().toString()))
-        {
-            Util.errorDialog(AddGSTDetails.this,"Enter GST Number");
             return false;
         }
 
@@ -1130,9 +1129,6 @@ public class AddGSTDetails extends AppCompatActivity {
                     submitOrderApiComplete(payment_id,p_id,"NA","NA","failure",notificationMsg.getText().toString());
 
                 }
-
-
-//
 
             }
         });

@@ -24,6 +24,8 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.w3c.dom.Text;
 
@@ -76,6 +78,9 @@ public class Chat extends AppCompatActivity {
                 finish();
             }
         });
+
+
+        FirebaseMessaging.getInstance().subscribeToTopic("pushNotifications");
 
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,6 +141,7 @@ public class Chat extends AppCompatActivity {
 
             }
         });
+
 
 
 
@@ -251,22 +257,22 @@ public class Chat extends AppCompatActivity {
             //textView.setBackgroundResource(R.drawable.rounded_corner2);
 
 //
-            NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            Intent notificationIntent = new Intent(getApplicationContext(), ChatUSer.class);
-            notificationIntent.putExtra("name", "");
-            notificationIntent.putExtra("value", "1");
-            PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, notificationIntent, 0);
-
-            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(Chat.this)
-                    .setSmallIcon(R.drawable.message)
-                    .setContentTitle("New Message from " + name)
-                    .setContentText(message)
-                    .setOnlyAlertOnce(true)
-                    .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-                    .setContentIntent(contentIntent);
-            mBuilder.setAutoCancel(true);
-            mBuilder.setLocalOnly(false);
-            mNotificationManager.notify(1, mBuilder.build());
+//            NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//            Intent notificationIntent = new Intent(getApplicationContext(), ChatUSer.class);
+//            notificationIntent.putExtra("name", "");
+//            notificationIntent.putExtra("value", "1");
+//            PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, notificationIntent, 0);
+//
+//            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(Chat.this)
+//                    .setSmallIcon(R.drawable.message)
+//                    .setContentTitle("New Message from " + name)
+//                    .setContentText(message)
+//                    .setOnlyAlertOnce(true)
+//                    .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+//                    .setContentIntent(contentIntent);
+//            mBuilder.setAutoCancel(true);
+//            mBuilder.setLocalOnly(false);
+//            mNotificationManager.notify(1, mBuilder.build());
 
         }
 

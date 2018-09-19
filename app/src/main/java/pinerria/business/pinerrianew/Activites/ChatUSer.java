@@ -72,8 +72,6 @@ public class ChatUSer extends AppCompatActivity {
 
                 doOnSuccess(s);
 
-
-
             }
         },new Response.ErrorListener(){
             @Override
@@ -149,8 +147,6 @@ public class ChatUSer extends AppCompatActivity {
             JSONObject obj = new JSONObject(s);
 
             Log.d("fsdfsdffdfdfdfdfdsdfs", String.valueOf(obj));
-
-
 
             JSONObject resobj = new JSONObject( String.valueOf(obj));
             Iterator<?> keys = resobj.keys();

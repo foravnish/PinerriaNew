@@ -93,7 +93,7 @@ public class DetailForJob extends Fragment {
             comName.setText(jsonObject.optString("user_name").toUpperCase());
             heading.setText(jsonObject.optString("heading"));
             description.setText(jsonObject.optString("description"));
-            address.setText(jsonObject.optString("city_name"));
+            address.setText(jsonObject.optString("address")+", "+jsonObject.optString("city_name"));
             phone.setText(jsonObject.optString("mobile"));
 
 
@@ -117,7 +117,7 @@ public class DetailForJob extends Fragment {
                     Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
                     sharingIntent.setType("text/plain");
 //                String shareBody =comName.getText().toString()+ " "+phone.getText().toString();
-                    String shareBody = "Hello, \nThis seems to be an interesting job for you. Please check it out.’, "+comName.getText().toString()+ " "+phone.getText().toString()+", Sharing";
+                    String shareBody = "Hi, \nThere is a job on Pinerria which might be of interest to you.\n"+heading.getText().toString()+"\n"+salary.getText().toString()+"\n"+address.getText().toString()+"\n"+"Please check it out.\n"+comName.getText().toString();
 
                     sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Details");
                     sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT,shareBody);
@@ -269,7 +269,7 @@ public class DetailForJob extends Fragment {
 
                         if (MyPrefrences.getUserLogin(getActivity())==true) {
 
-                            Toast.makeText(getActivity(), "Seller's  De-activate call feature now.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "The Job poster has not enabled the call feature.", Toast.LENGTH_SHORT).show();
 
                         }
                         else{

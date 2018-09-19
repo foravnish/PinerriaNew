@@ -30,6 +30,7 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.JsonObject;
 import com.payumoney.core.PayUmoneyConfig;
 import com.payumoney.core.PayUmoneyConstants;
 import com.payumoney.core.PayUmoneySdkInitializer;
@@ -81,6 +82,7 @@ public class PayOrderAct extends AppCompatActivity {
     String merKey,merId,salt;
     String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
 
+    JSONObject jsonObject;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,7 +146,7 @@ public class PayOrderAct extends AppCompatActivity {
         try {
            JSONArray jsonArray=new JSONArray(getIntent().getStringExtra("jsonArray"));
 
-           final JSONObject jsonObject=jsonArray.getJSONObject(0);
+            jsonObject=jsonArray.getJSONObject(0);
 
             amount.setText("Amount ₹ "+jsonObject.optString("amount"));
             descreption.setText(jsonObject.optString("description"));
@@ -226,7 +228,7 @@ public class PayOrderAct extends AppCompatActivity {
                             Log.d("fgsdgfsdghdfhd", String.valueOf(i1));
 
                     params.put("transaction_id", String.valueOf(i1));
-                    params.put("payment_status", "success");
+                    params.put("payment_status", "pending");
                     params.put("company_name", company_name.getText().toString());
                     if (flag.equals("true")){
                         params.put("gst_number", "NA");
@@ -550,7 +552,7 @@ public class PayOrderAct extends AppCompatActivity {
                 .setEmail(email)
                 .setsUrl(appEnvironment.surl())
                 .setfUrl(appEnvironment.furl())
-                .setUdf1(udf1)
+                .setUdf1(jsonObject.optString("payment_id"))
                 .setUdf2(udf2)
                 .setUdf3(udf3)
                 .setUdf4(udf4)
@@ -771,21 +773,17 @@ public class PayOrderAct extends AppCompatActivity {
                     Log.d("responseprint","success "+payuResponse);
                     Log.d("responseprint","success "+merchantResponse);
 
-//                    new AlertDialog.Builder(PayOrderAct.this)
-//                            .setCancelable(false)
-//                            .setMessage("Payment Success...")
-//                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-//                                public void onClick(DialogInterface dialog, int whichButton) {
-//                                    dialog.dismiss();
-//                                }
-//                            }).show();
-                    //  new BuyPackagesApi2(getApplicationContext(),"success","payment_success").execute();
 
-                    //  placeOrder();
+                    try {
+                        JSONObject jsonObject=new JSONObject(payuResponse);
+                        JSONObject resultJson=jsonObject.getJSONObject("result");
 
-//                    submitData(jsonObject1.optString("id"),jsonObject1.optString("name"),jsonObject2.optString("id"),jsonObject2.optString("name"),jsonObject1.optString("per_month_installment"),"online");
-//                    submitOrderApiComplete(payuResponse,merchantResponse,"NA","NA","success");
-                    errorDialog2("1",payuResponse,merchantResponse);
+                        errorDialog2("1",payuResponse,merchantResponse,resultJson.optString("udf1"),resultJson.optString("amount"),resultJson.optString("txnid"));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+
 
 
                 } else {
@@ -804,7 +802,7 @@ public class PayOrderAct extends AppCompatActivity {
                     // new BuyPackagesApi2(getApplicationContext(),"failed","payment_failed").execute();
 
 //                    submitOrderApiComplete("NA","NA","NA","NA","failure");
-                    errorDialog2("2","NA","NA");
+                    errorDialog2("2","NA","NA","NA","NA","NA");
                 }
 
                 // Response from Payumoney
@@ -846,7 +844,7 @@ public class PayOrderAct extends AppCompatActivity {
         return hexString.toString();
     }
 
-    private void submitOrderApiComplete(final String payment_id, final String p_id, final String txn_id, final String P_amount, final String status, final String Notimessage) {
+    private void submitOrderApiComplete(final String payment_id, final String p_id, final String txn_id, final String P_amount, final String status, final String Notimessage, final String paymntNo) {
 
         Util.showPgDialog(dialog);
         RequestQueue queue = Volley.newRequestQueue(PayOrderAct.this);
@@ -877,7 +875,7 @@ public class PayOrderAct extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 Util.cancelPgDialog(dialog);
                 Log.e("fdgdfgdfgd", "Login Error: " + error.getMessage());
-                Toast.makeText(getApplicationContext(), "Please Connect to the Internet or Wrong Password", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Please Connect to the Internet.", Toast.LENGTH_LONG).show();
             }
         }) {
 
@@ -887,13 +885,18 @@ public class PayOrderAct extends AppCompatActivity {
 
                 // Posting parameters to login url
                 Map<String, String> params = new HashMap<>();
-                params.put("payment_id", p_id);
-                params.put("transaction_id", txn_id);
-                params.put("response", payment_id);
-                params.put("pay_amount", P_amount);
-                params.put("payment_status", status);
-                params.put("unique_number", MyPrefrences.getDateTime(getApplicationContext()));
-                params.put("notification", Notimessage);
+                 params.put("payment_id", p_id);
+                 params.put("transaction_id", txn_id);
+                 params.put("response", payment_id);
+                 params.put("pay_amount", P_amount);
+                 params.put("payment_status", status);
+                 params.put("unique_number", MyPrefrences.getDateTime(getApplicationContext()));
+                 params.put("notification", Notimessage);
+                 params.put("payment_no", paymntNo);
+                 params.put("mode", "banner");
+
+                 Log.d("dfgdfgdfgdfgdfgd",MyPrefrences.getDateTime(getApplicationContext()));
+                 Log.d("dfgdfgdfgdfgdfgd",paymntNo);
 
 
                 return params;
@@ -914,7 +917,7 @@ public class PayOrderAct extends AppCompatActivity {
     }
 
 
-    private void errorDialog2(final String status,final String payment_id, final String p_id) {
+    private void errorDialog2(final String status, final String payment_id, final String p_id, final String paymntNo, final String amount, final String tnxId) {
         TextView Yes_action, No_action,btn;
         TextView heading;
         final EditText notificationMsg;
@@ -950,13 +953,14 @@ public class PayOrderAct extends AppCompatActivity {
             public void onClick(View v) {
 
                 if (status.equalsIgnoreCase("1")){
-                    submitOrderApiComplete(payment_id,p_id,"NA","NA","success",notificationMsg.getText().toString());
+                    submitOrderApiComplete(payment_id,p_id,tnxId,amount,"success",notificationMsg.getText().toString(),paymntNo);
 
+                    Log.d("fgdfgsdfgrdtgdgd","true");
                 }
 
                 else if(status.equalsIgnoreCase("2")){
-                    submitOrderApiComplete(payment_id,p_id,"NA","NA","failure",notificationMsg.getText().toString());
-
+                    submitOrderApiComplete(payment_id,p_id,tnxId,amount,"failure",notificationMsg.getText().toString(),paymntNo);
+                    Log.d("fgdfgsdfgrdtgdgd","false");
                 }
                 
 

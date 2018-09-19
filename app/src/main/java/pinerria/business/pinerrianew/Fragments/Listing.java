@@ -299,6 +299,7 @@ public class Listing extends Fragment {
                             map.put("my_favourite", jsonObject.optString("my_favourite"));
                             map.put("min_price", jsonObject.optString("min_price"));
                             map.put("max_price", jsonObject.optString("max_price"));
+                            map.put("premium", jsonObject.optString("premium"));
 
                             Adapter adapter=new Adapter();
                             expListView.setAdapter(adapter);
@@ -394,6 +395,7 @@ public class Listing extends Fragment {
             viewholder.imgaeView=convertView.findViewById(R.id.imgaeView);
             viewholder.totlaUsers=convertView.findViewById(R.id.totlaUsers);
             viewholder.price=convertView.findViewById(R.id.price);
+            viewholder.stars=convertView.findViewById(R.id.stars);
 //
             viewholder.keyword=convertView.findViewById(R.id.keyword);
             viewholder.distance=convertView.findViewById(R.id.distance);
@@ -524,20 +526,20 @@ public class Listing extends Fragment {
                 e.printStackTrace();
             }
 //
-//            try {
-//                if (AllProducts.get(position).get("premium").equalsIgnoreCase("Yes")){
-//                    viewholder.stars.setVisibility(View.VISIBLE);
+            try {
+                if (AllProducts.get(position).get("premium").equalsIgnoreCase("Yes")){
+                    viewholder.stars.setVisibility(View.VISIBLE);
 //                    viewholder.cardView.setCardBackgroundColor(Color.parseColor("#FFFDF4BE"));
 //                    viewholder.callNow1.setVisibility(View.VISIBLE);
-//                }
-//                else if (AllProducts.get(position).get("premium").equalsIgnoreCase("No")){
-//                    viewholder.stars.setVisibility(View.GONE);
+                }
+                else if (AllProducts.get(position).get("premium").equalsIgnoreCase("No")){
+                    viewholder.stars.setVisibility(View.GONE);
 //                    viewholder.cardView.setCardBackgroundColor(Color.parseColor("#ffffff"));
 //                    viewholder.callNow1.setVisibility(View.GONE);
-//                }
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 //
 //
 //            try {

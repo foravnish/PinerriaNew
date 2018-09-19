@@ -209,7 +209,7 @@
                     android:layout_weight="1"
                     android:gravity="right"
                     android:fontFamily="@font/muli_bold"
-                    android:text="12045678900"
+                    android:text="7042147001"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="16sp" />
 
@@ -224,11 +224,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:weightSum="2"
+                android:weightSum="4"
                 android:padding="12dp"
                 android:layout_marginTop="5dp"
-                android:background="#fff"
-                >
+                android:background="#fff">
 
 
                 <TextView
@@ -253,10 +252,10 @@
                     android:layout_marginBottom="10dp"
                     android:layout_marginLeft="5dp"
                     android:layout_toRightOf="@+id/tv_city"
-                    android:layout_weight="1"
+                    android:layout_weight="3"
                     android:gravity="right"
                     android:fontFamily="@font/muli_bold"
-                    android:text="abc@pinerria.com"
+                    android:text="customerhelpdesk@pinerria.com"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="16sp" />
 

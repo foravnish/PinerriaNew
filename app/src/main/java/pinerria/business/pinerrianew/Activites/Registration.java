@@ -77,7 +77,7 @@ public class Registration extends AppCompatActivity {
     //    ImageView regiImage;
     // ImageView regiImage;
     Button registration;
-    EditText rePass,password,mobile,namePerson;
+    EditText rePass,password,mobile,namePerson,emailId;
     RadioGroup radioGroup;
     TextView forLogin,skip;
 
@@ -101,12 +101,15 @@ public class Registration extends AppCompatActivity {
 
     List<String> keyData=new ArrayList<>();
     List<String> valData=new ArrayList<>();
+    String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
 
         namePerson=(EditText) findViewById(R.id.namePerson);
+        emailId=(EditText) findViewById(R.id.emailId);
         mobile=findViewById(R.id.mobile);
         password=findViewById(R.id.password);
         rePass=findViewById(R.id.rePass);
@@ -249,21 +252,11 @@ public class Registration extends AppCompatActivity {
             public void onClick(View view) {
 
 
-                if (radioGroup.getCheckedRadioButtonId() == -1)
-                {
-                    Log.d("fgdgdfgdfgdfgdfgdfgd","yes");
-
-                    Util.errorDialog(Registration.this,"Please Select Gender");
-                }
-                else
-                {
-                    Log.d("fgdgdfgdfgdfgdfgdfgd","no");
-
                     int selectedId = radioGroup.getCheckedRadioButtonId();
                     final RadioButton radioButton = (RadioButton) findViewById(selectedId);
 
-                    if (checkBox.isChecked()==true){
-                        Log.d("fdgsdgsdfgsdfgsdgrfgds","yes");
+//                    if (checkBox.isChecked()==true){
+//                        Log.d("fdgsdgsdfgsdfgsdgrfgds","yes");
 
                         if(validate()){
 
@@ -272,58 +265,21 @@ public class Registration extends AppCompatActivity {
 //                        Util.errorDialog(Registration.this,"Please Select State");
 //                    }
 //                    else{
-                            if (cityString.equalsIgnoreCase("Select City")){
-                                Util.errorDialog(Registration.this,"Please Select City");
-                            }
-                            else{
-
-//                            String path= null;
-//                            String filename= null;
-//                            try {
-//                                path = f.toString();
-//                                filename = path.substring(path.lastIndexOf("/")+1);
-//                                Log.d("dsfdfsdfsfs",filename);
-//                            } catch (Exception e) {
-//                                e.printStackTrace();
-//                            }
-
-//                            if (filename==null){
-//                                Util.errorDialog(Registration.this,"Please Select Image");
-//                            }
-//                            else{
-//                                //Toast.makeText(AddProduct.this, "yes", Toast.LENGTH_SHORT).show();
-//                                PostData(radioButton.getText().toString(),path,filename,mobile.getText().toString());
-//                            }
 
                                 PostData(radioButton.getText().toString(),mobile.getText().toString());
 
                             }
 
 
-                        }
+//                }
 
-
-
-                }
-
-                    else{
-                        Log.d("fdgsdgsdfgsdfgsdgrfgds","not ");
-                        Util.errorDialog(Registration.this,"Please indicate acceptance of Terms & Conditions");
-                    }
-
-
-
-
-
-
-
-
-
+//                    else{
+//                        Log.d("fdgsdgsdfgsdfgsdgrfgds","not ");
+//                        Util.errorDialog(Registration.this,"Please indicate acceptance of Terms & Conditions");
 //                    }
 
 
 
-                }
 
             }
         });
@@ -348,41 +304,45 @@ public class Registration extends AppCompatActivity {
         });
     }
 
+    private boolean validate() {
 
-    private boolean validate(){
-
-        if (TextUtils.isEmpty(namePerson.getText().toString()))
-        {
-            Util.errorDialog(Registration.this,"Enter Your Name");
+        if (TextUtils.isEmpty(namePerson.getText().toString())) {
+            Util.errorDialog(Registration.this, "Enter Your Name");
+            return false;
+        } else if (TextUtils.isEmpty(mobile.getText().toString())) {
+            Util.errorDialog(Registration.this, "Enter Mobile No.");
+            return false;
+        } else if (mobile.getText().toString().length() < 10) {
+            Util.errorDialog(Registration.this, "Enter 10 digit Mobile No.");
             return false;
         }
-        else if (TextUtils.isEmpty(mobile.getText().toString()))
-        {
-            Util.errorDialog(Registration.this,"Enter Mobile No.");
+        else if (!TextUtils.isEmpty(emailId.getText().toString())) {
+            if (!emailId.getText().toString().trim().matches(emailPattern)) {
+                Util.errorDialog(Registration.this, "Enter valid Email Id.");
+                return false;
+            }
+        } if (TextUtils.isEmpty(password.getText().toString())) {
+            Util.errorDialog(Registration.this, "Enter Password.");
             return false;
-        }
-        else if (mobile.getText().toString().length()<10)
-        {
-            Util.errorDialog(Registration.this,"Enter 10 digit Mobile No.");
+        } if (TextUtils.isEmpty(rePass.getText().toString())) {
+            Util.errorDialog(Registration.this, "Enter Confirm Password.");
             return false;
-        }
-        else if (TextUtils.isEmpty(password.getText().toString()))
-        {
-            Util.errorDialog(Registration.this,"Enter Password ");
-            return false;
-        }
-        else if (TextUtils.isEmpty(rePass.getText().toString()))
-        {
-            Util.errorDialog(Registration.this,"Enter Confirm Password");
-            return false;
-        }
-        else if (!rePass.getText().toString().equals(password.getText().toString())){
+        } if (!rePass.getText().toString().equals(password.getText().toString())) {
 //            Toast.makeText(getApplicationContext(), "Both Password should be match", Toast.LENGTH_SHORT).show();
-            Util.errorDialog(Registration.this,"Confirm Password not Match");
+            Util.errorDialog(Registration.this, "Confirm Password dose not match.");
+            return false;
+        }  if (cityString.equalsIgnoreCase("Select City")) {
+            Util.errorDialog(Registration.this, "Please Select City.");
+            return false;
+        }  if (radioGroup.getCheckedRadioButtonId() == -1) {
+            Util.errorDialog(Registration.this, "Please Select Gender.");
+            return false;
+        }  if (checkBox.isChecked() == false) {
+            Util.errorDialog(Registration.this, "Please indicate acceptance of Terms & Conditions.");
             return false;
         }
 
-        return true;
+            return true;
 
     }
 
@@ -673,6 +633,7 @@ public class Registration extends AppCompatActivity {
                     .type(MultipartBuilder.FORM)
 
                     .addFormDataPart("name", namePerson.getText().toString())
+                    .addFormDataPart("emailId", emailId.getText().toString())
                     .addFormDataPart("mobile", mobile.getText().toString())
                     .addFormDataPart("gender", value)
                     .addFormDataPart("password", password.getText().toString())
@@ -686,6 +647,8 @@ public class Registration extends AppCompatActivity {
             Log.d("dfdsgsdgdfgdfh",idCity);
             Log.d("dfdsgsdgdfgdfh",idstate);
 
+
+            Log.d("gdfgsdfgsgsgsdg",emailId.getText().toString());
 
             com.squareup.okhttp.Request request = new com.squareup.okhttp.Request.Builder()
 //                     .url("http://divpreetsingh.info/app/ManiUploadsImageHere")

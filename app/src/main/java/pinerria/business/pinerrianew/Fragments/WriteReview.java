@@ -1,8 +1,11 @@
 package pinerria.business.pinerrianew.Fragments;
 
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -10,10 +13,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -43,6 +49,8 @@ import java.util.Map;
 
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 import pinerria.business.pinerrianew.Activites.HomeAct;
+import pinerria.business.pinerrianew.Activites.Login;
+import pinerria.business.pinerrianew.Activites.PayActivity;
 import pinerria.business.pinerrianew.R;
 import pinerria.business.pinerrianew.Utils.Api;
 import pinerria.business.pinerrianew.Utils.AppController;
@@ -133,14 +141,27 @@ public class WriteReview extends Fragment {
             }
         });
 
+        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    // do something, e.g. set your TextView here via .setText()
+                    InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                    return true;
+                }
+                return false;
+            }
+        });
+
         bubmitReview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-
                 if (getArguments().getString("user_id").equals(MyPrefrences.getUserID(getActivity()))){
 
-                    Util.errorDialog(getActivity(),"This is Your Listing, You cant't give review");
+                    Util.errorDialog(getActivity(),"You can not give a Review and Rating for your own business.");
                 }
                 else {
 
@@ -157,11 +178,14 @@ public class WriteReview extends Fragment {
                                             JSONObject jsonObject = new JSONObject(response);
                                             if (jsonObject.getString("status").equalsIgnoreCase("success")) {
 
-                                            Toast.makeText(getActivity(), jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
-//                                                errorDialog("Thank you for Your Rating");
+//                                            Toast.makeText(getActivity(), jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                                                errorDialog(jsonObject.getString("message"));
+
                                             } else {
 
-                                                Toast.makeText(getActivity(), jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                                                popUpForUpdateRating("You have already given Review and Rating to this business. Do you want to update?",jsonObject.getString("rating_id"));
+
+                                                //Toast.makeText(getActivity(), jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
                                             }
 
                                         } catch (JSONException e) {
@@ -286,6 +310,106 @@ public class WriteReview extends Fragment {
         return view;
     }
 
+    private void popUpForUpdateRating(String msg, final String r_id) {
+
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage(msg)
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog1, int id) {
+                        dialog1.cancel();
+
+
+
+                        Util.showPgDialog(dialog);
+                        StringRequest postRequest = new StringRequest(Request.Method.POST, Api.updateMyRating,
+                                new Response.Listener<String>() {
+                                    @Override
+                                    public void onResponse(String response) {
+                                        // response
+                                        Log.d("ResponseUpdate", response);
+                                        Util.cancelPgDialog(dialog);
+                                        try {
+                                            JSONObject jsonObject = new JSONObject(response);
+                                            if (jsonObject.getString("status").equalsIgnoreCase("success")) {
+
+//                                            Toast.makeText(getActivity(), jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                                                errorDialog("Rating Updated successfully.");
+
+                                            } else {
+                                                Toast.makeText(getActivity(), jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                                            }
+
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+
+                                    }
+                                },
+                                new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        // error
+                                        Toast.makeText(getActivity(), "Error! Please connect to the Internet.", Toast.LENGTH_SHORT).show();
+                                        Util.cancelPgDialog(dialog);
+                                    }
+                                }
+                        ) {
+
+
+                            @Override
+                            protected Map<String, String> getParams() {
+                                Map<String, String> params = new HashMap<String, String>();
+                                params.put("rating_id",r_id);
+                                params.put("user_id", MyPrefrences.getUserID(getActivity()));
+                                params.put("review",editText.getText().toString());
+                                params.put("rating", rate);
+
+                                Log.d("dfdgdfgdfgh1",r_id);
+                                Log.d("dfdgdfgdfgh2",MyPrefrences.getUserID(getActivity()));
+                                Log.d("dfdgdfgdfgh3",editText.getText().toString());
+                                Log.d("dfdgdfgdfgh4",rate);
+
+
+
+//                                params.put("business_id", getArguments().getString("id"));
+//                                params.put("review", editText.getText().toString());
+//                                params.put("rating", rate);
+//                                params.put("user_id", MyPrefrences.getUserID(getActivity()));
+
+                                return params;
+                            }
+                        };
+                        postRequest.setRetryPolicy(new DefaultRetryPolicy(27000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                        postRequest.setShouldCache(false);
+
+                        AppController.getInstance().addToRequestQueue(postRequest);
+
+
+
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog1, int id) {
+                        //  Action for 'NO' Button
+                        dialog1.cancel();
+
+
+//                                    Intent intent=new Intent(PayActivity.this,HomeAct.class);
+//                                    intent.putExtra("userType","");
+//                                    startActivity(intent);
+//                                    overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+//                                    finish();
+
+                    }
+                });
+        AlertDialog alert = builder.create();
+        //Setting the title manually
+        alert.setTitle("Review");
+        alert.show();
+    }
+
     public class Viewholder{
         NetworkImageView iamge;
         TextView comName,date_txt,c1_email,c1_mobile1,uname,review,user_icon;
@@ -308,15 +432,20 @@ public class WriteReview extends Fragment {
 
                 dialog.dismiss();
 
-                Fragment fragment=new WriteReview();
-                Bundle bundle=new Bundle();
-                bundle.putString("id",getArguments().getString("id"));
-                bundle.putString("company_name", comName.getText().toString());
-                bundle.putString("address", comAdd.getText().toString());
-                FragmentManager manager=getActivity().getSupportFragmentManager();
-                FragmentTransaction ft=manager.beginTransaction();
-                fragment.setArguments(bundle);
-                ft.replace(R.id.content_frame,fragment).addToBackStack(null).commit();
+                Intent intent=new Intent(getActivity(),HomeAct.class);
+                intent.putExtra("userType","");
+                startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+
+//                Fragment fragment=new WriteReview();
+//                Bundle bundle=new Bundle();
+//                bundle.putString("id",getArguments().getString("id"));
+//                bundle.putString("company_name", comName.getText().toString());
+//                bundle.putString("address", comAdd.getText().toString());
+//                FragmentManager manager=getActivity().getSupportFragmentManager();
+//                FragmentTransaction ft=manager.beginTransaction();
+//                fragment.setArguments(bundle);
+//                ft.replace(R.id.content_frame,fragment).addToBackStack(null).commit();
 
             }
         });

@@ -168,6 +168,7 @@ public class ViewJobs extends Fragment {
                             map.put("experience", jsonObject.optString("experience"));
                             map.put("state_name", jsonObject.optString("state_name"));
                             map.put("city_name", jsonObject.optString("city_name"));
+                            map.put("address", jsonObject.optString("address"));
                             map.put("zone_name", jsonObject.optString("zone_name"));
                             map.put("user_name", jsonObject.optString("user_name"));
                             map.put("description", jsonObject.optString("description"));
@@ -290,7 +291,7 @@ public class ViewJobs extends Fragment {
             salary.setText(currency);
 
             experience.setText(AllProducts.get(position).get("experience"));
-            address.setText(AllProducts.get(position).get("city_name"));
+            address.setText(AllProducts.get(position).get("address")+", "+AllProducts.get(position).get("city_name"));
 //            address.setText(AllProducts.get(position).get("city_name")+", "+AllProducts.get(position).get("state_name")+", "+AllProducts.get(position).get("zone_name"));
             full_part_time.setText(AllProducts.get(position).get("full_part_time"));
             jobId.setText(AllProducts.get(position).get("user_name"));

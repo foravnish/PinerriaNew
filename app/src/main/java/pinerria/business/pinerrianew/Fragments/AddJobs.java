@@ -70,7 +70,7 @@ public class AddJobs extends Fragment {
 
     ImageView regiImage;
     Button submitJob;
-    EditText rePass,password,salary,heading,description;
+    EditText rePass,password,salary,heading,description,address;
     RadioGroup radioGroup;
     RadioButton radioButton;
     TextView forLogin,uploadImage;
@@ -98,6 +98,7 @@ public class AddJobs extends Fragment {
         submitJob=view.findViewById(R.id.submitJob);
         typeJobs=view.findViewById(R.id.typeJobs);
         experience=view.findViewById(R.id.experience);
+        address=view.findViewById(R.id.address);
 
 
         radioGroup = (RadioGroup) view.findViewById(R.id.radioGroup);
@@ -280,6 +281,7 @@ public class AddJobs extends Fragment {
                 params.put("full_part_time", value);
                 params.put("experience", valExp);
                 params.put("description", description.getText().toString());
+                params.put("address", address.getText().toString());
 
                 return params;
             }
@@ -321,6 +323,7 @@ public class AddJobs extends Fragment {
                         heading.setText(jsonObject.optString("heading"));
                         salary.setText(jsonObject.optString("salary"));
                         description.setText(jsonObject.optString("description"));
+                        address.setText(jsonObject.optString("address"));
 
                     }
 
@@ -415,6 +418,7 @@ public class AddJobs extends Fragment {
                 params.put("full_part_time", value);
                 params.put("experience", valExp);
                 params.put("description", description.getText().toString());
+                params.put("address", address.getText().toString());
 
                 return params;
             }
@@ -437,20 +441,24 @@ public class AddJobs extends Fragment {
 
         if (TextUtils.isEmpty(heading.getText().toString()))
         {
-            Util.errorDialog(getActivity(),"Type Heading");
+            Util.errorDialog(getActivity(),"Enter Heading");
             return false;
         }
         else if (TextUtils.isEmpty(description.getText().toString()))
         {
-            Util.errorDialog(getActivity(),"Type Description");
+            Util.errorDialog(getActivity(),"Enter Description");
             return false;
         }
         else if (TextUtils.isEmpty(salary.getText().toString()))
         {
-            Util.errorDialog(getActivity(),"Type Salary");
+            Util.errorDialog(getActivity(),"Enter Salary");
             return false;
         }
-
+        else if (TextUtils.isEmpty(address.getText().toString()))
+        {
+            Util.errorDialog(getActivity(),"Enter Address");
+            return false;
+        }
 
 
 

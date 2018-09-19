@@ -119,6 +119,21 @@
 
                         </android.support.design.widget.TextInputLayout>
 
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:theme="@style/TextLabel">
+
+                            <EditText
+                                android:id="@+id/emailId"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Email Id (Optional)"
+                                android:textColor="@color/white"
+                                android:inputType="textEmailAddress"/>
+
+                        </android.support.design.widget.TextInputLayout>
+
 
                         <android.support.design.widget.TextInputLayout
                             android:layout_width="match_parent"
@@ -262,6 +277,7 @@
                             android:layout_marginTop="5dp"
                             android:buttonTint="@color/gray5"
                             android:textColor="@color/gray5"
+                            android:checked="false"
                             android:text=" I agree to the Terms &amp; Conditions"/>
 
                         <Button

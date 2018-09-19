@@ -130,7 +130,6 @@ public class MyJobs extends Fragment {
         });
 
 
-
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
                 Api.userJob+"/"+ MyPrefrences.getUserID(getActivity()), null, new Response.Listener<JSONObject>() {
 
@@ -164,6 +163,7 @@ public class MyJobs extends Fragment {
                         full_part_time.setText(jsonObject.optString("full_part_time"));
                         experience.setText(jsonObject.optString("experience"));
                         description.setText(jsonObject.optString("description"));
+                        address.setText(jsonObject.optString("address"));
 
                         jobId.setText("ID "+jsonObject.optString("id"));
                         String year=jsonObject.optString("created_date").substring(0,4);

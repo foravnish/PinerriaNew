@@ -72,9 +72,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             Notification notification;
             final NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
                     getApplicationContext());
+
             Intent notificationIntent = new Intent(getApplicationContext(), HomeAct.class);
             notificationIntent.putExtra("userType","");
             PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, notificationIntent, 0);
+
+
             notification = mBuilder.setSmallIcon(R.mipmap.logo_noti).setTicker("Pinerria").setWhen(0)
                     .setAutoCancel(true)
                     .setContentTitle("Pinerria")

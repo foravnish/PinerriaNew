@@ -122,9 +122,9 @@
                 <!--<category android:name="android.intent.category.BROWSABLE" />-->
             <!--</intent-filter>-->
         <!--</activity>-->
-        <activity android:name=".Activites.ChatUSer" />
-        <activity android:name=".Activites.Chat" />
-        <activity android:name=".Activites.AddGSTDetails"></activity>
+        <activity android:name=".Activites.ChatUSer" android:screenOrientation="portrait"/>
+        <activity android:name=".Activites.Chat" android:screenOrientation="portrait"/>
+        <activity android:name=".Activites.AddGSTDetails" android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

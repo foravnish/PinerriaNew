@@ -180,6 +180,8 @@ public class Details extends Fragment {
                 rating.setRating(Float.parseFloat(jsonObject.optString("total_rating")));
             }
 
+//            rating.setRating(Float.parseFloat("3.5"));
+           // rating.setRating(3.5f);
 
             if (jsonObject.optString("min_price").equals("")){
                 priceLayout.setVisibility(View.GONE);
