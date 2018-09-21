@@ -500,7 +500,7 @@ public class WriteReview extends Fragment {
             if (!AllProducts.get(position).get("user_name").equals("")) {
                 viewholder.comName.setText(AllProducts.get(position).get("user_name").substring(0, 1).toUpperCase() + AllProducts.get(position).get("user_name").substring(1).toUpperCase());
             }
-            viewholder.user_icon.setText(AllProducts.get(position).get("user_name"));
+            viewholder.user_icon.setText(AllProducts.get(position).get("user_name").toUpperCase());
 //            viewholder.c1_mobile1.setText(AllProducts.get(position).get("mobile"));
 //            String number;
 //            number="+91-XXXXXXX"+AllProducts.get(position).get("mobile").substring(AllProducts.get(position).get("mobile").length() - 3);

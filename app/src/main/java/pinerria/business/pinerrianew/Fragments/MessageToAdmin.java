@@ -71,7 +71,7 @@ public class MessageToAdmin extends Fragment {
     GridView grigView2;
     HelpAdapter helpAdapter;
    // MessageFrmmAdapter messageFrmmAdapter;
-
+   ImageView imageNoListing;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -83,7 +83,7 @@ public class MessageToAdmin extends Fragment {
         grigView=view.findViewById(R.id.grigView);
         sendqu=view.findViewById(R.id.sendqu);
         fromAdmin=view.findViewById(R.id.fromAdmin);
-
+        imageNoListing =  view.findViewById(R.id.imageNoListing);
         DataList = new ArrayList<>();
 
         sendqu.setOnClickListener(new View.OnClickListener() {
@@ -208,6 +208,7 @@ public class MessageToAdmin extends Fragment {
                     if (response.getString("status").equalsIgnoreCase("success")){
 
                         grigView.setVisibility(View.VISIBLE);
+                        imageNoListing.setVisibility(View.GONE);
                         //  imageNoListing.setVisibility(View.GONE);
                         JSONArray jsonArray=response.getJSONArray("message");
                         for (int i=0;i<jsonArray.length();i++){
@@ -221,7 +222,7 @@ public class MessageToAdmin extends Fragment {
                             map.put("comment", jsonObject.optString("comment"));
                             map.put("created_date", jsonObject.optString("created_date"));
                             map.put("subject_id", jsonObject.optString("subject_id"));
-
+                            map.put("res_status", jsonObject.optString("res_status"));
 
 
                             HelpAdapter adapter=new HelpAdapter();
@@ -231,7 +232,7 @@ public class MessageToAdmin extends Fragment {
                     }
                     else{
                         grigView.setVisibility(View.GONE);
-                        // imageNoListing.setVisibility(View.VISIBLE);
+                         imageNoListing.setVisibility(View.VISIBLE);
                         //  Toast.makeText(getActivity(), "No Record Found...", Toast.LENGTH_SHORT).show();
                     }
 
@@ -446,7 +447,7 @@ public class MessageToAdmin extends Fragment {
 
     class HelpAdapter extends BaseAdapter {
         LayoutInflater inflater;
-        TextView id,receiver_id,queryFor,subject,message,send_date;
+        TextView id,receiver_id,queryFor,subject,message,send_date,status;
         ImageView image;
         HelpAdapter(){
             inflater=(LayoutInflater)getActivity().getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -477,6 +478,8 @@ public class MessageToAdmin extends Fragment {
             queryFor=view.findViewById(R.id.queryFor);
             receiver_id=view.findViewById(R.id.receiver_id);
             id=view.findViewById(R.id.id);
+            status=view.findViewById(R.id.status);
+
 
             send_date.setText("Date: "+DataList.get(i).get("created_date"));
             message.setText("Message: "+DataList.get(i).get("comment"));
@@ -484,7 +487,7 @@ public class MessageToAdmin extends Fragment {
             queryFor.setText("Subject: "+DataList.get(i).get("description"));
             receiver_id.setText("Action: "+DataList.get(i).get("subject_id"));
             id.setText("Enquiry Id: "+DataList.get(i).get("id"));
-
+            status.setText(DataList.get(i).get("res_status"));
             return view;
         }
     }

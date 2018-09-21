@@ -104,9 +104,6 @@ public class WriteReviewEdit extends Fragment {
                 if (!rate.isEmpty()) {
 
 
-
-
-
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     builder.setMessage("You have already given Review and Rating to this business. Do you want to update?”")
                             .setCancelable(false)

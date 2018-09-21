@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,7 +51,7 @@ public class MessageFromAdmin extends Fragment {
     Dialog dialog;
     GridView grigView2;
     List<HashMap<String,String>> DataList;
-
+    ImageView imageNoListing;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -66,6 +67,7 @@ public class MessageFromAdmin extends Fragment {
         grigView2=view.findViewById(R.id.grigView);
         DataList = new ArrayList<>();
 
+        imageNoListing =  view.findViewById(R.id.imageNoListing);
 
         HomeAct.title.setText("Message From Admin");
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
@@ -84,7 +86,7 @@ public class MessageFromAdmin extends Fragment {
                     if (response.getString("status").equalsIgnoreCase("success")){
 
                         grigView2.setVisibility(View.VISIBLE);
-                        //  imageNoListing.setVisibility(View.GONE);
+                          imageNoListing.setVisibility(View.GONE);
                         JSONArray jsonArray=response.getJSONArray("message");
                         for (int i=0;i<jsonArray.length();i++){
                             JSONObject jsonObject=jsonArray.getJSONObject(i);
@@ -98,7 +100,6 @@ public class MessageFromAdmin extends Fragment {
                             map.put("subject_id", jsonObject.optString("subject_id"));
                             map.put("res_status", jsonObject.optString("res_status"));
 
-
                             HelpAdapter adapter=new HelpAdapter();
                             grigView2.setAdapter(adapter);
                             DataList.add(map);
@@ -106,7 +107,7 @@ public class MessageFromAdmin extends Fragment {
                     }
                     else{
                         grigView2.setVisibility(View.GONE);
-                        // imageNoListing.setVisibility(View.VISIBLE);
+                         imageNoListing.setVisibility(View.VISIBLE);
                         //  Toast.makeText(getActivity(), "No Record Found...", Toast.LENGTH_SHORT).show();
                     }
 
@@ -180,8 +181,8 @@ public class MessageFromAdmin extends Fragment {
 
             send_date.setText("Date: "+DataList.get(i).get("created_date"));
             message.setText("Message: "+DataList.get(i).get("comment"));
-            queryFor.setText("Subject: "+DataList.get(i).get("subject_id"));
-            subject.setText("Action Type: "+DataList.get(i).get("description"));
+            subject.setText("Subject: "+DataList.get(i).get("subject_id"));
+            queryFor.setText("Action Type: "+DataList.get(i).get("description"));
             status.setText("Status: "+DataList.get(i).get("res_status"));
             //receiver_id.setText("To, "+DataList.get(i).get("receiver_id"));
             id.setText("Enquiry Id: "+DataList.get(i).get("id"));
