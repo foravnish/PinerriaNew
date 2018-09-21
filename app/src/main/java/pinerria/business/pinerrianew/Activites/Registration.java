@@ -418,15 +418,9 @@ public class Registration extends AppCompatActivity {
                 Log.d("fgdfgdfgdfgdfgdfg", String.valueOf(json));
                 if (json.optString("status").equalsIgnoreCase("success")) {
 
-
-
                     // Toast.makeText(getApplicationContext(), "Registration Successfully..", Toast.LENGTH_LONG).show();
 
                     otpVerfy(mob);
-
-
-
-
 
                 } else {
 //                    Toast.makeText(PostAdd.this, "Error " + json, Toast.LENGTH_LONG).show();

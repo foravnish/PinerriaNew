@@ -83,6 +83,7 @@ public class Chat extends AppCompatActivity {
 
         reference1 = new Firebase("https://pinerria-home-business.firebaseio.com/messages/" + UserDetails.username + "_" + UserDetails.chatWith);
         reference2 = new Firebase("https://pinerria-home-business.firebaseio.com/messages/" + UserDetails.chatWith + "_" + UserDetails.username);
+
         toolbarTxtName.setText(getIntent().getStringExtra("name"));
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -160,9 +161,6 @@ public class Chat extends AppCompatActivity {
 
             }
         });
-
-
-
 
 
         reference1.addChildEventListener(new ChildEventListener() {
@@ -278,6 +276,10 @@ public class Chat extends AppCompatActivity {
                 params.put("user_id",MyPrefrences.getUserID(getApplicationContext()));
                 params.put("reciever_id",getIntent().getStringExtra("id"));
                 params.put("message",msg);
+
+                Log.d("fsdfsdfsfsfsef1",MyPrefrences.getUserID(getApplicationContext()));
+                Log.d("fsdfsdfsfsfsef2",getIntent().getStringExtra("id"));
+                Log.d("fsdfsdfsfsfsef3",msg);
 
                 return params;
             }

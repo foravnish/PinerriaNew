@@ -113,9 +113,6 @@ public class WriteReviewEdit extends Fragment {
                             .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog2, int id) {
 
-
-
-
                                     Util.showPgDialog(dialog);
                                     StringRequest postRequest = new StringRequest(Request.Method.POST, Api.updateMyRating,
                                             new Response.Listener<String>() {

@@ -411,6 +411,8 @@ public class HomeAct extends AppCompatActivity
 
 
 
+        //Log.d("gfsdgdfgdfgdfgdf","b"+getIntent().getStringExtra("userType"));
+
 
         if (getIntent().getStringExtra("userType").equalsIgnoreCase("2")){
             Fragment fragment = new Packages();
@@ -419,6 +421,10 @@ public class HomeAct extends AppCompatActivity
             ft.replace(R.id.content_frame, fragment).commit();
             ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout, R.anim.frag_fade_right, R.anim.frag_fad_left);
         }
+//        else if (getIntent().getStringExtra("userType").equalsIgnoreCase("chat")){
+//
+//            startActivity(new Intent(getApplicationContext(), ChatUSer.class));
+//        }
           else {
             Fragment fragment = new Home();
             FragmentManager manager = getSupportFragmentManager();

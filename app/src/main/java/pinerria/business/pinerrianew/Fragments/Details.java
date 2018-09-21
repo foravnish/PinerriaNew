@@ -498,12 +498,12 @@ public class Details extends Fragment {
                                     Intent intent=new Intent(getActivity(),HomeAct.class);
                                     intent.putExtra("userType","");
                                     startActivity(intent);
-                                   getActivity(). overridePendingTransition(R.anim.fadein, R.anim.fadeout);
-                                   getActivity(). finish();
+                                    getActivity(). overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+                                    getActivity(). finish();
 
                                 }
                             });
-                    AlertDialog alert = builder.create();
+                     AlertDialog alert = builder.create();
                     //Setting the title manually
                     alert.setTitle("Pinerria");
                     alert.show();
