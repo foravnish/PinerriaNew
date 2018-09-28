@@ -363,8 +363,6 @@ public class HomeAct extends AppCompatActivity
         jsonObjReq.setShouldCache(false);
         AppController.getInstance().addToRequestQueue(jsonObjReq);
 
-
-
         if (HomeAct.business==true ){
             Log.d("fsdfsfsfs","true");
             Menu menu = navigationView.getMenu();

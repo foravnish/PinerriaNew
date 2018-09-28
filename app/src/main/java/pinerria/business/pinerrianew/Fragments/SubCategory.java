@@ -337,7 +337,6 @@ public class SubCategory extends Fragment {
         LayoutInflater inflater;
 
 
-
         Adapter() {
             inflater = (LayoutInflater) getActivity().getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 

@@ -75,10 +75,9 @@
                         android:layout_height="16dp"
                         android:isIndicator="true"
                         android:numStars="5"
-
                         android:layout_marginLeft="10dp"
                         android:progressTint="#f77501"
-                        android:stepSize="0.1"
+                        android:stepSize="0.5"
                         android:layout_marginBottom="8dp"
                         card_view:mrb_fillBackgroundStars="true"
                         card_view:mrb_progressBackgroundTint="#bbbbbb" />

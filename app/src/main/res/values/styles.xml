@@ -40,4 +40,8 @@ u
         <item name="listPreferredItemHeightSmall">35dp</item><!-- item size in menu-->
         <item name="android:fontFamily">@font/muli_semibold</item>
     </style>
+
+    <style name="Color1SwitchStyle">
+        <item name="colorControlActivated">@color/green2</item>
+    </style>
 </resources>

@@ -12,6 +12,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -83,7 +85,7 @@ public class WriteReview extends Fragment {
     FloatingActionButton fabButton;
     String value="";
     List<String> data=new ArrayList<>();
-
+    private boolean isReached = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -141,19 +143,64 @@ public class WriteReview extends Fragment {
             }
         });
 
-        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+//        editText.setOnKeyListener(new DialogInterface.OnKeyListener()
+//        {
+//            @Override
+//            public boolean onKey(DialogInterface dialogInterface, int i, KeyEvent keyEvent) {
+//                if (keyEvent.getAction() == KeyEvent.ACTION_DOWN)
+//                {
+//                    switch (i)
+//                    {
+//                        case KeyEvent.KEYCODE_DPAD_CENTER:
+//                        case KeyEvent.KEYCODE_ENTER:
+//                            addCourseFromTextBox();
+//                            return true;
+//                        default:
+//                            break;
+//                    }
+//                }
+//                return false;
+//            }
+//
+//
+//        });
 
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    // do something, e.g. set your TextView here via .setText()
-                    InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                    return true;
-                }
-                return false;
-            }
-        });
+//        editText.addTextChangedListener(new TextWatcher(){
+//            @Override
+//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//                // if edittext has 10chars & this is not called yet, add new line
+//                if(editText.getText().length() == 10 && !isReached) {
+//                    editText.append("\n");
+//                    isReached = true;
+//                }
+//                // if edittext has less than 10chars & boolean has changed, reset
+//                if(editText.getText().length() < 10 && isReached) isReached = false;
+//            }
+//        });
+
+//        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+//
+//            @Override
+//            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+//                if (actionId == EditorInfo.IME_ACTION_DONE) {
+//                    // do something, e.g. set your TextView here via .setText()
+//                    InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+//                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+//                    return true;
+//                }
+//                return false;
+//            }
+//        });
 
         bubmitReview.setOnClickListener(new View.OnClickListener() {
             @Override

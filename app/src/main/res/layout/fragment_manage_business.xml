@@ -144,7 +144,7 @@
                             android:layout_weight="1.8"
                             android:fontFamily="@font/muli_bold"
                             android:singleLine="true"
-                            android:text="Madona Beauty Salon"
+                            android:text=""
                             android:textColor="@color/p_black"
                             android:textSize="20sp" />
                         </RelativeLayout>
@@ -265,7 +265,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="12dp"
                 android:layout_marginTop="20dp"
+                android:visibility="gone"
                 android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -282,10 +284,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="10dp"
                     android:layout_marginLeft="20dp"
-
-
                     android:checked="true"
-
                     android:textColor="@color/p_black" />
             </LinearLayout>
 

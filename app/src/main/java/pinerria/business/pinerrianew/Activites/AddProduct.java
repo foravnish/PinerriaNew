@@ -23,9 +23,11 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SwitchCompat;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -83,6 +85,8 @@ import pinerria.business.pinerrianew.Utils.AppController;
 import pinerria.business.pinerrianew.Utils.JSONParser;
 import pinerria.business.pinerrianew.Utils.MyPrefrences;
 import pinerria.business.pinerrianew.Utils.Util;
+
+import static android.text.Html.fromHtml;
 
 public class AddProduct extends AppCompatActivity {
 
@@ -715,9 +719,6 @@ public class AddProduct extends AppCompatActivity {
 
                     if (response.getString("status").equalsIgnoreCase("success")){
 
-
-
-
                         //  imageNoListing.setVisibility(View.GONE);
                         JSONArray jsonArray=response.getJSONArray("message");
 
@@ -1122,21 +1123,15 @@ public class AddProduct extends AppCompatActivity {
 
                     MyPrefrences.setBusinesID(getApplicationContext(),json.optString("message"));
 
-                    Toast.makeText(getApplicationContext(), "Business Added Successfully. The changes will reflect after admin approval,", Toast.LENGTH_LONG).show();
+//                    Toast.makeText(getApplicationContext(), "Business Added Successfully. The changes will reflect after admin approval,", Toast.LENGTH_LONG).show();
 
-                    Intent intent=new Intent(AddProduct.this,HomeAct.class);
-                    intent.putExtra("userType","my_product");
-                    startActivity(intent);
-                    overridePendingTransition(R.anim.fadein, R.anim.fadeout);
-                    finish();
-
-
+                    errorDialog(AddProduct.this,"Congrats!\nBusiness Added Successfully.\nThe changes will reflect after admin approval.\n" +
+                            "Once approved, you can also add ‘Photo Gallery’ by going to ‘Manage Gallery’ in the ‘Manage Business’ menu.");
                 } else {
                         Toast.makeText(getApplicationContext(), ""+json.optString("message"), Toast.LENGTH_LONG).show();
                 }
             }
         }
-
     }
 
     private JSONObject uploadImageFile(Context context, String value, String filepath1, String fileName1) {
@@ -1275,19 +1270,19 @@ public class AddProduct extends AppCompatActivity {
             Util.cancelPgDialog(dialog);
             if (json != null) {
 
-
                 if (json.optString("status").equalsIgnoreCase("success")) {
 
                     Log.d("dsfdsgdgdfgdfgdfgdfgd", String.valueOf(json));
 
-                    Toast.makeText(getApplicationContext(), "Business Edit Successfully. The changes will reflect after admin approval.", Toast.LENGTH_LONG).show();
+//                    Toast.makeText(getApplicationContext(), "Business Edit Successfully. The changes will reflect after admin approval.", Toast.LENGTH_LONG).show();
 
-                    Intent intent=new Intent(AddProduct.this,HomeAct.class);
-                    intent.putExtra("userType","my_product");
-                    startActivity(intent);
-                    overridePendingTransition(R.anim.fadein, R.anim.fadeout);
-                    finish();
+//                    Intent intent=new Intent(AddProduct.this,HomeAct.class);
+//                    intent.putExtra("userType","my_product");
+//                    startActivity(intent);
+//                    overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+//                    finish();
 
+                    errorDialog(AddProduct.this,"Business Edit Successfully. The changes will reflect after admin approval.");
 
                 } else {
                     Toast.makeText(getApplicationContext(), ""+json.optString("message"), Toast.LENGTH_LONG).show();
@@ -1438,16 +1433,15 @@ public class AddProduct extends AppCompatActivity {
 
                     Log.d("dsfdsgdgdfgdfgdfgdfgd", String.valueOf(json));
 
+                    errorDialog(AddProduct.this,"Business Edit Successfully. The changes will reflect after admin approval.");
 
-
-
-                    Toast.makeText(getApplicationContext(), "Business Edit Successfully. The changes will reflect after admin approval.", Toast.LENGTH_LONG).show();
-
-                    Intent intent=new Intent(AddProduct.this,HomeAct.class);
-                    intent.putExtra("userType","my_product");
-                    startActivity(intent);
-                    overridePendingTransition(R.anim.fadein, R.anim.fadeout);
-                    finish();
+//                    Toast.makeText(getApplicationContext(), "Business Edit Successfully. The changes will reflect after admin approval.", Toast.LENGTH_LONG).show();
+//
+//                    Intent intent=new Intent(AddProduct.this,HomeAct.class);
+//                    intent.putExtra("userType","my_product");
+//                    startActivity(intent);
+//                    overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+//                    finish();
 
 
                 } else {
@@ -1578,7 +1572,6 @@ public class AddProduct extends AppCompatActivity {
 
                             map.put("id", jsonObject.optString("id"));
                             map.put("category", jsonObject.optString("category"));
-
 
                             CatList.add(jsonObject.optString("category"));
 
@@ -2026,11 +2019,33 @@ public class AddProduct extends AppCompatActivity {
         jsonObjReq.setShouldCache(false);
         AppController.getInstance().addToRequestQueue(jsonObjReq);
 
-
-
     }
 
 
 
+    public static void errorDialog(final Context context, String message) {
+        final Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.alertdialogcustom2);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        TextView text = (TextView) dialog.findViewById(R.id.msg_txv);
+        text.setText(message);
+        Button ok = (Button) dialog.findViewById(R.id.btn_ok);
+        ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+
+                Intent intent=new Intent(context,HomeAct.class);
+                intent.putExtra("userType","my_product");
+                context.startActivity(intent);
+               // finish();
+
+
+            }
+        });
+        dialog.show();
+
+    }
 
 }

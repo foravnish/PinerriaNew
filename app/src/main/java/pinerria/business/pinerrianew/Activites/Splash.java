@@ -41,11 +41,7 @@ public class Splash extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-
         Log.d("Tokenjfgdjglkdfgdfg", MyPrefrences.getgcm_token(getApplicationContext()));
-
-
-
 
         Thread background = new Thread() {
             public void run() {
@@ -70,8 +66,6 @@ public class Splash extends AppCompatActivity {
                         overridePendingTransition(R.anim.fadein, R.anim.fadeout);
                         finish();
                     }
-
-
 
 //                    Intent intent=new Intent(Splash.this,HomeAct.class);
 //                    intent.putExtra("userType","");

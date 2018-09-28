@@ -8,8 +8,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,6 +19,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -41,6 +45,7 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.StringRequest;
+import com.jsibbold.zoomage.ZoomageView;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -48,6 +53,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.xml.sax.Parser;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -94,7 +100,12 @@ public class Details extends Fragment {
     private DatabaseHelper db;
     LinearLayout priceLayout;
     TextView price;
-
+    JSONArray jsonArray;
+    public  static ViewPager viewpager;
+    public  static List<HashMap<String,String>> ImgData;
+    public  static CustomPagerAdapter customPagerAdapter;
+    public  static JSONObject jsonObject2;
+  //  public  static CircleIndicator indicator ;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -127,6 +138,11 @@ public class Details extends Fragment {
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         mRecyclerView.setLayoutManager(mLayoutManager);
+
+
+        //indicator = (CircleIndicator)dialog.findViewById(R.id.indicator);
+        ImgData =new ArrayList<>();
+        customPagerAdapter=new CustomPagerAdapter(getActivity());
 
 
       //  HomeAct.title.setText("Pinerria");
@@ -448,6 +464,8 @@ public class Details extends Fragment {
         }
 
 
+
+
         chat_now.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -662,23 +680,20 @@ public class Details extends Fragment {
 
                     if (response.getString("status").equalsIgnoreCase("success")){
                         cardGallery.setVisibility(View.VISIBLE);
-                        final JSONArray jsonArray=response.getJSONArray("message");
+                        jsonArray=response.getJSONArray("message");
                         for (int i=0;i<jsonArray.length();i++){
                             final JSONObject jsonObject1=jsonArray.getJSONObject(i);
-
 
                             HashMap<String,String> map=new HashMap<>();
                             map.put("id",jsonObject1.optString("id"));
                             map.put("image",jsonObject1.optString("image"));
-
+                            map.put("image2",jsonObject1.optString("image2"));
 
                             mAdapter = new HLVAdapter(getActivity());
 
                             mRecyclerView.setAdapter(mAdapter);
                             mAdapter.notifyDataSetChanged();
                             AllBaner.add(map);
-
-
                         }
                     }
                     else{
@@ -818,7 +833,7 @@ public class Details extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(HLVAdapter.ViewHolder viewHolder, int i) {
+        public void onBindViewHolder(HLVAdapter.ViewHolder viewHolder, final int i) {
 
 
 //            ImageLoader imageLoader = AppController.getInstance().getImageLoader();
@@ -833,6 +848,13 @@ public class Details extends Fragment {
 
             // final Typeface tvFont = Typeface.createFromAsset(getApplicationContext().getAssets(), "muli_bold.ttf");
 
+            viewHolder.imgThumbnail.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+//                    showFullImageDialog(getActivity(),AllBaner.get(i).get("image").replace(" ","%20"));
+                    showFullImageDialog(getActivity(), jsonArray.toString(),i, "Photo");
+                }
+            });
         }
 
         @Override
@@ -861,20 +883,213 @@ public class Details extends Fragment {
 
             @Override
             public void onClick(View view) {
-
-//
-
             }
-
             @Override
             public boolean onLongClick(View view) {
                 return false;
             }
 
-//
         }
 
     }
 
+        public static void showFullImageDialog(Context context,String url, int pos,String titlename) {
+            final Dialog dialog = new Dialog(context, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+            //dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setContentView(R.layout.showfullimage);
+            ImageView back_img = (ImageView) dialog.findViewById(R.id.back_img);
+//          ImageView fact_image = (ImageView) dialog.findViewById(R.id.fact_image);
+            viewpager = (ViewPager) dialog.findViewById(R.id.viewpager);
+
+            Log.d("fgdfgsdfgdfgdfg",url);
+           // indicator = (CircleIndicator)dialog.findViewById(R.id.indicator);
+            ImgData =new ArrayList<>();
+            customPagerAdapter=new CustomPagerAdapter(context);
+            String Prev_Response=url;
+
+            try {
+               // jsonObject2=new JSONObject(Prev_Response);
+
+                JSONArray jsonArray=new JSONArray(Prev_Response);
+                for (int i=0;i<jsonArray.length();i++){
+                    JSONObject jsonObject1=jsonArray.getJSONObject(i);
+                    Log.d("gbfhfghfgh",jsonObject1.toString());
+                    HashMap<String,String> map=new HashMap<>();
+                    map.put("img",jsonObject1.optString("image2"));
+                    ImgData.add(map);
+                    viewpager.setAdapter(customPagerAdapter);
+                    viewpager.setCurrentItem(pos);
+                   // indicator.setViewPager(viewpager);
+                    //  indicator.setViewPager(viewPager);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+//        Util.showImage(context, imageurl, fact_image);
+//        PhotoViewAttacher photoViewAttacher = new PhotoViewAttacher(fact_image);
+//        //photoViewAttacher.onDrag(2,2);
+//        photoViewAttacher.update();
+            TextView title = (TextView) dialog.findViewById(R.id.title);
+            title.setText(titlename);
+
+            back_img.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.cancel();
+                }
+            });
+            dialog.show();
+        }
+
+
+
+    public static class CustomPagerAdapter extends PagerAdapter {
+        LayoutInflater layoutInflater;
+        Button download;
+        Context  context;
+        Drawable drawable;
+        byte[] BYTE;
+        ByteArrayOutputStream byteArrayOutputStream;
+        public CustomPagerAdapter(Context context) {
+            this.context=context;
+        }
+
+        @Override
+        public int getCount() {
+            return ImgData.size();
+        }
+
+        @Override
+        public boolean isViewFromObject(View view, Object object) {
+
+            return view==object;
+        }
+        @Override
+        public Object instantiateItem(ViewGroup container, final int position) {
+
+            //ZoomageView networkImageView;
+//            ImageView networkImageView;
+
+            layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View view = layoutInflater.inflate(R.layout.custom_photogallery2, container, false);
+            ZoomageView networkImageView = (ZoomageView) view.findViewById(R.id.networkImageView);
+
+            Log.d("fgdfgdfghsg",ImgData.get(position).get("img").toString());
+
+//            ImageLoader imageLoader=AppController.getInstance().getImageLoader();
+//            networkImageView.setImageUrl(ImgData.get(position).get("img"),imageLoader);
+
+//            Picasso.with(context).load(ImgData.get(position).get("img")).transform(new CropSquareTransformation()).into(networkImageView);
+            Picasso.with(context).load(ImgData.get(position).get("img")).into(networkImageView);
+//
+
+//            byteArrayOutputStream=new ByteArrayOutputStream();
+//
+////            drawable = context.getResources().getDrawable(R.drawable.sdf);
+////            Bitmap bitmap1 = ((BitmapDrawable)drawable).getBitmap();
+//
+//            BitmapFactory.Options options = new BitmapFactory.Options();
+//            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+//            Bitmap bitmap1 = BitmapFactory.decodeFile(ImgData.get(position).get("img"), options);
+//
+//            bitmap1.compress(Bitmap.CompressFormat.JPEG,40,byteArrayOutputStream);
+//            BYTE = byteArrayOutputStream.toByteArray();
+//            Bitmap bitmap2 = BitmapFactory.decodeByteArray(BYTE,0,BYTE.length);
+//            networkImageView.setImageBitmap(bitmap2);
+
+
+//            BitmapFactory.Options options = new BitmapFactory.Options();
+//            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+//            Bitmap bitmap = BitmapFactory.decodeFile(ImgData.get(position).get("img"), options);
+//
+//            CropSquareTransformation  ob=new CropSquareTransformation();
+//            //ob.transform(bitmap);
+//            networkImageView.setImageBitmap(ob.transform(bitmap));
+
+
+//            BitmapFactory.Options options = new BitmapFactory.Options();
+//            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+//            Bitmap bitmap = BitmapFactory.decodeFile(ImgData.get(position).get("img"), options);
+////
+//            int  size=Math.min(bitmap.getWidth(),bitmap.getHeight());
+//            int mwidth=(bitmap.getWidth()-size)/2;
+//            int mhieght=(bitmap.getHeight()-size)/2;
+//
+//            Bitmap bitmap1=Bitmap.createBitmap(bitmap,mwidth,mhieght,size,size);
+//            if (bitmap1!=bitmap){
+//                bitmap.recycle();
+//            }
+//            networkImageView.setImageBitmap(bitmap1);
+
+
+//            Bitmap scaledBitmap = scaleDown(bitmap, 200, true);
+//
+//            networkImageView.setImageBitmap(scaledBitmap);
+
+//            Picasso.with(context).load(ImgData.get(position).get("img")).resize(200, 100).centerCrop().into(networkImageView);
+
+//            Util.showImage(context, ImgData.get(position).get("img"), networkImageView);
+//            PhotoViewAttacher photoViewAttacher = new PhotoViewAttacher(networkImageView);
+//
+////            photoViewAttacher.onDrag(2,2);
+//            photoViewAttacher.update();
+
+
+//            networkImageView.setOnClickListener(new View.OnClickListener() {
+//                @O    verride
+//                public void onClick(View view) {
+//                    Log.d("gfhbgfgjhfgjfh",ImgData.get(position).get("img"));
+//
+////                    Util.showFullImageDialog(getActivity(), ImgData.get(position).get("img"), getArguments().getString("category"));
+//                    Util.showFullImageDialog(context, context.getArguments().getString("DataList"), getArguments().getString("category"));
+//
+//                }
+//            });
+            (container).addView(view);
+
+//            thread=new Thread(){
+//                @Override
+//                public void run() {
+//                    super.run();
+//                    try {
+//                        Thread.sleep(2000);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                    viewPager.setCurrentItem(2);
+//                }
+//            };
+//
+//            thread.start();
+//
+            return view;
+        }
+
+        public static Bitmap scaleDown(Bitmap realImage, float maxImageSize,
+                                       boolean filter) {
+            float ratio = Math.min(
+                    (float) maxImageSize / realImage.getWidth(),
+                    (float) maxImageSize / realImage.getHeight());
+            int width = Math.round((float) ratio * realImage.getWidth());
+            int height = Math.round((float) ratio * realImage.getHeight());
+
+            Bitmap newBitmap = Bitmap.createScaledBitmap(realImage, width,
+                    height, filter);
+            return newBitmap;
+        }
+
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            (container).removeView((LinearLayout) object);
+        }
+
+        @Override
+        public int getItemPosition(Object object) {
+            return super.POSITION_NONE;
+        }
+    }
 
 }

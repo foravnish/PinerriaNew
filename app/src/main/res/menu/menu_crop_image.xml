@@ -5,12 +5,12 @@
         android:id="@+id/action_cancel"
         android:orderInCategory="100"
         android:title="Cancel"
-        android:icon="@android:drawable/ic_menu_close_clear_cancel"
+        android:icon="@drawable/closebtn"
         app:showAsAction="always" />
     <item
         android:id="@+id/action_crop"
         android:orderInCategory="100"
         android:title="Crop"
-        android:icon="@android:drawable/ic_menu_crop"
+        android:icon="@drawable/checkr"
         app:showAsAction="always" />
 </menu>

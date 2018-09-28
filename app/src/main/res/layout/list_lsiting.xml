@@ -126,13 +126,10 @@
                     </RelativeLayout>
 
 
-
-
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="25dp"
-                        android:layout_gravity="center"
-                        >
+                        android:layout_gravity="center">
 
                     <me.zhanghai.android.materialratingbar.MaterialRatingBar
                         android:id="@+id/rating"
@@ -143,7 +140,7 @@
                         android:numStars="5"
                         android:layout_marginTop="5dp"
                         android:progressTint="#f77501"
-                        android:stepSize="0.1"/>
+                        android:stepSize="0.5"/>
 
                         <TextView
                          android:id="@+id/totlaUsers"

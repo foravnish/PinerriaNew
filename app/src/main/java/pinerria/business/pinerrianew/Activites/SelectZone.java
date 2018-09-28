@@ -75,8 +75,6 @@ public class SelectZone extends AppCompatActivity {
         Util.showPgDialog(dialog);
 
 
-
-
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
                 Api.city, null, new Response.Listener<JSONObject>() {
 
@@ -107,9 +105,6 @@ public class SelectZone extends AppCompatActivity {
                             //   data.add(jsonObject.optString("id"));
 
 
-
-
-
 //
 //                            Adapter adapter=new Adapter();
 //                            expListView.setAdapter(adapter);
@@ -121,15 +116,14 @@ public class SelectZone extends AppCompatActivity {
                             lv.setAdapter(adapter);
 
 
-
-
-
                             autoTextSearch.addTextChangedListener(new TextWatcher() {
 
                                 @Override
                                 public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
                                     // When user changed the Text
                                     SelectZone.this.adapter.getFilter().filter(cs);
+
+                                    Log.d("fsdfsdfsdfsdf", String.valueOf(cs));
                                 }
 
                                 @Override
@@ -193,6 +187,7 @@ public class SelectZone extends AppCompatActivity {
                 startActivity(intent);
                 overridePendingTransition(R.anim.fadein, R.anim.fadeout);
 
+                Log.d("sdfsdfsdfsdfgsdgfsd",AllProducts.get(i).get("id"));
             }
         });
     }

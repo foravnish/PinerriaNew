@@ -89,7 +89,6 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
-
                         <TextView
                             android:id="@+id/queryFor"
                             android:layout_width="match_parent"

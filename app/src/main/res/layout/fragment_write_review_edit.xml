@@ -108,7 +108,7 @@
             android:numStars="5"
             android:layout_below="@+id/text1"
             android:progressTint="@color/orange"
-            android:stepSize="0.1" />
+            android:stepSize="0.5" />
 
         <LinearLayout
             android:id="@+id/editlay"

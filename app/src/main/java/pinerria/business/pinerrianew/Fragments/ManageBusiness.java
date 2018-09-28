@@ -159,7 +159,6 @@ public class ManageBusiness extends Fragment {
                                         //  Action for 'NO' Button
                                         //dialog.cancel();
 
-
                                         Intent intent=new Intent(getActivity(),HomeAct.class);
                                         intent.putExtra("userType","");
                                         startActivity(intent);
@@ -209,8 +208,6 @@ public class ManageBusiness extends Fragment {
             }
         });
 
-
-
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
                 Api.userBusiness+"/"+ MyPrefrences.getUserID(getActivity()), null, new Response.Listener<JSONObject>() {
 
@@ -225,7 +222,6 @@ public class ManageBusiness extends Fragment {
 //                    String name = response.getString("name");
 
                     if (response.getString("status").equalsIgnoreCase("success")){
-
 
                         //  imageNoListing.setVisibility(View.GONE);
                         JSONArray jsonArray=response.getJSONArray("message");
@@ -245,7 +241,6 @@ public class ManageBusiness extends Fragment {
                             rating.setRating(Float.parseFloat(jsonObject.optString("total_rating")));
                         }
 
-
                         if (jsonObject.optString("min_price").equals("")){
                             priceLayout.setVisibility(View.GONE);
                         }
@@ -258,7 +253,6 @@ public class ManageBusiness extends Fragment {
                             }
 
                         }
-
 
                         ImageLoader imageLoader=AppController.getInstance().getImageLoader();
                         subCatImage.setImageUrl(jsonObject.optString("image"),imageLoader);
@@ -308,7 +302,6 @@ public class ManageBusiness extends Fragment {
                                 changeStatusBusinessCall(jsonObject.optString("id"),b);
                             }
                         });
-
 
 
 //                        Picasso.with(getActivity())

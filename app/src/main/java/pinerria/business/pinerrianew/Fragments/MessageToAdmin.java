@@ -484,8 +484,8 @@ public class MessageToAdmin extends Fragment {
             send_date.setText("Date: "+DataList.get(i).get("created_date"));
             message.setText("Message: "+DataList.get(i).get("comment"));
             subject.setText("Subject: "+DataList.get(i).get("subject_id"));
-            queryFor.setText("Subject: "+DataList.get(i).get("description"));
-            receiver_id.setText("Action: "+DataList.get(i).get("subject_id"));
+            queryFor.setText("Subject: "+DataList.get(i).get("subject_id"));
+            receiver_id.setText("Action: "+DataList.get(i).get("description"));
             id.setText("Enquiry Id: "+DataList.get(i).get("id"));
             status.setText(DataList.get(i).get("res_status"));
             return view;
