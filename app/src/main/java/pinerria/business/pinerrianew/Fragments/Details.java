@@ -87,7 +87,7 @@ public class Details extends Fragment {
     Dialog dialog;
     List<HashMap<String,String>> AllBaner;
     RecyclerView.Adapter mAdapter;
-    TextView dealsIn,totlaUsers;
+    TextView dealsIn,totlaUsers,desc;
     NetworkImageView imageView;
     LinearLayout chat_now,call;
     TextView comName,nameUser,address,phone;
@@ -125,6 +125,7 @@ public class Details extends Fragment {
         imgFav =  view.findViewById(R.id.imgFav);
         cardGallery =  view.findViewById(R.id.cardGallery);
         totlaUsers =  view.findViewById(R.id.totlaUsers);
+        desc =  view.findViewById(R.id.desc);
 
         comName =  view.findViewById(R.id.comName);
         nameUser =  view.findViewById(R.id.nameUser);
@@ -182,6 +183,7 @@ public class Details extends Fragment {
             phone.setText(jsonObject.optString("primary_mobile"));
 
             totlaUsers.setText(" ("+jsonObject.optString("total_rating_user")+" Reviews)");
+            desc.setText(jsonObject.optString("desc"));
 
 
 //            if (jsonObject.optString("call_button").equals("Yes")){
@@ -192,6 +194,7 @@ public class Details extends Fragment {
 //                price.setVisibility(View.GONE);
 //
 //            }
+
             if (!jsonObject.optString("total_rating").equals("")) {
                 rating.setRating(Float.parseFloat(jsonObject.optString("total_rating")));
             }

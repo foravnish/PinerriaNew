@@ -93,7 +93,7 @@ public class AddProduct extends AppCompatActivity {
 //    ImageView regiImage;
     CircleImageView regiImage;
     Button postAdd;
-    EditText rePass,password,mobile,nameBusiness,mobileSecond,landline,email,address,zip,keyword,maxPrice,minPrice,newLocation;
+    EditText rePass,password,mobile,nameBusiness,mobileSecond,landline,email,address,zip,keyword,maxPrice,minPrice,newLocation,desc;
     TextInputLayout newLocation1;
     RadioGroup radioGroup;
 //    TextView forLogin,uploadImage;
@@ -167,6 +167,7 @@ public class AddProduct extends AppCompatActivity {
         viewShow=findViewById(R.id.viewShow);
         linearShow=findViewById(R.id.linearShow);
         switchBusiness=findViewById(R.id.switchBusiness);
+        desc=findViewById(R.id.desc);
 
         //Toolbar mActionBarToolbar = (Toolbar)findViewById(R.id.toolbar);
         //setSupportActionBar(mActionBarToolbar);
@@ -225,6 +226,7 @@ public class AddProduct extends AppCompatActivity {
                 addLocationPop();
             }
         });
+
 
         checkBobPrice.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -738,6 +740,7 @@ public class AddProduct extends AppCompatActivity {
                         keyword.setText(jsonObject.optString("service_keyword"));
                         minPrice.setText(jsonObject.optString("min_price"));
                         maxPrice.setText(jsonObject.optString("max_price"));
+                        desc.setText(jsonObject.optString("desc"));
 
                         loc_id=jsonObject.optString("location_id");
 
@@ -1167,6 +1170,7 @@ public class AddProduct extends AppCompatActivity {
                     .addFormDataPart("service_keyword", keyword.getText().toString())
                     .addFormDataPart("max_price", maxPrice.getText().toString())
                     .addFormDataPart("min_price", minPrice.getText().toString())
+                    .addFormDataPart("desc", desc.getText().toString())
                     .addFormDataPart("price_status", flag)
                     .addFormDataPart("call_button_status", val_mobile)
                     .addFormDataPart("location_id", idLocation)
@@ -1327,6 +1331,7 @@ public class AddProduct extends AppCompatActivity {
                     .addFormDataPart("service_keyword", keyword.getText().toString())
                     .addFormDataPart("max_price", maxPrice.getText().toString())
                     .addFormDataPart("min_price", minPrice.getText().toString())
+                    .addFormDataPart("desc", desc.getText().toString())
                     .addFormDataPart("price_status", flag)
                     .addFormDataPart("call_button_status", val_mobile)
                     .addFormDataPart("location_id", idLocation)
@@ -1487,6 +1492,7 @@ public class AddProduct extends AppCompatActivity {
                     .addFormDataPart("service_keyword", keyword.getText().toString())
                     .addFormDataPart("max_price", maxPrice.getText().toString())
                     .addFormDataPart("min_price", minPrice.getText().toString())
+                    .addFormDataPart("desc", desc.getText().toString())
                     .addFormDataPart("price_status", flag)
                     .addFormDataPart("call_button_status", val_mobile)
                     .addFormDataPart("location_id", idLocation)

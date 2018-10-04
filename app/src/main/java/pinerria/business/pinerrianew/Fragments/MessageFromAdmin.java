@@ -148,7 +148,11 @@ public class MessageFromAdmin extends Fragment {
         TextView id,receiver_id,queryFor,subject,message,send_date,messageTxt,status;
 
         HelpAdapter(){
+
             inflater=(LayoutInflater)getActivity().getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            if (inflater == null) {
+                throw new AssertionError("LayoutInflater not found.");
+            }
         }
         @Override
         public int getCount() {

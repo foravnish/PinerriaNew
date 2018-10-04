@@ -8,10 +8,10 @@ public class Api {
 
 
 //    public static String BASEURL="http://pinerria.com/pinerria/api/";
-    public static String BASEURL="http://pinerria.com/api/";
-    public static String BASEURL_FOR_IMAGE="http://pinerria.com/assets/images/business/";
+    public static String BASEURL="https://pinerria.com/api/";
+    public static String BASEURL_FOR_IMAGE="https://pinerria.com/assets/images/business/thumb/";
 
-    public static String gethashCode="http://pinerria.com/getHashCode.php";
+    public static String gethashCode="https://pinerria.com/getHashCode.php";
 
     public static String catToSubCat=BASEURL+"catToSubCat";
     public static String category=BASEURL+"category";

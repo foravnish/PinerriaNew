@@ -151,9 +151,13 @@ public class ComposeMessage extends Fragment {
 
                             country.add(jsonObject.optString("name"));
 
-                            ArrayAdapter aa = new ArrayAdapter(getActivity(),android.R.layout.simple_spinner_item,country);
-                            aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                            spiner.setAdapter(aa);
+                            try {
+                                ArrayAdapter aa = new ArrayAdapter(getActivity(),android.R.layout.simple_spinner_item,country);
+                                aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                spiner.setAdapter(aa);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
 
                             DataDropDown.add(map);
 
