@@ -69,14 +69,12 @@ public class Api {
     public static String myFavouriteBusiness  = BASEURL+"myFavouriteBusiness";
     public static String checkPrevoiusUserpackages=BASEURL+"checkPrevoiusUserpackages";
     public static String sendNotificationByUser=BASEURL+"sendNotificationByUser";
+    public static String userNotificationsList=BASEURL+"userNotificationsList";
 
 
     public static String URL_FETCH_MESSAGES=BASEURL+"myChatingHistory";
     public static String URL_SEND_MESSAGE=BASEURL+"saveChatData";
     public static String URL_STORE_TOKEN=BASEURL+"updateFcmId";
-
-
-
 
 
     public static String BASEURL3="http://bizzcityinfo.com/Api/index.php/main/";
@@ -128,7 +126,6 @@ public class Api {
     public static String dataToBuyerCallHistory=BASEURL+"dataToBuyerCallHistory";
     public static String forgetPassword=BASEURL+"forgetPassword";
     public static String messageToAdmin=BASEURL+"messageToAdmin";
-
 
 
     public static String BASE_URL = "http://bizzcityinfo.com/";

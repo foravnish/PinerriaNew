@@ -13,9 +13,11 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
@@ -47,10 +49,12 @@ import pinerria.business.pinerrianew.Utils.AppController;
 import pinerria.business.pinerrianew.Utils.MyPrefrences;
 import pinerria.business.pinerrianew.Utils.Util;
 
+import static android.text.Html.fromHtml;
+
 
 public class Login extends AppCompatActivity {
 
-    TextView btn_forgot_pwd,btn_skip;
+    TextView btn_forgot_pwd,btn_skip,tnc;
     Button login;
     EditText password,mobile;
     Dialog dialog;
@@ -78,6 +82,7 @@ public class Login extends AppCompatActivity {
         forRegistration=findViewById(R.id.forRegistration);
         btn_forgot_pwd=findViewById(R.id.btn_forgot_pwd);
         btn_skip=findViewById(R.id.skip);
+        tnc=findViewById(R.id.tnc);
 
         Firebase.setAndroidContext(this);
 
@@ -90,6 +95,13 @@ public class Login extends AppCompatActivity {
 
             }
         });
+        tnc.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        startActivity(new Intent(Login.this,TermandConditions.class));
+
+                    }
+                });
 
         btn_forgot_pwd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -137,7 +149,9 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                loginAPi();
+                if(validate()) {
+                    loginAPi();
+                }
             }
         });
 
@@ -174,8 +188,9 @@ public class Login extends AppCompatActivity {
 
                     }
                     else{
-//                        Toast.makeText(getApplicationContext(),jsonObject.getString("message") , Toast.LENGTH_SHORT).show();
-                        Util.errorDialog(Login.this,jsonObject.getString("message"));
+                        Toast.makeText(getApplicationContext(),jsonObject.getString("message") , Toast.LENGTH_SHORT).show();
+
+//                        Util.errorDialog(Login.this,jsonObject.getString("message"));
                     }
 
                 } catch (JSONException e) {
@@ -572,15 +587,24 @@ public class Login extends AppCompatActivity {
 
                             if (jsonObject.getString("message").equals("User Registered But Not Verify Otp")){
 
-
                                 otpVerfy(mobile.getText().toString());
-
-
                             }
-                        else{
-//                        if (jsonObject.getString("message").equals())
-                            Toast.makeText(getApplicationContext(), jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
-                        }
+                            else if (jsonObject.getString("message").equalsIgnoreCase("Mobile Number Not Registered. Please Register as a User.")){
+
+                                errorDialog(Login.this,"Mobile Number Not Registered.\nPlease Register as a User.");
+                            }
+                            else if (jsonObject.getString("message").equalsIgnoreCase("Invalid Password. Please retry.")){
+
+                                errorDialog2(Login.this,"Invalid Password. \nPlease retry.",password);
+                            }
+
+
+//                        else{
+////                        if (jsonObject.getString("message").equals())
+////                                errorDialog(Login.this,jsonObject.getString("message")+"."+"\nPlease Register as a User.");
+//                                errorDialog(Login.this,jsonObject.getString("message"));
+////                            Toast.makeText(getApplicationContext(), jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+//                        }
                     }
 
                 } catch (JSONException e) {
@@ -927,5 +951,63 @@ public class Login extends AppCompatActivity {
         queue.add(strReq);
 
     }
+
+    public static void errorDialog(final Context context, String message) {
+        final Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.alertdialogcustom2);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        TextView text = (TextView) dialog.findViewById(R.id.msg_txv);
+        text.setText(message);
+        Button ok = (Button) dialog.findViewById(R.id.btn_ok);
+        ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+
+                Intent intent=new Intent(context,Registration.class);
+                context.startActivity(intent);
+
+            }
+        });
+        dialog.show();
+
+    }
+
+    public static void errorDialog2(final Context context, String message, final EditText password) {
+        final Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.alertdialogcustom2);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        TextView text = (TextView) dialog.findViewById(R.id.msg_txv);
+        text.setText(message);
+        Button ok = (Button) dialog.findViewById(R.id.btn_ok);
+        ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+
+                password.requestFocus();
+
+
+            }
+        });
+        dialog.show();
+
+    }
+
+    private boolean validate() {
+
+        if (TextUtils.isEmpty(mobile.getText().toString())) {
+            Util.errorDialog(Login.this, "Please enter Mobile No");
+            return false;
+        } else if (TextUtils.isEmpty(password.getText().toString())) {
+            Util.errorDialog(Login.this, "Please enter Password");
+            return false;
+
+        }
+            return true;
+
+        }
 
 }

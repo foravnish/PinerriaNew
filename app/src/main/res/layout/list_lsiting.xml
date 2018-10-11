@@ -48,6 +48,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
+
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -70,6 +71,32 @@
                                 app:riv_oval="false" />
 
                         </RelativeLayout>
+
+                        <LinearLayout
+                            android:id="@+id/linerColor"
+                            android:layout_width="130dp"
+                            android:layout_height="20dp"
+                            android:rotation="135"
+                            android:layout_marginTop="0dp"
+                            android:layout_marginLeft="-40dp"
+                            android:background="@color/orange"
+                            android:visibility="visible">
+
+                            <TextView
+                                android:id="@+id/labelTxt"
+                                android:layout_width="152dp"
+                                android:layout_height="wrap_content"
+                                android:text="PREMIUM"
+                                android:textAllCaps="true"
+                                android:textSize="9dp"
+                                android:rotation="180"
+                                android:fontFamily="@font/muli"
+                                android:layout_marginLeft="0dp"
+                                android:textColor="@color/white"
+                                android:layout_gravity="center"
+                                android:gravity="center"/>
+                        </LinearLayout>
+
                     </RelativeLayout>
 
 
@@ -202,16 +229,17 @@
                             android:textColor="@color/pink"
                             android:textSize="13sp"/>
 
-                        <ImageView
-                            android:id="@+id/stars"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:layout_gravity="center"
-                            android:paddingRight="3dp"
-                            android:paddingLeft="3dp"
-                            android:layout_weight="1"
-                            android:src="@drawable/star"
-                            android:visibility="visible" />
+                        <!--<ImageView-->
+                            <!--android:id="@+id/stars"-->
+                            <!--android:layout_width="30dp"-->
+                            <!--android:layout_height="30dp"-->
+                            <!--android:layout_gravity="center"-->
+                            <!--android:paddingRight="3dp"-->
+                            <!--android:paddingLeft="3dp"-->
+                            <!--android:layout_weight="1"-->
+                            <!---->
+                            <!--android:src="@drawable/star"-->
+                            <!--android:visibility="visible" />-->
                     </LinearLayout>
 
 

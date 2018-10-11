@@ -17,8 +17,8 @@
         android:orderInCategory="3"/>
     <item
         android:id="@+id/four"
-        android:title="Pay Now"
-        android:visible="false"
-        android:icon="@drawable/paynow"
+        android:title="Notifications"
+        android:icon="@drawable/notification1"
+        android:iconTint="@color/white"
         android:orderInCategory="4"/>
 </menu>

@@ -1,15 +1,11 @@
-package pinerria.business.pinerrianew.Fragments;
-
+package pinerria.business.pinerrianew.Activites;
 
 import android.app.Dialog;
 import android.graphics.drawable.ColorDrawable;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.text.Html;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,41 +20,30 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import pinerria.business.pinerrianew.Activites.HomeAct;
-
 import pinerria.business.pinerrianew.R;
 import pinerria.business.pinerrianew.Utils.Api;
 import pinerria.business.pinerrianew.Utils.AppController;
 import pinerria.business.pinerrianew.Utils.Util;
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class Faqs extends Fragment {
-
-
-    public Faqs() {
-        // Required empty public constructor
-    }
-
+public class TermandConditions extends AppCompatActivity {
 
     Dialog dialog;
     TextView content;
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view= inflater.inflate(R.layout.fragment_faqs, container, false);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_termand_conditions);
 
 
-        content=view.findViewById(R.id.content);
+        content=findViewById(R.id.content);
 //        getActivity().setTitle("About Us");
 
-        HomeAct.title.setText("FAQs");
+//        getActivity().setTitle("Terms & Conditions");
 
-        dialog=new Dialog(getActivity());
+
+        dialog=new Dialog(TermandConditions.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dialog.setCancelable(false);
@@ -81,7 +66,7 @@ public class Faqs extends Fragment {
 
                         JSONArray jsonArray=response.getJSONArray("message");
                         for (int i=0;i<jsonArray.length();i++){
-                            JSONObject jsonObject=jsonArray.getJSONObject(5);
+                            JSONObject jsonObject=jsonArray.getJSONObject(3);
 
                             content.setText(Html.fromHtml(jsonObject.optString("content")));
 
@@ -90,7 +75,7 @@ public class Faqs extends Fragment {
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Toast.makeText(getActivity(),
+                    Toast.makeText(getApplicationContext(),
                             "Error: " + e.getMessage(),
                             Toast.LENGTH_LONG).show();
                     Util.cancelPgDialog(dialog);
@@ -102,7 +87,7 @@ public class Faqs extends Fragment {
             @Override
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.d("Respose", "Error: " + error.getMessage());
-                Toast.makeText(getActivity(),
+                Toast.makeText(getApplicationContext(),
                         "Error! Please Connect to the internet", Toast.LENGTH_SHORT).show();
                 // hide the progress dialog
                 Util.cancelPgDialog(dialog);
@@ -110,13 +95,10 @@ public class Faqs extends Fragment {
             }
         });
 
+
         // Adding request to request queue
         jsonObjReq.setShouldCache(false);
         AppController.getInstance().addToRequestQueue(jsonObjReq);
-
-
-
-        return view;
     }
 
 }

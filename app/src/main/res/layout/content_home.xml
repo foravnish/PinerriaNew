@@ -61,10 +61,10 @@
                     android:layout_gravity="center"
                     android:layout_toRightOf="@+id/home"
                     android:drawableTint="@color/white"
-                    android:drawableTop="@drawable/profilenew"
+                    android:drawableTop="@drawable/addplus"
                     android:gravity="center"
-                    android:text="Profile"
-                    android:layout_marginLeft="40dp"
+                    android:text="Add Business"
+                    android:layout_marginLeft="10dp"
                     android:textColor="@color/white"
                     android:textSize="13dp" />
 
@@ -106,10 +106,10 @@
                     android:layout_alignParentRight="true"
                     android:layout_gravity="center"
                     android:drawableTint="@color/white"
-                    android:drawableTop="@drawable/message_footer"
+                    android:drawableTop="@drawable/faq2"
                     android:gravity="center"
                     android:backgroundTint="@color/white"
-                    android:text="Message"
+                    android:text="FAQs"
                     android:layout_marginRight="25dp"
                     android:textColor="@color/white"
                     android:textSize="13dp" />

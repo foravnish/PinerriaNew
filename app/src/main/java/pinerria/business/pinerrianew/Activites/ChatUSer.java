@@ -96,10 +96,14 @@ public class ChatUSer extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 UserDetails.chatWith = al2.get(position);
                 Intent intent=new Intent(ChatUSer.this, Chat.class);
-                intent.putExtra("name",al.get(position));
+                intent.putExtra("nameValue",al.get(position));
                 intent.putExtra("id",userId.get(position));
                 intent.putExtra("value","0");
                 startActivity(intent);
+
+                Log.d("dfgdfgsdfgsdfgdfg1",al2.get(position));
+                Log.d("dfgdfgsdfgsdfgdfg2",al.get(position));
+                Log.d("dfgdfgsdfgsdfgdfg3",userId.get(position));
             }
         });
     }

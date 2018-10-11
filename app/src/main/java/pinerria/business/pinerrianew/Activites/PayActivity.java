@@ -103,7 +103,6 @@ public class PayActivity extends AppCompatActivity {
             duration.setText(jsonObject.optString("duration")+" Months Validity");
 
 
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -246,6 +245,11 @@ public class PayActivity extends AppCompatActivity {
 
 
                     }
+                    else if  (jsonObject.optString("status").equals("failure")) {
+
+                            errorDialog(PayActivity.this,jsonObject.optString("message"));
+
+                    }
                     else{
                         Intent intent=new Intent(PayActivity.this,AddGSTDetails.class);
                         intent.putExtra("type","package");
@@ -303,7 +307,8 @@ public class PayActivity extends AppCompatActivity {
                 params.put("pay_amount", jsonObject.optString("total_value"));
                 params.put("payment_status", "Pending");
                 params.put("company_name", com_name);
-                params.put("gst_number", gst);
+//                params.put("gst_number", gst);
+                params.put("gst_number", "NA");
                 params.put("tax_address", address);
                 params.put("user_email", email);
                 params.put("unique_number", MyPrefrences.getDateTime(getApplicationContext()));

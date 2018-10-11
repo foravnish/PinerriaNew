@@ -9,11 +9,11 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
-
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
 
     <application
         android:name=".Utils.AppController"
@@ -23,32 +23,32 @@
         android:roundIcon="@mipmap/logo_noti"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-
-        <service android:name=".gcm.MyFirebaseMessagingService"
+        <service
+            android:name=".gcm.MyFirebaseMessagingService"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
         <service android:name=".gcm.MyFirebaseInstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
 
+
+
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@mipmap/logo_noti" />
-        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
-             notification message. See README(https://goo.gl/6BKBk7) for more. -->
+        <!--
+             Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more.
+        -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent" />
-
-
 
         <activity
             android:name=".Activites.Splash"
@@ -63,7 +63,6 @@
             android:name=".Activites.HomeAct"
             android:label="@string/title_activity_home"
             android:screenOrientation="portrait"
-
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activites.ProfilePage"
@@ -98,39 +97,46 @@
         <activity
             android:name=".Activites.EditPhotos"
             android:screenOrientation="portrait" />
-
-
-
         <activity
             android:name=".Activites.PayActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activites.PayOrderAct"
             android:screenOrientation="portrait" />
-        <!--<activity-->
-            <!--android:name=".Activites.PaymentSuccessActivity"-->
-            <!--android:label="@string/title_activity_payment_success"-->
-            <!--android:screenOrientation="portrait">-->
-            <!--<intent-filter>-->
-                <!--<data-->
-                    <!--android:host="EBS"-->
-                    <!--android:scheme="application.pinerria" />-->
+        <!-- <activity -->
+        <!-- android:name=".Activites.PaymentSuccessActivity" -->
+        <!-- android:label="@string/title_activity_payment_success" -->
+        <!-- android:screenOrientation="portrait"> -->
+        <!-- <intent-filter> -->
+        <!-- <data -->
+        <!-- android:host="EBS" -->
+        <!-- android:scheme="application.pinerria" /> -->
 
-                <!--<action android:name="android.intent.action.VIEW" />-->
 
-                <!--<category android:name="android.intent.category.DEFAULT" />-->
-                <!--<category android:name="android.intent.category.BROWSABLE" />-->
-            <!--</intent-filter>-->
-        <!--</activity>-->
-        <activity android:name=".Activites.ChatUSer" android:screenOrientation="portrait"/>
-        <activity android:name=".Activites.Chat" android:screenOrientation="portrait"/>
-        <activity android:name=".Activites.AddGSTDetails" android:screenOrientation="portrait"></activity>
+        <!-- <action android:name="android.intent.action.VIEW" /> -->
 
-        <receiver android:name=".Utils.MySMSBroadCastReceiver" >
-            <intent-filter android:priority="999" >
+
+        <!-- <category android:name="android.intent.category.DEFAULT" /> -->
+        <!-- <category android:name="android.intent.category.BROWSABLE" /> -->
+        <!-- </intent-filter> -->
+        <!-- </activity> -->
+        <activity
+            android:name=".Activites.ChatUSer"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activites.Chat"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activites.AddGSTDetails"
+            android:screenOrientation="portrait" />
+
+        <receiver android:name=".Utils.MySMSBroadCastReceiver">
+            <intent-filter android:priority="999">
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
+
+        <activity android:name=".Activites.TermandConditions"></activity>
     </application>
 
 </manifest>

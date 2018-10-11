@@ -188,11 +188,11 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
                 }
                 else if (id==R.id.four){
 
-//                    Fragment fragment = new BannerRequest();
-//                    FragmentManager manager = getFragmentManager();
-//                    FragmentTransaction ft = manager.beginTransaction();
-//                    ft.replace(R.id.content_frame, fragment).addToBackStack(null).commit();
-//                    ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout,R.anim.frag_fade_right, R.anim.frag_fad_left);
+                    Fragment fragment = new Notifications();
+                    FragmentManager manager = getFragmentManager();
+                    FragmentTransaction ft = manager.beginTransaction();
+                    ft.replace(R.id.content_frame, fragment).addToBackStack(null).commit();
+                    ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout,R.anim.frag_fade_right, R.anim.frag_fad_left);
                 }
 
                 return false;

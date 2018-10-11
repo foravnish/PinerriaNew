@@ -346,7 +346,7 @@ public class Listing extends Fragment {
         LinearLayout priceLayout;
         MaterialRatingBar rating;
         RoundedImageView imgaeView;
-
+        LinearLayout linerColor;
     }
     class Adapter extends BaseAdapter {
 
@@ -395,7 +395,8 @@ public class Listing extends Fragment {
             viewholder.imgaeView=convertView.findViewById(R.id.imgaeView);
             viewholder.totlaUsers=convertView.findViewById(R.id.totlaUsers);
             viewholder.price=convertView.findViewById(R.id.price);
-            viewholder.stars=convertView.findViewById(R.id.stars);
+//            viewholder.stars=convertView.findViewById(R.id.stars);
+            viewholder.linerColor=convertView.findViewById(R.id.linerColor);
 //
             viewholder.keyword=convertView.findViewById(R.id.keyword);
             viewholder.distance=convertView.findViewById(R.id.distance);
@@ -528,12 +529,14 @@ public class Listing extends Fragment {
 //
             try {
                 if (AllProducts.get(position).get("premium").equalsIgnoreCase("Yes")){
-                    viewholder.stars.setVisibility(View.VISIBLE);
+//                    viewholder.stars.setVisibility(View.VISIBLE);
+                    viewholder.linerColor.setVisibility(View.VISIBLE);
 //                    viewholder.cardView.setCardBackgroundColor(Color.parseColor("#FFFDF4BE"));
 //                    viewholder.callNow1.setVisibility(View.VISIBLE);
                 }
                 else if (AllProducts.get(position).get("premium").equalsIgnoreCase("No")){
-                    viewholder.stars.setVisibility(View.GONE);
+//                    viewholder.stars.setVisibility(View.GONE);
+                    viewholder.linerColor.setVisibility(View.GONE);
 //                    viewholder.cardView.setCardBackgroundColor(Color.parseColor("#ffffff"));
 //                    viewholder.callNow1.setVisibility(View.GONE);
                 }

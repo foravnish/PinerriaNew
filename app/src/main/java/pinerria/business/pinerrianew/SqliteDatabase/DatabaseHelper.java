@@ -13,7 +13,7 @@ import java.util.List;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Database Version
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 6;
 
     // Database Name
     private static final String DATABASE_NAME = "notes_db";
@@ -57,7 +57,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(Note.COLUMN_NOTE, note);
 
         // insert row
-        long id = db.insert(Note.TABLE_NAME, null, values);
+        long id = db.insertWithOnConflict(Note.TABLE_NAME, null, values,SQLiteDatabase.CONFLICT_REPLACE);
 
         // close db connection
         db.close();
@@ -120,7 +120,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         List<Note> notes = new ArrayList<>();
 
         // Select All Query
-        String selectQuery = "SELECT  * FROM " + Note.TABLE_NAME + " ORDER BY " +
+        String selectQuery = "SELECT *  FROM " + Note.TABLE_NAME + " ORDER BY " +
                 Note.COLUMN_TIMESTAMP + " DESC";
 
         SQLiteDatabase db = this.getWritableDatabase();

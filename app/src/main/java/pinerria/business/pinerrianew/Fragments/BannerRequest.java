@@ -88,6 +88,7 @@ public class BannerRequest extends Fragment {
 
 
         mobile.setText(MyPrefrences.getMobile(getActivity()));
+        email.setText(MyPrefrences.getEMAILID(getActivity()));
      //   pName.setText(MyPrefrences.getUSENAME(getActivity()).toUpperCase());
 
         submitReq.setOnClickListener(new View.OnClickListener() {

@@ -188,8 +188,7 @@ public class Registration extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-
-
+                startActivity(new Intent(Registration.this,TermandConditions.class));
 
 
 //                Log.d("fgdgdfgdfgdfgdg", String.valueOf(checkBox.isChecked()));

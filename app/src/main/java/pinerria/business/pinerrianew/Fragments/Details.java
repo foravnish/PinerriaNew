@@ -114,7 +114,6 @@ public class Details extends Fragment {
 
        // Log.d("sdfsdfdsgd",getArguments().getString("id"));
 
-
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view2);
         dealsIn = (TextView) view.findViewById(R.id.dealsIn);
         imageView = (NetworkImageView) view.findViewById(R.id.imageView);
@@ -396,10 +395,10 @@ public class Details extends Fragment {
                     Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
                     sharingIntent.setType("text/plain");
 //                String shareBody =comName.getText().toString()+ " "+phone.getText().toString();
-                    String shareBody ="Hi, \n" +
-                            "Please visit my business page on Pinerria app. Click on the link below. "+jsonObject.optString("business_share_url");
+                    String shareBody ="Hi, \n" + "Please visit my business page on Pinerria app. Click on the link below. "+jsonObject.optString("business_share_url");
+//                    String shareBody="http://www.google.com";
 
-                    sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Details");
+                    sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "My Business Page on Pinerria");
                     sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT,shareBody);
                     startActivity(Intent.createChooser(sharingIntent, "Share via"));
 
@@ -484,8 +483,8 @@ public class Details extends Fragment {
 
 
                     UserDetails.chatWith = jsonObject.optString("primary_mobile");
-                    Intent intent=new Intent(getActivity(), Chat.class);
-                    intent.putExtra("name",jsonObject.optString("user_name"));
+                    Intent intent=new Intent(getActivity(),Chat.class);
+                    intent.putExtra("nameValue",jsonObject.optString("user_name"));
                     intent.putExtra("id",jsonObject.optString("user_id"));
                     intent.putExtra("value","0");
                     startActivity(intent);
@@ -534,8 +533,6 @@ public class Details extends Fragment {
 
             }
         });
-
-
 
         return view;
 

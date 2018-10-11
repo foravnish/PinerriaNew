@@ -95,6 +95,7 @@ import pinerria.business.pinerrianew.Fragments.MessageToAdmin;
 import pinerria.business.pinerrianew.Fragments.MyFavourate;
 import pinerria.business.pinerrianew.Fragments.MyJobs;
 import pinerria.business.pinerrianew.Fragments.MyProducts;
+import pinerria.business.pinerrianew.Fragments.Notifications;
 import pinerria.business.pinerrianew.Fragments.Packages;
 import pinerria.business.pinerrianew.Fragments.PayOrder;
 import pinerria.business.pinerrianew.Fragments.RatingView;
@@ -419,10 +420,14 @@ public class HomeAct extends AppCompatActivity
             ft.replace(R.id.content_frame, fragment).commit();
             ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout, R.anim.frag_fade_right, R.anim.frag_fad_left);
         }
-//        else if (getIntent().getStringExtra("userType").equalsIgnoreCase("chat")){
-//
-//            startActivity(new Intent(getApplicationContext(), ChatUSer.class));
-//        }
+        else if (getIntent().getStringExtra("userType").equalsIgnoreCase("notification")){
+            Fragment fragment = new Notifications();
+            FragmentManager manager = getSupportFragmentManager();
+            FragmentTransaction ft = manager.beginTransaction();
+            ft.replace(R.id.content_frame, fragment).commit();
+            ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout, R.anim.frag_fade_right, R.anim.frag_fad_left);
+
+        }
           else {
             Fragment fragment = new Home();
             FragmentManager manager = getSupportFragmentManager();
@@ -441,7 +446,6 @@ public class HomeAct extends AppCompatActivity
         });
 
 
-
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -454,7 +458,7 @@ public class HomeAct extends AppCompatActivity
 
                 profile.startAnimation(myAnim);
 
-                Intent intent=new Intent(HomeAct.this,ProfilePage.class);
+                Intent intent=new Intent(HomeAct.this,AddProduct.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.fadein, R.anim.fadeout);
 
@@ -588,7 +592,7 @@ public class HomeAct extends AppCompatActivity
                 packageList.startAnimation(myAnim);
 
 
-                Fragment fragment = new MessageToAdmin();
+                Fragment fragment = new Faqs();
                 FragmentManager manager = getSupportFragmentManager();
                 FragmentTransaction ft = manager.beginTransaction();
                 ft.replace(R.id.content_frame, fragment).commit();
@@ -879,6 +883,14 @@ public class HomeAct extends AppCompatActivity
         } else if (id == R.id.nav_manage_business) {
 
             Fragment fragment = new ManageBusiness();
+            FragmentManager manager = getSupportFragmentManager();
+            FragmentTransaction ft = manager.beginTransaction();
+            ft.replace(R.id.content_frame, fragment).addToBackStack(null).commit();
+            ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout,R.anim.frag_fade_right, R.anim.frag_fad_left);
+
+         } else if (id == R.id.nav_groupnotification) {
+
+            Fragment fragment = new Notifications();
             FragmentManager manager = getSupportFragmentManager();
             FragmentTransaction ft = manager.beginTransaction();
             ft.replace(R.id.content_frame, fragment).addToBackStack(null).commit();

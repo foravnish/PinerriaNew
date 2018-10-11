@@ -72,7 +72,12 @@ public class Chat extends AppCompatActivity {
         backBtn = (ImageView) findViewById(R.id.backBtn);
         toolbarTxtName = (TextView) findViewById(R.id.toolbarTxtName);
 
-        Log.d("gdfgdgsdgdfgdfgd",getIntent().getStringExtra("id"));
+
+        Log.d("fgdfgdfgdfgdgdr1",getIntent().getStringExtra("nameValue"));
+        Log.d("fgdfgdfgdfgdgdr2",UserDetails.chatWith );
+        Log.d("fgdfgdfgdfgdgdr3",getIntent().getStringExtra("id"));
+
+
 
         Firebase.setAndroidContext(this);
 //        reference1 = new Firebase("https://android-chat-app-e711d.firebaseio.com/messages/" + UserDetails.username + "_" + UserDetails.chatWith);
@@ -84,7 +89,9 @@ public class Chat extends AppCompatActivity {
         reference1 = new Firebase("https://pinerria-home-business.firebaseio.com/messages/" + UserDetails.username + "_" + UserDetails.chatWith);
         reference2 = new Firebase("https://pinerria-home-business.firebaseio.com/messages/" + UserDetails.chatWith + "_" + UserDetails.username);
 
-        toolbarTxtName.setText(getIntent().getStringExtra("name"));
+
+        toolbarTxtName.setText(getIntent().getStringExtra("nameValue"));
+
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -201,11 +208,11 @@ public class Chat extends AppCompatActivity {
 
                 if(userName.equals(UserDetails.username)){
 //                    addMessageBox("You:-\n" + message, date,1);
-                    addMessageBox( message, time,date,1, getIntent().getStringExtra("name"));
+                    addMessageBox( message, time,date,1, getIntent().getStringExtra("nameValue"));
                 }
                 else{
 //                    addMessageBox(UserDetails.chatWith + ":-\n" + message, date,2);
-                    addMessageBox(message, time,date,2,getIntent().getStringExtra("name"));
+                    addMessageBox(message, time,date,2,getIntent().getStringExtra("nameValue"));
                 }
             }
 

@@ -214,7 +214,6 @@ public class Packages extends Fragment {
 
                                     Util.errorDialog(getActivity(),""+response.getString("message"));
 
-
                                 }
                                 else{
                                     if (jsonObject2.optString("company_name").equalsIgnoreCase("")){

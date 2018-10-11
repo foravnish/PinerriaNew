@@ -28,6 +28,15 @@
 
     </group>
 
+
+    <group android:checkableBehavior="single"
+        android:id="@+id/groupnotification">
+        <item
+            android:id="@+id/nav_groupnotification"
+            android:icon="@drawable/notifa"
+            android:title="Notification" />
+
+    </group>
     <group android:checkableBehavior="single"
         android:id="@+id/group3">
         <item

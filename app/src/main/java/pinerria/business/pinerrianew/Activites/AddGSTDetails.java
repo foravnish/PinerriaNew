@@ -497,7 +497,6 @@ public class AddGSTDetails extends AppCompatActivity {
                 intent.putExtra("userType","");
                 context.startActivity(intent);
 
-
             }
         });
         dialog.show();
