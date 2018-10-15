@@ -428,6 +428,14 @@ public class HomeAct extends AppCompatActivity
             ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout, R.anim.frag_fade_right, R.anim.frag_fad_left);
 
         }
+        else if (getIntent().getStringExtra("userType").equalsIgnoreCase("jobs")){
+            Fragment fragment = new MyJobs();
+            FragmentManager manager = getSupportFragmentManager();
+            FragmentTransaction ft = manager.beginTransaction();
+            ft.replace(R.id.content_frame, fragment).commit();
+            ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout, R.anim.frag_fade_right, R.anim.frag_fad_left);
+
+        }
           else {
             Fragment fragment = new Home();
             FragmentManager manager = getSupportFragmentManager();

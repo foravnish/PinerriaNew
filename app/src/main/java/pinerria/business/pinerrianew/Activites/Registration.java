@@ -341,7 +341,7 @@ public class Registration extends AppCompatActivity {
             return false;
         } if (!rePass.getText().toString().equals(password.getText().toString())) {
 //            Toast.makeText(getApplicationContext(), "Both Password should be match", Toast.LENGTH_SHORT).show();
-            Util.errorDialog(Registration.this, "Confirm Password dose not match.");
+            Util.errorDialog(Registration.this, "Confirm Password does not match.");
             return false;
         }  if (cityString.equalsIgnoreCase("Select City")) {
             Util.errorDialog(Registration.this, "Please Select City.");

@@ -111,9 +111,6 @@ public class PayActivity extends AppCompatActivity {
         try {
             jsonObject2=new JSONObject(getIntent().getStringExtra("userInfo"));
 
-
-
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -310,7 +307,7 @@ public class PayActivity extends AppCompatActivity {
 //                params.put("gst_number", gst);
                 params.put("gst_number", "NA");
                 params.put("tax_address", address);
-                params.put("user_email", email);
+                params.put("user_email", "no-email");
                 params.put("unique_number", MyPrefrences.getDateTime(getApplicationContext()));
 
 

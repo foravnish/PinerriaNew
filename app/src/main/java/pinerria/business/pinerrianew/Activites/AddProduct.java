@@ -454,7 +454,7 @@ public class AddProduct extends AppCompatActivity {
                 if (idLocation.equals("")) {
 
                     if (newLocation.getText().toString().equals("")) {
-                        Util.errorDialog(AddProduct.this, "Can't blank Location");
+                        Util.errorDialog(AddProduct.this, "Enter location");
                     }
                     else{
 
@@ -498,14 +498,12 @@ public class AddProduct extends AppCompatActivity {
                                     e.printStackTrace();
                                 }
                                 if (filename == null) {
-                                    Util.errorDialog(AddProduct.this, "Please Select Image");
+                                    Util.errorDialog(AddProduct.this, "Please select a Business Image.");
                                 } else {
                                     //Toast.makeText(AddProduct.this, "yes", Toast.LENGTH_SHORT).show();
                                     PostData(path, filename);
 
                                 }
-
-
                             }
 
 
@@ -870,16 +868,31 @@ public class AddProduct extends AppCompatActivity {
         if (TextUtils.isEmpty(nameBusiness.getText().toString()))
         {
            Util.errorDialog(AddProduct.this,"Enter Business Name");
+            nameBusiness.requestFocus();
+            return false;
+        }
+        else if (TextUtils.isEmpty(keyword.getText().toString()))
+        {
+            Util.errorDialog(AddProduct.this,"Enter what your Business deals in.");
+            keyword.requestFocus();
+            return false;
+        }
+        else if (TextUtils.isEmpty(desc.getText().toString()))
+        {
+            Util.errorDialog(AddProduct.this,"Enter Description.");
+            desc.requestFocus();
             return false;
         }
         else if (TextUtils.isEmpty(mobile.getText().toString()))
         {
             Util.errorDialog(AddProduct.this,"Enter Mobile No");
+            mobile.requestFocus();
             return false;
         }
         else if (mobile.getText().toString().length()<10)
         {
             Util.errorDialog(AddProduct.this,"Enter 10 digit Mobile No.");
+            mobile.requestFocus();
             return false;
         }
 //        else if (TextUtils.isEmpty(email.getText().toString()))
@@ -891,22 +904,22 @@ public class AddProduct extends AppCompatActivity {
         else if (TextUtils.isEmpty(address.getText().toString()))
         {
             Util.errorDialog(AddProduct.this,"Enter Address");
+            address.requestFocus();
             return false;
         }
+
 //        else if (TextUtils.isEmpty(zip.getText().toString()))
 //        {
 //            zip.setError("Oops! Pincode blank");
 //            zip.requestFocus();
 //            return false;
 //        }
-        else if (TextUtils.isEmpty(keyword.getText().toString()))
-        {
-            Util.errorDialog(AddProduct.this,"Enter Keyword");
-            return false;
-        }
+
+
         if (checkBobPrice.isChecked()) {
         if (TextUtils.isEmpty(minPrice.getText().toString())) {
-                Util.errorDialog(AddProduct.this, "Please enter 'Starting Price'");
+                Util.errorDialog(AddProduct.this, "Please 'Starting Price'");
+                minPrice.requestFocus();
                 return false;
             }
         }
@@ -923,10 +936,9 @@ public class AddProduct extends AppCompatActivity {
 //            return false;
 //        }
 
-
-
         if (minPirce>=maxPirce){
             Util.errorDialog(AddProduct.this,"'Higher Range' must be greater than 'Starting Price'");
+            maxPrice.requestFocus();
             return false;
         }
 

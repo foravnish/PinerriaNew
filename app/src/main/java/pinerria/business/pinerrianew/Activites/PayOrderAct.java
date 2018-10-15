@@ -531,7 +531,8 @@ public class PayOrderAct extends AppCompatActivity {
 //        String firstName = mAppPreference.getFirstName();
 //        String email = email_til.getEditText().getText().toString().trim();
 //        String email = MyPrefrences.getEMAILID(getApplicationContext()).toString();
-        String email = "customerhelpdesk@pinerria.com";
+//        String email = "customerhelpdesk@pinerria.com";
+        String email = user_email.getText().toString();
         String udf1 = "";
         String udf2 = "";
         String udf3 = "";

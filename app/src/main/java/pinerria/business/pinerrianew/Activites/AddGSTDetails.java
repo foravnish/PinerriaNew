@@ -637,15 +637,6 @@ public class AddGSTDetails extends AppCompatActivity {
 
 
 
-
-
-
-
-
-
-
-
-
     /// TODO PayUMoney
 
     private void launchPayUMoneyFlow(String package_name, String total_value) {
@@ -680,7 +671,8 @@ public class AddGSTDetails extends AppCompatActivity {
 //        String firstName = mAppPreference.getFirstName();
 //        String email = email_til.getEditText().getText().toString().trim();
 //        String email = MyPrefrences.getEMAILID(getApplicationContext()).toString();
-        String email = "customerhelpdesk@pinerria.com";
+//        String email = "customerhelpdesk@pinerria.com";
+        String email =user_email.getText().toString();
         String udf1 = "";
         String udf2 = "";
         String udf3 = "";
@@ -711,6 +703,7 @@ public class AddGSTDetails extends AppCompatActivity {
                 .setUdf8(udf8)
                 .setUdf9(udf9)
                 .setUdf10(udf10)
+
                 .setIsDebug(appEnvironment.debug())
 //                .setKey(appEnvironment.merchant_Key())
                 .setKey(merKey.toString())

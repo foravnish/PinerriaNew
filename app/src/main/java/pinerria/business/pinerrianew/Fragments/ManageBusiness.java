@@ -230,6 +230,8 @@ public class ManageBusiness extends Fragment {
 
                         jsonObject=jsonArray.getJSONObject(0);
 
+                        MyPrefrences.setBusinesID(getActivity(),jsonObject.optString("id"));
+
                         nameBusiness.setText(jsonObject.optString("bussiness_name"));
                         //Catname.setText(jsonObject.optString("category_id"));
                         //subCatName.setText(jsonObject.optString("sub_category_id"));

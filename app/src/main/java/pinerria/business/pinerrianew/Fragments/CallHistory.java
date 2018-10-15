@@ -103,6 +103,7 @@ public class CallHistory extends Fragment {
         Util.showPgDialog(dialog);
 
 
+        Log.d("dfgdfgdfgdfgdfg",MyPrefrences.getBusinesID(getActivity()));
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
                 Api.myRecievedCall+"/"+ MyPrefrences.getBusinesID(getActivity()), null, new Response.Listener<JSONObject>() {
 //                Api.myRecievedCall+"/62" , null, new Response.Listener<JSONObject>() {

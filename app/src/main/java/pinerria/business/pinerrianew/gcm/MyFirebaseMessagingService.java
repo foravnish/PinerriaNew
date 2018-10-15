@@ -102,7 +102,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 notificationIntent.putExtra("id",jsonObject.optString("receiver_id"));
 
                 PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, notificationIntent, 0);
-                notification = mBuilder.setSmallIcon(R.mipmap.logo_noti).setTicker("Pinerria").setWhen(0)
+                notification = mBuilder.setSmallIcon(R.mipmap.noti_icon).setTicker("Pinerria").setWhen(0)
                         .setAutoCancel(true)
                         .setContentTitle(jsonObject.optString("title"))
                         .setTicker("Pinerria")
@@ -111,7 +111,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 //                        .setStyle(inboxStyle)
                         .setStyle(new NotificationCompat.BigTextStyle().bigText(jsonObject.optString("body")))
 //                .setWhen(getTimeMilliSec(timeStamp))
-                        .setSmallIcon(R.mipmap.logo_noti)
+                        .setSmallIcon(R.mipmap.noti_icon)
                         .setContentIntent(contentIntent)
                          .setStyle(new NotificationCompat.BigPictureStyle().bigPicture(image))
 //                .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), icon))
@@ -134,7 +134,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 Intent notificationIntent = new Intent(getApplicationContext(), HomeAct.class);
                 notificationIntent.putExtra("userType", "notification");
                 PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, notificationIntent, 0);
-                notification = mBuilder.setSmallIcon(R.mipmap.logo_noti).setTicker("Pinerria").setWhen(0)
+                notification = mBuilder.setSmallIcon(R.mipmap.noti_icon).setTicker("Pinerria").setWhen(0)
                         .setAutoCancel(true)
                         .setContentTitle(jsonObject.optString("title"))
                         .setTicker("Pineria")
@@ -143,7 +143,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 //                        .setStyle(inboxStyle)
                         .setStyle(new NotificationCompat.BigTextStyle().bigText(jsonObject.optString("body")))
 //                .setWhen(getTimeMilliSec(timeStamp))
-                        .setSmallIcon(R.mipmap.logo_noti)
+                        .setSmallIcon(R.mipmap.noti_icon)
                         .setContentIntent(contentIntent)
                         // .setStyle(new NotificationCompat.BigPictureStyle().bigPicture(image))
 //                .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), icon))
@@ -200,7 +200,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             Intent notificationIntent = new Intent(getApplicationContext(), HomeAct.class);
             notificationIntent.putExtra("userType", "");
             PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, notificationIntent, 0);
-            notification = mBuilder.setSmallIcon(R.mipmap.logo_noti).setTicker("Pinerria").setWhen(0)
+            notification = mBuilder.setSmallIcon(R.mipmap.noti_icon).setTicker("Pinerria").setWhen(0)
                     .setAutoCancel(true)
                     .setContentTitle(jsonObject.optString("title"))
                     .setTicker("Pineria")
@@ -209,7 +209,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 //                    .setStyle(inboxStyle)
                     .setStyle(new NotificationCompat.BigTextStyle().bigText(jsonObject.optString("body")))
 //                .setWhen(getTimeMilliSec(timeStamp))
-                    .setSmallIcon(R.mipmap.logo_noti)
+                    .setSmallIcon(R.mipmap.noti_icon)
                     .setContentIntent(contentIntent)
                     // .setStyle(new NotificationCompat.BigPictureStyle().bigPicture(image))
 //                .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), icon))
@@ -222,8 +222,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
 
         }
-
-
 
 
 
