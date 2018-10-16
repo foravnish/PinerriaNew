@@ -113,7 +113,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 //                .setWhen(getTimeMilliSec(timeStamp))
                         .setSmallIcon(R.mipmap.noti_icon)
                         .setContentIntent(contentIntent)
-                         .setStyle(new NotificationCompat.BigPictureStyle().bigPicture(image))
+                       //  .setStyle(new NotificationCompat.BigPictureStyle().bigPicture(image))
 //                .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), icon))
                         .setContentText(jsonObject.optString("body"))
                         .build();
