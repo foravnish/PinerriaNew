@@ -159,8 +159,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         }
 
-
-
         if (jsonObject.optString("status").equals("chat")) {
 //            NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
 //            inboxStyle.addLine(jsonObject.optString("body"));
