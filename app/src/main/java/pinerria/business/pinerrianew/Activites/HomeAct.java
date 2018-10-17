@@ -410,7 +410,7 @@ public class HomeAct extends AppCompatActivity
 
 
 
-        //Log.d("gfsdgdfgdfgdfgdf","b"+getIntent().getStringExtra("userType"));
+        Log.d("gfsdgdfgdfgdfgdf",getIntent().getStringExtra("userType"));
 
 
         if (getIntent().getStringExtra("userType").equalsIgnoreCase("2")){
@@ -434,6 +434,10 @@ public class HomeAct extends AppCompatActivity
             FragmentTransaction ft = manager.beginTransaction();
             ft.replace(R.id.content_frame, fragment).commit();
             ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout, R.anim.frag_fade_right, R.anim.frag_fad_left);
+
+        }
+        else if (getIntent().getStringExtra("userType").equalsIgnoreCase("chatscr")){
+            LoginForChat2();
 
         }
           else {
@@ -625,6 +629,7 @@ public class HomeAct extends AppCompatActivity
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>(){
             @Override
             public void onResponse(String s) {
+                Log.d("gfdgdfgdfgsdfgdf",s);
                 if(s.equals("null")){
                     Toast.makeText(HomeAct.this, "user not found", Toast.LENGTH_LONG).show();
                 }
@@ -639,6 +644,63 @@ public class HomeAct extends AppCompatActivity
                             UserDetails.username = user;
                             UserDetails.password = pass;
                             startActivity(new Intent(HomeAct.this, ChatUSer.class));
+                        }
+                        else {
+                            Toast.makeText(HomeAct.this, "incorrect password", Toast.LENGTH_LONG).show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                pd.dismiss();
+            }
+        },new Response.ErrorListener(){
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                System.out.println("" + volleyError);
+                pd.dismiss();
+            }
+        });
+
+        RequestQueue rQueue = Volley.newRequestQueue(HomeAct.this);
+        rQueue.add(request);
+
+
+    }
+
+    private void LoginForChat2() {
+
+//        String url = "https://chatapp-25d11.firebaseio.com/users.json";
+        String url = "https://pinerria-home-business.firebaseio.com/users.json";
+        final ProgressDialog pd = new ProgressDialog(HomeAct.this);
+        pd.setMessage("Loading...");
+        pd.show();
+
+        StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>(){
+            @Override
+            public void onResponse(String s) {
+                Log.d("gfdgdfgdfgsdfgdf",s);
+                if(s.equals("null")){
+                    Toast.makeText(HomeAct.this, "user not found", Toast.LENGTH_LONG).show();
+                }
+                else{
+                    try {
+                        JSONObject obj = new JSONObject(s);
+
+                        if(!obj.has(user)){
+                            Toast.makeText(HomeAct.this, "user not found", Toast.LENGTH_LONG).show();
+                        }
+                        else if(obj.getJSONObject(user).getString("password").equals(pass)){
+                            UserDetails.username = user;
+                            UserDetails.password = pass;
+//                            startActivity(new Intent(getActivity(), ChatUSer.class));
+                            UserDetails.chatWith = UserDetails.mobileNo;
+                            Intent intent=new Intent(getApplicationContext(),Chat.class);
+                            intent.putExtra("nameValue",UserDetails.name);
+                            intent.putExtra("id",UserDetails.chatId);
+                            intent.putExtra("value1","0");
+                            startActivity(intent);
                         }
                         else {
                             Toast.makeText(HomeAct.this, "incorrect password", Toast.LENGTH_LONG).show();

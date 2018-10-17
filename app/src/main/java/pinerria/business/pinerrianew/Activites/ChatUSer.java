@@ -98,7 +98,7 @@ public class ChatUSer extends AppCompatActivity {
                 Intent intent=new Intent(ChatUSer.this, Chat.class);
                 intent.putExtra("nameValue",al.get(position));
                 intent.putExtra("id",userId.get(position));
-                intent.putExtra("value","0");
+                intent.putExtra("value1","0");
                 startActivity(intent);
 
                 Log.d("dfgdfgsdfgsdfgdfg1",al2.get(position));

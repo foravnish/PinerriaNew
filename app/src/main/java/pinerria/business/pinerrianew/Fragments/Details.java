@@ -4,6 +4,7 @@ package pinerria.business.pinerrianew.Fragments;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -38,6 +39,7 @@ import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
@@ -45,6 +47,7 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.jsibbold.zoomage.ZoomageView;
 import com.squareup.picasso.Picasso;
 
@@ -61,6 +64,7 @@ import java.util.Map;
 
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 import pinerria.business.pinerrianew.Activites.Chat;
+import pinerria.business.pinerrianew.Activites.ChatUSer;
 import pinerria.business.pinerrianew.Activites.HomeAct;
 import pinerria.business.pinerrianew.Activites.Login;
 import pinerria.business.pinerrianew.Activites.UserDetails;
@@ -81,6 +85,10 @@ public class Details extends Fragment {
     public Details() {
         // Required empty public constructor
     }
+
+    private String pass="123456";
+    private String user;
+
 
     RecyclerView mRecyclerView;
     RecyclerView.LayoutManager mLayoutManager;
@@ -138,6 +146,8 @@ public class Details extends Fragment {
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         mRecyclerView.setLayoutManager(mLayoutManager);
+
+        user=MyPrefrences.getMobile(getActivity());
 
 
         //indicator = (CircleIndicator)dialog.findViewById(R.id.indicator);
@@ -482,12 +492,9 @@ public class Details extends Fragment {
 //                    startActivity(intent);
 
 
-                    UserDetails.chatWith = jsonObject.optString("primary_mobile");
-                    Intent intent=new Intent(getActivity(),Chat.class);
-                    intent.putExtra("nameValue",jsonObject.optString("user_name"));
-                    intent.putExtra("id",jsonObject.optString("user_id"));
-                    intent.putExtra("value","0");
-                    startActivity(intent);
+                    LoginForChat();
+
+
 
                     Log.d("dfsdfsdfsdfgsdgdfgertg",jsonObject.optString("primary_mobile"));
 
@@ -1091,5 +1098,64 @@ public class Details extends Fragment {
             return super.POSITION_NONE;
         }
     }
+
+
+    private void LoginForChat() {
+
+//        String url = "https://chatapp-25d11.firebaseio.com/users.json";
+        String url = "https://pinerria-home-business.firebaseio.com/users.json";
+        final ProgressDialog pd = new ProgressDialog(getActivity());
+        pd.setMessage("Loading...");
+        pd.show();
+
+        StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>(){
+            @Override
+            public void onResponse(String s) {
+                Log.d("gfdgdfgdfgsdfgdf",s);
+                if(s.equals("null")){
+                    Toast.makeText(getActivity(), "user not found", Toast.LENGTH_LONG).show();
+                }
+                else{
+                    try {
+                        JSONObject obj = new JSONObject(s);
+
+                        if(!obj.has(user)){
+                            Toast.makeText(getActivity(), "user not found", Toast.LENGTH_LONG).show();
+                        }
+                        else if(obj.getJSONObject(user).getString("password").equals(pass)){
+                            UserDetails.username = user;
+                            UserDetails.password = pass;
+//                            startActivity(new Intent(getActivity(), ChatUSer.class));
+                            UserDetails.chatWith = jsonObject.optString("primary_mobile");
+                            Intent intent=new Intent(getActivity(),Chat.class);
+                            intent.putExtra("nameValue",jsonObject.optString("user_name"));
+                            intent.putExtra("id",jsonObject.optString("user_id"));
+                            intent.putExtra("value1","0");
+                            startActivity(intent);
+                        }
+                        else {
+                            Toast.makeText(getActivity(), "incorrect password", Toast.LENGTH_LONG).show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                pd.dismiss();
+            }
+        },new Response.ErrorListener(){
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                System.out.println("" + volleyError);
+                pd.dismiss();
+            }
+        });
+
+        RequestQueue rQueue = Volley.newRequestQueue(getActivity());
+        rQueue.add(request);
+
+
+    }
+
 
 }

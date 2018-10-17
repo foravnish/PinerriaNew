@@ -6,6 +6,7 @@ import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.app.TaskStackBuilder;
 import android.content.ComponentName;
 import android.content.Context;
@@ -19,7 +20,14 @@ import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.firebase.client.Firebase;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -93,13 +101,23 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
                 NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
                 inboxStyle.addLine(jsonObject.optString("body"));
+
+              //  LoginForChat();
+
                 Notification notification;
                 final NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
                         getApplicationContext());
-                Intent notificationIntent = new Intent(getApplicationContext(), Chat.class);
+//                Intent notificationIntent = new Intent(getApplicationContext(), Chat.class);
+//                notificationIntent.putExtra("nameValue",jsonObject.optString("name"));
+//                notificationIntent.putExtra("id",jsonObject.optString("receiver_id"));
+//                notificationIntent.putExtra("value1","notifiscr");
 
-                notificationIntent.putExtra("nameValue",jsonObject.optString("name"));
-                notificationIntent.putExtra("id",jsonObject.optString("receiver_id"));
+                Intent notificationIntent = new Intent(getApplicationContext(), HomeAct.class);
+                notificationIntent.putExtra("userType", "chatscr");
+
+                UserDetails.mobileNo=jsonObject.optString("mobile_no");
+                UserDetails.name=jsonObject.optString("name");
+                UserDetails.chatId=jsonObject.optString("receiver_id");
 
                 PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, notificationIntent, 0);
                 notification = mBuilder.setSmallIcon(R.mipmap.noti_icon).setTicker("Pinerria").setWhen(0)
@@ -160,31 +178,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
 
         if (jsonObject.optString("status").equals("chat")) {
-//            NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
-//            inboxStyle.addLine(jsonObject.optString("body"));
-//            Notification notification;
-//            final NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
-//                    getApplicationContext());
-//            Intent notificationIntent = new Intent(getApplicationContext(), ChatUSer.class);
-//            PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, notificationIntent, 0);
-//            notification = mBuilder.setSmallIcon(R.mipmap.logo_noti).setTicker("Pinerria").setWhen(0)
-//                    .setAutoCancel(true)
-//                    .setContentTitle(jsonObject.optString("title"))
-//                    .setTicker("Pineria")
-////                .setContentIntent(resultPendingIntent)
-//                    .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
-//                    .setStyle(inboxStyle)
-////                .setWhen(getTimeMilliSec(timeStamp))
-//                    .setSmallIcon(R.mipmap.logo_noti)
-//                    .setContentIntent(contentIntent)
-//                    // .setStyle(new NotificationCompat.BigPictureStyle().bigPicture(image))
-////                .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), icon))
-//                    .setContentText(jsonObject.optString("body"))
-//                    .build();
-//
-//
-//            NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-//            notificationManager.notify(0, notification);
 
         }
 
@@ -338,5 +331,61 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
 
+//    private void LoginForChat() {
+//
+////        String url = "https://chatapp-25d11.firebaseio.com/users.json";
+//        String url = "https://pinerria-home-business.firebaseio.com/users.json";
+//        final ProgressDialog pd = new ProgressDialog(getApplicationContext());
+//        pd.setMessage("Loading...");
+//        pd.show();
+//
+//        StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>(){
+//            @Override
+//            public void onResponse(String s) {
+//                Log.d("gfdgdfgdfgsdfgdf",s);
+//                if(s.equals("null")){
+//                    Toast.makeText(getApplicationContext(), "user not found", Toast.LENGTH_LONG).show();
+//                }
+//                else{
+//                    try {
+//                        JSONObject obj = new JSONObject(s);
+//
+//                        if(!obj.has(user)){
+//                            Toast.makeText(getApplicationContext(), "user not found", Toast.LENGTH_LONG).show();
+//                        }
+//                        else if(obj.getJSONObject(user).getString("password").equals(pass)){
+//                            UserDetails.username = user;
+//                            UserDetails.password = pass;
+////                            startActivity(new Intent(getActivity(), ChatUSer.class));
+//                            UserDetails.chatWith = jsonObject.optString("primary_mobile");
+//                            Intent intent=new Intent(getApplicationContext(),Chat.class);
+//                            intent.putExtra("nameValue",jsonObject.optString("user_name"));
+//                            intent.putExtra("id",jsonObject.optString("user_id"));
+//                            intent.putExtra("value","0");
+//                            startActivity(intent);
+//                        }
+//                        else {
+//                            Toast.makeText(getApplicationContext(), "incorrect password", Toast.LENGTH_LONG).show();
+//                        }
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//
+//                pd.dismiss();
+//            }
+//        },new Response.ErrorListener(){
+//            @Override
+//            public void onErrorResponse(VolleyError volleyError) {
+//                System.out.println("" + volleyError);
+//                pd.dismiss();
+//            }
+//        });
+//
+//        RequestQueue rQueue = Volley.newRequestQueue(getApplicationContext());
+//        rQueue.add(request);
+//
+//
+//    }
 
 }

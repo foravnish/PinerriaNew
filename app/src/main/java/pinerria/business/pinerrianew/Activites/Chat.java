@@ -2,6 +2,7 @@ package pinerria.business.pinerrianew.Activites;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.media.RingtoneManager;
@@ -22,9 +23,11 @@ import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -60,6 +63,11 @@ public class Chat extends AppCompatActivity {
     ImageView backBtn;
     TextView toolbarTxtName;
     int val;
+
+    private String pass="123456";
+    private String user;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,7 +84,12 @@ public class Chat extends AppCompatActivity {
         Log.d("fgdfgdfgdfgdgdr1",getIntent().getStringExtra("nameValue"));
         Log.d("fgdfgdfgdfgdgdr2",UserDetails.chatWith );
         Log.d("fgdfgdfgdfgdgdr3",getIntent().getStringExtra("id"));
+//        Log.d("fgdfgdfgdfgdgdr4",getIntent().getStringExtra("value1"));
 
+//        if (getIntent().getStringExtra("value1").equalsIgnoreCase("notification_screen")){
+//            user=MyPrefrences.getMobile(getApplicationContext());
+//            LoginForChat();
+//        }
 
 
         Firebase.setAndroidContext(this);
@@ -362,6 +375,64 @@ public class Chat extends AppCompatActivity {
         layout.addView(headerView);
         scrollView.fullScroll(View.FOCUS_DOWN);
     }
+
+    private void LoginForChat() {
+
+//        String url = "https://chatapp-25d11.firebaseio.com/users.json";
+        String url = "https://pinerria-home-business.firebaseio.com/users.json";
+        final ProgressDialog pd = new ProgressDialog(getApplicationContext());
+        pd.setMessage("Loading...");
+        pd.show();
+
+        StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>(){
+            @Override
+            public void onResponse(String s) {
+                Log.d("gfdgdfgdfgsdfgdf",s);
+                if(s.equals("null")){
+                    Toast.makeText(getApplicationContext(), "user not found", Toast.LENGTH_LONG).show();
+                }
+                else{
+                    try {
+                        JSONObject obj = new JSONObject(s);
+
+                        if(!obj.has(user)){
+                            Toast.makeText(getApplicationContext(), "user not found", Toast.LENGTH_LONG).show();
+                        }
+                        else if(obj.getJSONObject(user).getString("password").equals(pass)){
+                            UserDetails.username = user;
+                            UserDetails.password = pass;
+
+//                            UserDetails.chatWith = UserDetails.chatWith ;
+//                            Intent intent=new Intent(getApplicationContext(),Chat.class);
+//                            intent.putExtra("nameValue",jsonObject.optString("user_name"));
+//                            intent.putExtra("id",jsonObject.optString("user_id"));
+//                            intent.putExtra("value","0");
+//                            startActivity(intent);
+                        }
+                        else {
+                            Toast.makeText(getApplicationContext(), "incorrect password", Toast.LENGTH_LONG).show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                pd.dismiss();
+            }
+        },new Response.ErrorListener(){
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                System.out.println("" + volleyError);
+                pd.dismiss();
+            }
+        });
+
+        RequestQueue rQueue = Volley.newRequestQueue(getApplicationContext());
+        rQueue.add(request);
+
+
+    }
+
 
 
 }

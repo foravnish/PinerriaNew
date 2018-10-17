@@ -766,6 +766,11 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
         public CustomPagerAdapter2(Context context) {
             mContext = context;
             mLayoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            if (mLayoutInflater == null) {
+                throw new AssertionError("LayoutInflater not found.");
+            }
+
+
         }
 
         @Override
