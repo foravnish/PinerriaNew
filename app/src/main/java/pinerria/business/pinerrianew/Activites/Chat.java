@@ -147,6 +147,7 @@ public class Chat extends AppCompatActivity {
 
 
                 }
+
             }
         });
 
@@ -348,26 +349,6 @@ public class Chat extends AppCompatActivity {
             dateTxt.setText(date+", "+time);
 
             dateTab.setText(date);
-            // lp2.gravity = Gravity.RIGHT;
-            //textView.setBackgroundResource(R.drawable.rounded_corner2);
-
-//
-//            NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-//            Intent notificationIntent = new Intent(getApplicationContext(), ChatUSer.class);
-//            notificationIntent.putExtra("name", "");
-//            notificationIntent.putExtra("value", "1");
-//            PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, notificationIntent, 0);
-//
-//            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(Chat.this)
-//                    .setSmallIcon(R.drawable.message)
-//                    .setContentTitle("New Message from " + name)
-//                    .setContentText(message)
-//                    .setOnlyAlertOnce(true)
-//                    .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-//                    .setContentIntent(contentIntent);
-//            mBuilder.setAutoCancel(true);
-//            mBuilder.setLocalOnly(false);
-//            mNotificationManager.notify(1, mBuilder.build());
 
         }
 
@@ -375,64 +356,6 @@ public class Chat extends AppCompatActivity {
         layout.addView(headerView);
         scrollView.fullScroll(View.FOCUS_DOWN);
     }
-
-    private void LoginForChat() {
-
-//        String url = "https://chatapp-25d11.firebaseio.com/users.json";
-        String url = "https://pinerria-home-business.firebaseio.com/users.json";
-        final ProgressDialog pd = new ProgressDialog(getApplicationContext());
-        pd.setMessage("Loading...");
-        pd.show();
-
-        StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>(){
-            @Override
-            public void onResponse(String s) {
-                Log.d("gfdgdfgdfgsdfgdf",s);
-                if(s.equals("null")){
-                    Toast.makeText(getApplicationContext(), "user not found", Toast.LENGTH_LONG).show();
-                }
-                else{
-                    try {
-                        JSONObject obj = new JSONObject(s);
-
-                        if(!obj.has(user)){
-                            Toast.makeText(getApplicationContext(), "user not found", Toast.LENGTH_LONG).show();
-                        }
-                        else if(obj.getJSONObject(user).getString("password").equals(pass)){
-                            UserDetails.username = user;
-                            UserDetails.password = pass;
-
-//                            UserDetails.chatWith = UserDetails.chatWith ;
-//                            Intent intent=new Intent(getApplicationContext(),Chat.class);
-//                            intent.putExtra("nameValue",jsonObject.optString("user_name"));
-//                            intent.putExtra("id",jsonObject.optString("user_id"));
-//                            intent.putExtra("value","0");
-//                            startActivity(intent);
-                        }
-                        else {
-                            Toast.makeText(getApplicationContext(), "incorrect password", Toast.LENGTH_LONG).show();
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                pd.dismiss();
-            }
-        },new Response.ErrorListener(){
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                System.out.println("" + volleyError);
-                pd.dismiss();
-            }
-        });
-
-        RequestQueue rQueue = Volley.newRequestQueue(getApplicationContext());
-        rQueue.add(request);
-
-
-    }
-
 
 
 }
