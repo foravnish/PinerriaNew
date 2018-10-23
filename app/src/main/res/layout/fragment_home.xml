@@ -4,15 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/list_bg_color"
+    android:background="@color/white"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Fragments.Home">
 
     <RelativeLayout
         android:id="@+id/rela1"
         android:layout_width="match_parent"
-        android:layout_height="160dp"
-       >
+        android:layout_height="160dp">
 
 
         <android.support.v4.view.ViewPager

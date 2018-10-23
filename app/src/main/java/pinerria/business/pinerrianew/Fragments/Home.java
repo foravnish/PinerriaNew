@@ -264,12 +264,13 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
                                 AllBaner.add(new Const(jsonObject.optString("id"), jsonObject.optString("title"), jsonObject.optString("image"), jsonObject.optString("url"), null, null, null,null,null,null));
                            // }
 
-                            mCustomPagerAdapter2=new CustomPagerAdapter2(getActivity());
-                            viewPager2.setAdapter(mCustomPagerAdapter2);
-                            indicator2.setViewPager(viewPager2);
-                           // indicator2.setViewPager(viewPager2);
-                            mCustomPagerAdapter2.notifyDataSetChanged();
-
+                            if (getActivity()!=null) {
+                                mCustomPagerAdapter2 = new CustomPagerAdapter2(getActivity());
+                                viewPager2.setAdapter(mCustomPagerAdapter2);
+                                indicator2.setViewPager(viewPager2);
+                                // indicator2.setViewPager(viewPager2);
+                                mCustomPagerAdapter2.notifyDataSetChanged();
+                            }
                         }
 //                        final Handler handler = new Handler();
 //
