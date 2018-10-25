@@ -94,7 +94,8 @@ public class DetailForJob extends Fragment {
             heading.setText(jsonObject.optString("heading"));
             description.setText(jsonObject.optString("description"));
             address.setText(jsonObject.optString("address")+", "+jsonObject.optString("city_name"));
-            phone.setText(jsonObject.optString("mobile"));
+//            phone.setText(jsonObject.optString("mobile"));
+            phone.setText("Enabled");
 
 
             NumberFormat formatter = NumberFormat.getCurrencyInstance(new Locale("en", "IN"));

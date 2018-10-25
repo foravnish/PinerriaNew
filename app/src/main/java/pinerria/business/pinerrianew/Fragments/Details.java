@@ -189,7 +189,8 @@ public class Details extends Fragment {
             comName.setText(jsonObject.optString("user_name"));
             nameUser.setText(jsonObject.optString("bussiness_name"));
             address.setText(jsonObject.optString("address")+" "+jsonObject.optString("city_name"));
-            phone.setText(jsonObject.optString("primary_mobile"));
+//            phone.setText(jsonObject.optString("primary_mobile"));
+            phone.setText("Enabled");
 
             totlaUsers.setText(" ("+jsonObject.optString("total_rating_user")+" Reviews)");
             desc.setText(jsonObject.optString("desc"));
