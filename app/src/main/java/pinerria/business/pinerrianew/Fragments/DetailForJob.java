@@ -133,7 +133,6 @@ public class DetailForJob extends Fragment {
                 @Override
                 public void onClick(View view) {
 
-
                     if (MyPrefrences.getUserLogin(getActivity())==true) {
 
                         UserDetails.chatWith = jsonObject.optString("mobile");
@@ -144,8 +143,6 @@ public class DetailForJob extends Fragment {
                         startActivity(intent);
 
                         Log.d("dfsdfsdfsdfgsdgdfgertg",jsonObject.optString("mobile"));
-
-
 
                     }
                     else{
