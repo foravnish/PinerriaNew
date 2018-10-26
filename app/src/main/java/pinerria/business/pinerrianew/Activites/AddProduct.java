@@ -918,7 +918,7 @@ public class AddProduct extends AppCompatActivity {
 
         if (checkBobPrice.isChecked()) {
         if (TextUtils.isEmpty(minPrice.getText().toString())) {
-                Util.errorDialog(AddProduct.this, "Please 'Starting Price'");
+                Util.errorDialog(AddProduct.this, "Please enter 'Starting Price'");
                 minPrice.requestFocus();
                 return false;
             }

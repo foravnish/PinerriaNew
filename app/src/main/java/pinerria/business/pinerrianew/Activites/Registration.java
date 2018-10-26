@@ -561,8 +561,8 @@ public class Registration extends AppCompatActivity {
 
                                             errorDialog(Registration.this,"Registration successful.\nPlease Login.");
 
-                                            startActivity(new Intent(Registration.this,   Login.class));
-                                            finish();
+//                                            startActivity(new Intent(Registration.this,   Login.class));
+//                                            finish();
 
                                         } else {
                                             Toast.makeText(Registration.this, "User already exists", Toast.LENGTH_LONG).show();
