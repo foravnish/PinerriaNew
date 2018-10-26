@@ -51,6 +51,8 @@ public class ChatUSer extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_user);
 
+        HomeAct.chat_flag=true;
+
         usersList = (ListView)findViewById(R.id.usersList);
         noUsersText = (TextView)findViewById(R.id.noUsersText);
         backBtn = (ImageView) findViewById(R.id.backBtn);

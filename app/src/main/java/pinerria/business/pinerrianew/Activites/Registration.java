@@ -557,7 +557,10 @@ public class Registration extends AppCompatActivity {
                                             reference2.child(mob).child("name").setValue(namePerson.getText().toString());
                                             reference3.child(mob).child("userId").setValue(jsonObject1.optString("id").toString());
 
-                                            Toast.makeText(getApplicationContext(), "Registration Successfully... Please Login.", Toast.LENGTH_SHORT).show();
+//                                            Toast.makeText(getApplicationContext(), "Registration successful.\nPlease Login.", Toast.LENGTH_SHORT).show();
+
+                                            errorDialog(Registration.this,"Registration successful.\nPlease Login.");
+
                                             startActivity(new Intent(Registration.this,   Login.class));
                                             finish();
 

@@ -143,6 +143,7 @@ public class HomeAct extends AppCompatActivity
 
     String newVersion;
     String currentVersion;
+    public  static boolean chat_flag;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -150,6 +151,7 @@ public class HomeAct extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        HomeAct.chat_flag=true;
 
         profile=findViewById(R.id.profile);
         home=findViewById(R.id.home);
@@ -406,12 +408,7 @@ public class HomeAct extends AppCompatActivity
             nav_my_jobs.setVisible(false);
         }
 
-
-
-
-
         Log.d("gfsdgdfgdfgdfgdf",getIntent().getStringExtra("userType"));
-
 
         if (getIntent().getStringExtra("userType").equalsIgnoreCase("2")){
             Fragment fragment = new Packages();
@@ -426,21 +423,19 @@ public class HomeAct extends AppCompatActivity
             FragmentTransaction ft = manager.beginTransaction();
             ft.replace(R.id.content_frame, fragment).commit();
             ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout, R.anim.frag_fade_right, R.anim.frag_fad_left);
-
         }
+
         else if (getIntent().getStringExtra("userType").equalsIgnoreCase("jobs")){
             Fragment fragment = new MyJobs();
             FragmentManager manager = getSupportFragmentManager();
             FragmentTransaction ft = manager.beginTransaction();
             ft.replace(R.id.content_frame, fragment).commit();
             ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout, R.anim.frag_fade_right, R.anim.frag_fad_left);
-
         }
         else if (getIntent().getStringExtra("userType").equalsIgnoreCase("chatscr")){
             LoginForChat2();
-
         }
-          else {
+        else {
             Fragment fragment = new Home();
             FragmentManager manager = getSupportFragmentManager();
             FragmentTransaction ft = manager.beginTransaction();

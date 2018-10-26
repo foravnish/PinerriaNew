@@ -81,6 +81,8 @@ public class Chat extends AppCompatActivity {
         toolbarTxtName = (TextView) findViewById(R.id.toolbarTxtName);
 
 
+        HomeAct.chat_flag=false;
+
         Log.d("fgdfgdfgdfgdgdr1",getIntent().getStringExtra("nameValue"));
         Log.d("fgdfgdfgdfgdgdr2",UserDetails.chatWith );
         Log.d("fgdfgdfgdfgdgdr3",getIntent().getStringExtra("id"));
@@ -108,7 +110,7 @@ public class Chat extends AppCompatActivity {
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                HomeAct.chat_flag=true;
                 finish();
             }
         });
@@ -253,6 +255,12 @@ public class Chat extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        HomeAct.chat_flag=true;
     }
 
     private void chatNotificationApi(final String msg) {
