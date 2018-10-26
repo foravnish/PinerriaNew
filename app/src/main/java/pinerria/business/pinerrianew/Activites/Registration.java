@@ -598,10 +598,6 @@ public class Registration extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
-
-
-
             }
         }, new Response.ErrorListener() {
             @Override

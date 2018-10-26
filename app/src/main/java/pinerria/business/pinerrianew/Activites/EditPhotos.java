@@ -53,6 +53,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -373,7 +375,9 @@ public class EditPhotos extends AppCompatActivity {
             Log.d("sdfasafsdfsdfsdfsdf",f.toString());
             Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f), null, options);
 
-
+//            ByteArrayOutputStream out = new ByteArrayOutputStream();
+//            b1.compress(Bitmap.CompressFormat.JPEG, 300, out);
+//            Bitmap b = BitmapFactory.decodeStream(new ByteArrayInputStream(out.toByteArray()));
 
 
             String path2 = null;
