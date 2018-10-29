@@ -387,7 +387,7 @@ public class SubCategory extends Fragment {
 //                    .build();
 
             Picasso.with(getActivity())
-                    .load(AllProducts.get(position).get("image").replace(" ","%20"))
+                        .load(AllProducts.get(position).get("image").replace(" ","%20"))
                     .fit()
                    // .transform(transformation)
                     .into(viewholder.subCatImage);

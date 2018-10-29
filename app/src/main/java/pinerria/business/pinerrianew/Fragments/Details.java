@@ -306,8 +306,6 @@ public class Details extends Fragment {
 
             }
 
-
-
             imgFav.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
