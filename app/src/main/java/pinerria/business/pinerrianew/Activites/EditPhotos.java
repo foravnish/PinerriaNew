@@ -53,6 +53,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -80,7 +82,7 @@ public class EditPhotos extends AppCompatActivity {
 
     String filepath1, fileName1 =null;
     ProgressDialog progress;
-    TextView profileBack;
+    TextView textNote;
     Dialog dialog;
 
     ImageView image1;
@@ -104,6 +106,7 @@ public class EditPhotos extends AppCompatActivity {
         setContentView(R.layout.activity_edit_photos);
         img1=findViewById(R.id.img1);
         image1=(ImageView)findViewById(R.id.imageV1);
+        textNote=(TextView) findViewById(R.id.textNote);
 
 
         gridview=(GridView) findViewById(R.id.gridview);
@@ -255,9 +258,14 @@ public class EditPhotos extends AppCompatActivity {
                         gridview.setVisibility(View.VISIBLE);
                         //  imageNoListing.setVisibility(View.GONE);
                         JSONArray jsonArray=response.getJSONArray("message");
+                        if (jsonArray.length()>=1){
+                            textNote.setVisibility(View.VISIBLE);
+                        }
+                        else {
+                            textNote.setVisibility(View.GONE);
+                        }
                         for (int i=0;i<jsonArray.length();i++){
                             JSONObject jsonObject=jsonArray.getJSONObject(i);
-
 
                             HashMap<String,String> map=new HashMap();
                             map.put("id", jsonObject.optString("id"));
@@ -367,7 +375,9 @@ public class EditPhotos extends AppCompatActivity {
             Log.d("sdfasafsdfsdfsdfsdf",f.toString());
             Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f), null, options);
 
-
+//            ByteArrayOutputStream out = new ByteArrayOutputStream();
+//            b1.compress(Bitmap.CompressFormat.JPEG, 300, out);
+//            Bitmap b = BitmapFactory.decodeStream(new ByteArrayInputStream(out.toByteArray()));
 
 
             String path2 = null;

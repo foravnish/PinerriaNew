@@ -18,15 +18,6 @@
             android:title="Profile" />
 
     </group>
-
-    <group android:checkableBehavior="single"
-        android:id="@+id/group3">
-        <item
-            android:id="@+id/nav_manage_business"
-            android:icon="@drawable/business"
-            android:title="Manage Business" />
-
-    </group>
     <group android:checkableBehavior="single"
         android:id="@+id/group4">
 
@@ -36,6 +27,56 @@
             android:title="Add Business" />
 
     </group>
+
+
+    <group android:checkableBehavior="single"
+        android:id="@+id/groupnotification">
+        <item
+            android:id="@+id/nav_groupnotification"
+            android:icon="@drawable/notifa"
+            android:title="Notification" />
+
+    </group>
+    <group android:checkableBehavior="single"
+        android:id="@+id/group3">
+        <item
+            android:id="@+id/nav_manage_business"
+            android:icon="@drawable/business"
+            android:title="Manage Business" />
+
+    </group>
+
+    <group android:checkableBehavior="single"
+        android:id="@+id/group9">
+        <item
+            android:id="@+id/nav_package"
+            android:icon="@drawable/package_icon"
+            android:title="Make Premium" />
+    </group>
+
+    <group android:checkableBehavior="single"
+        android:id="@+id/group8">
+        <item
+            android:id="@+id/nav_add_banner"
+            android:icon="@drawable/banner_req"
+            android:title="Request a Banner" />
+    </group>
+
+    <group android:checkableBehavior="single"
+        android:id="@+id/group12">
+        <item
+            android:id="@+id/nav_pay_order"
+            android:icon="@drawable/pay_my_order"
+            android:title="Pay My Order" />
+    </group>
+    <group android:checkableBehavior="single"
+        android:id="@+id/groupc_policy">
+        <item
+            android:id="@+id/nav_gst_detail"
+            android:icon="@drawable/addgstdetail"
+            android:title="Add GST Detail" />
+    </group>
+
     <group android:checkableBehavior="single"
         android:id="@+id/group5">
         <item
@@ -51,37 +92,29 @@
             android:icon="@drawable/jobs"
             android:title="Manage Jobs" />
     </group>
-    <group android:checkableBehavior="single"
-        android:id="@+id/group7">
-        <item
-            android:id="@+id/nav_my_product"
-            android:icon="@drawable/ic_menu_manage"
-            android:visible="false"
-            android:title="My Products" />
-    </group>
-    <group android:checkableBehavior="single"
-        android:id="@+id/group8">
-        <item
-            android:id="@+id/nav_add_banner"
-            android:icon="@drawable/banner_req"
-            android:title="Request a Banner" />
-    </group>
-
-    <group android:checkableBehavior="single"
-        android:id="@+id/groupc_policy">
-        <item
-            android:id="@+id/nav_gst_detail"
-            android:icon="@drawable/banner_req"
-            android:title="Add GST Detail" />
-    </group>
 
 
     <group android:checkableBehavior="single"
-        android:id="@+id/group9">
+        android:id="@+id/group11">
         <item
-            android:id="@+id/nav_package"
-            android:icon="@drawable/package_icon"
-            android:title="Packages" />
+            android:id="@+id/nav_view_jobs"
+            android:icon="@drawable/view_jobs"
+            android:title="View Jobs" />
+    </group>
+
+    <group android:checkableBehavior="single"
+        android:id="@+id/group_mess_to_admin">
+        <item
+            android:id="@+id/nav_mass_to_admin"
+            android:icon="@drawable/messagetoadmin"
+            android:title="Message To Admin" />
+    </group>
+    <group android:checkableBehavior="single"
+        android:id="@+id/group_fav">
+        <item
+            android:id="@+id/nav_my_fav"
+            android:icon="@drawable/favirate"
+            android:title="My Favourite" />
     </group>
     <group android:checkableBehavior="single"
         android:id="@+id/group10">
@@ -91,25 +124,44 @@
             android:title="Transactions" />
     </group>
     <group android:checkableBehavior="single"
-        android:id="@+id/group11">
+        android:id="@+id/group_call_his">
         <item
-            android:id="@+id/nav_view_jobs"
-            android:icon="@drawable/view_jobs"
-            android:title="View Jobs" />
+            android:id="@+id/nav_call_his"
+            android:icon="@drawable/mycalls"
+            android:title="My Calls" />
     </group>
+
+
     <group android:checkableBehavior="single"
-        android:id="@+id/group12">
+        android:id="@+id/grouptnc">
         <item
-            android:id="@+id/nav_pay_order"
-            android:icon="@drawable/pay_my_order"
-            android:title="Pay My Order" />
+            android:id="@+id/nav_tnc"
+            android:icon="@drawable/termscondition"
+            android:title="Terms &amp; Conditions"  />
     </group>
+
     <group android:checkableBehavior="single"
         android:id="@+id/group13">
         <item
             android:id="@+id/nav_contact"
             android:icon="@drawable/contact_us_icon"
             android:title="Contact Us"  />
+    </group>
+
+    <group android:checkableBehavior="single"
+        android:id="@+id/group_faq">
+        <item
+            android:id="@+id/nav_faqs"
+            android:icon="@drawable/information"
+            android:title="FAQs"  />
+    </group>
+
+    <group android:checkableBehavior="single"
+        android:id="@+id/group_aboutus">
+        <item
+            android:id="@+id/nav_about"
+            android:icon="@drawable/questionsabout"
+            android:title="About Us"  />
     </group>
     <group android:checkableBehavior="single"
         android:id="@+id/group14">
@@ -118,6 +170,38 @@
             android:icon="@drawable/logout_new"
             android:title="Logout" />
     </group>
+
+
+
+
+
+
+
+
+
+
+    <group android:checkableBehavior="single"
+        android:id="@+id/group7">
+        <item
+            android:id="@+id/nav_my_product"
+            android:icon="@drawable/ic_menu_manage"
+            android:visible="false"
+            android:title="My Products" />
+    </group>
+
+
+
+
+    <group android:checkableBehavior="single"
+        android:id="@+id/group_rating">
+        <item
+            android:id="@+id/nav_rating"
+            android:icon="@drawable/myrating"
+            android:visible="false"
+            android:title="My Ratings" />
+    </group>
+
+
 
 
 

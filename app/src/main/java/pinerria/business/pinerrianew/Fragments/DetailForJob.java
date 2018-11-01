@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,8 +51,8 @@ public class DetailForJob extends Fragment {
         // Required empty public constructor
     }
 
-    TextView comName,heading,address,phone,shareDetail,description,salary,experience,full_part_time,date,jobId;
-    Button call,chat_now;
+    TextView comName,heading,address,phone,description,salary,experience,full_part_time,date,jobId;
+    LinearLayout call,chat_now,shareDetail;
     NetworkImageView imageView;
     JSONObject jsonObject;
 
@@ -85,7 +86,6 @@ public class DetailForJob extends Fragment {
             imageView.setImageUrl(jsonObject.optString("image").toString().replace(" ","%20"),imageLoader);
 
             HomeAct.title.setText(jsonObject.optString("heading"));
-            comName =  view.findViewById(R.id.comName);
             heading =  view.findViewById(R.id.heading);
             address =  view.findViewById(R.id.address);
             phone =  view.findViewById(R.id.phone);
@@ -93,8 +93,9 @@ public class DetailForJob extends Fragment {
             comName.setText(jsonObject.optString("user_name").toUpperCase());
             heading.setText(jsonObject.optString("heading"));
             description.setText(jsonObject.optString("description"));
-            address.setText(jsonObject.optString("city_name")+" "+jsonObject.optString("state_name"));
-            phone.setText(jsonObject.optString("mobile"));
+            address.setText(jsonObject.optString("address")+", "+jsonObject.optString("city_name"));
+//            phone.setText(jsonObject.optString("mobile"));
+            phone.setText("Enabled");
 
 
             NumberFormat formatter = NumberFormat.getCurrencyInstance(new Locale("en", "IN"));
@@ -103,7 +104,7 @@ public class DetailForJob extends Fragment {
             salary.setText(currency);
 
             experience.setText(jsonObject.optString("experience"));
-            address.setText(jsonObject.optString("city_name")+", "+jsonObject.optString("state_name")+", "+jsonObject.optString("zone_name")+", India");
+          //  address.setText(jsonObject.optString("city_name")+", "+jsonObject.optString("zone_name"));
             full_part_time.setText(jsonObject.optString("full_part_time"));
             jobId.setText(jsonObject.optString("user_name"));
             String year=jsonObject.optString("created_date").substring(0,4);
@@ -117,7 +118,7 @@ public class DetailForJob extends Fragment {
                     Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
                     sharingIntent.setType("text/plain");
 //                String shareBody =comName.getText().toString()+ " "+phone.getText().toString();
-                    String shareBody ="Hey, This Job is good, "+comName.getText().toString()+ " "+phone.getText().toString()+", Sharing";
+                    String shareBody = "Hi, \nThere is a job on Pinerria which might be of interest to you.\n"+heading.getText().toString()+"\n"+salary.getText().toString()+"\n"+address.getText().toString()+"\n"+"Please check it out.\n"+comName.getText().toString();
 
                     sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Details");
                     sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT,shareBody);
@@ -132,17 +133,16 @@ public class DetailForJob extends Fragment {
                 @Override
                 public void onClick(View view) {
 
-
                     if (MyPrefrences.getUserLogin(getActivity())==true) {
 
                         UserDetails.chatWith = jsonObject.optString("mobile");
                         Intent intent=new Intent(getActivity(), Chat.class);
-                        intent.putExtra("name",jsonObject.optString("user_name"));
+                        intent.putExtra("nameValue",jsonObject.optString("user_name"));
+                        intent.putExtra("id",jsonObject.optString("user_id"));
+                        intent.putExtra("value1","0");
                         startActivity(intent);
 
                         Log.d("dfsdfsdfsdfgsdgdfgertg",jsonObject.optString("mobile"));
-
-
 
                     }
                     else{
@@ -187,8 +187,7 @@ public class DetailForJob extends Fragment {
 
 
 
-            if (jsonObject.optString("mobile_status").equals("1")){
-
+            if (jsonObject.optString("mobile_status").equals("Yes")){
                 call.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -261,7 +260,7 @@ public class DetailForJob extends Fragment {
             }
 
             else {
-                call.setTextColor(Color.parseColor("#545454"));
+              //  call.setTextColor(Color.parseColor("#545454"));
                 phone.setText("N/A");
                 call.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -269,7 +268,7 @@ public class DetailForJob extends Fragment {
 
                         if (MyPrefrences.getUserLogin(getActivity())==true) {
 
-                            Toast.makeText(getActivity(), "Seller's  De-activate call feature now.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "The Job poster has not enabled the call feature.", Toast.LENGTH_SHORT).show();
 
                         }
                         else{

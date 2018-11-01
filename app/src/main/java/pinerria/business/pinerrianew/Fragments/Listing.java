@@ -1,8 +1,10 @@
 package pinerria.business.pinerrianew.Fragments;
 
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -19,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -54,6 +57,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -65,7 +69,7 @@ import pinerria.business.pinerrianew.Utils.Api;
 import pinerria.business.pinerrianew.Utils.AppController;
 import pinerria.business.pinerrianew.Utils.MyPrefrences;
 import pinerria.business.pinerrianew.Utils.Util;
-import pinerria.business.pinerrianew.gcm.GCMRegistrationIntentService;
+
 
 
 /**
@@ -94,13 +98,14 @@ public class Listing extends Fragment {
     JSONArray jsonArray;
     JSONArray jsonArrayLocation;
     ImageView imageNoListing;
-    TextView dateWise,ratingWise,locationWise;
+    TextView ratingWise,locationWise;
+    LinearLayout nearMeLayout;
 
 //    ImageView imageNoListing;
 
     private GoogleApiClient googleApiClient;
     String lat,longi;
-
+    String nearMeValue;
 
 
 
@@ -115,7 +120,7 @@ public class Listing extends Fragment {
         expListView = (GridView) view.findViewById(R.id.lvExp);
         imageNoListing =  view.findViewById(R.id.imageNoListing);
         ratingWise =  view.findViewById(R.id.ratingWise);
-        dateWise =  view.findViewById(R.id.dateWise);
+        nearMeLayout =  view.findViewById(R.id.nearMeLayout);
         locationWise =  view.findViewById(R.id.locationWise);
 //        imageNoListing = (ImageView) view.findViewById(R.id.imageNoListing);
 //        fabButton = (FloatingActionButton) view.findViewById(R.id.fab);
@@ -141,13 +146,47 @@ public class Listing extends Fragment {
         Log.d("fgsdgsdfgsdfgdfsgdgd", String.valueOf(HomeAct.latitude));
         Log.d("fgsdgsdfgsdfgdfsgdgd", String.valueOf(HomeAct.longitude));
 
-        dateWise.setOnClickListener(new View.OnClickListener() {
+
+
+        nearMeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Util.showPgDialog(dialog);
-                listingDataOfCom("off");
+//                Util.showPgDialog(dialog);
+//                listingDataOfCom("off");
+
+                if (String.valueOf(HomeAct.latitude).equals("null")){
+                    Log.d("dfgdfgdfgdfghd","sdfdsgd");
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setMessage("Please click on GPS on side menu")
+                            .setCancelable(false)
+                            .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+
+                                    dialog.cancel();
+
+                                }
+                            });
+
+
+                    AlertDialog alert = builder.create();
+                    //Setting the title manually
+                    alert.setTitle("Pinerria");
+                    alert.show();
+
+
+                }
+                else{
+
+                    popNearMe();
+
+
+                }
+
             }
         });
+
+
         ratingWise.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -209,88 +248,6 @@ public class Listing extends Fragment {
 
         AllProducts.clear();
 
-
-
-//        RequestQueue queue = Volley.newRequestQueue(getActivity());
-//        StringRequest strReq = new StringRequest(Request.Method.POST,
-//                Api.subCategoryBusiness, new Response.Listener<String>() {
-//            @Override
-//            public void onResponse(String response) {
-//                Util.cancelPgDialog(dialog);
-//                Log.e("dfsjfdfsdfgd", "Login Response: " + response);
-//
-//                try {
-//                    JSONObject jsonObject1=new JSONObject(response);
-//                    // if (jsonObject.getString("status").equalsIgnoreCase("success")){
-//
-//                    if (jsonObject1.getString("status").equalsIgnoreCase("success")){
-//
-//                        expListView.setVisibility(View.VISIBLE);
-//                        imageNoListing.setVisibility(View.GONE);
-//                        jsonArray=jsonObject1.getJSONArray("message");
-//                        for (int i=0;i<jsonArray.length();i++){
-//                            JSONObject jsonObject=jsonArray.getJSONObject(i);
-//
-//                            map=new HashMap();
-//                            map.put("id", jsonObject.optString("id"));
-//                            map.put("bussiness_name", jsonObject.optString("bussiness_name"));
-//                            map.put("city_name", jsonObject.optString("city_name"));
-//                            map.put("service_keyword", jsonObject.optString("service_keyword"));
-//                            map.put("image", jsonObject.optString("image"));
-//                            map.put("total_rating_user", jsonObject.optString("total_rating_user"));
-//                            map.put("total_rating", jsonObject.optString("total_rating"));
-//                            map.put("my_favourite", jsonObject.optString("my_favourite"));
-//
-//                            Adapter adapter=new Adapter();
-//                            expListView.setAdapter(adapter);
-//                            AllProducts.add(map);
-//                        }
-//                    }
-//                    else{
-//                        expListView.setVisibility(View.GONE);
-//                        imageNoListing.setVisibility(View.VISIBLE);
-//                    }
-//
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//
-//
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                Util.cancelPgDialog(dialog);
-//                Log.e("fdgdfgdfgd", "Login Error: " + error.getMessage());
-//                Toast.makeText(getActivity(),"Please Connect to the Internet or Wrong Password", Toast.LENGTH_LONG).show();
-//            }
-//        }){
-//
-//            @Override
-//            protected Map<String, String> getParams() throws AuthFailureError {
-//                Log.e("fgdfgdfgdf","Inside getParams");
-//
-//                // Posting parameters to login url
-//                Map<String, String> params = new HashMap<>();
-//                params.put("sort_rating", wiseData);
-//                params.put("sub_category", getArguments().getString("id"));
-//                params.put("city_id", MyPrefrences.getCityID(getActivity()));
-//                params.put("user_id", MyPrefrences.getUserID(getActivity()));
-//
-//                return params;
-//            }
-//
-////                        @Override
-////                        public Map<String, String> getHeaders() throws AuthFailureError {
-////                            Log.e("fdgdfgdfgdfg","Inside getHeaders()");
-////                            Map<String,String> headers=new HashMap<>();
-////                            headers.put("Content-Type","application/x-www-form-urlencoded");
-////                            return headers;
-////                        }
-//        };
-//        // Adding request to request queue
-//        queue.add(strReq);
-
         if (String.valueOf(HomeAct.latitude).equals("null")){
             Log.d("dfgdfgdfgdfghd","sdfdsgd");
             lat="";
@@ -302,10 +259,15 @@ public class Listing extends Fragment {
         }
 
 
+        Log.d("gdfgdfgdfgd1",getArguments().getString("id"));
+        Log.d("gdfgdfgdfgd2",MyPrefrences.getUserID(getActivity()));
+        Log.d("gdfgdfgdfgd3",MyPrefrences.getCityID(getActivity()));
+        Log.d("gdfgdfgdfgd4",getArguments().getString("value"));
+        Log.d("gdfgdfgdfgd5",getArguments().getString("nearMe"));
 
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
                 Api.subCategoryBusiness+"?sort_rating="+wiseData+"&sub_category="+getArguments().getString("id")+"&user_id="+MyPrefrences.getUserID(getActivity())+"&city_id="+MyPrefrences.getCityID(getActivity())+
-                "&latitue="+lat+"&longitue="+longi+"&location_id=", null, new Response.Listener<JSONObject>() {
+                "&latitue="+lat+"&longitue="+longi+"&location_id="+getArguments().getString("value")+"&near_me="+getArguments().getString("nearMe"), null, new Response.Listener<JSONObject>() {
 
             @Override
             public void onResponse(JSONObject response) {
@@ -335,6 +297,9 @@ public class Listing extends Fragment {
                             map.put("total_rating_user", jsonObject.optString("total_rating_user"));
                             map.put("total_rating", jsonObject.optString("total_rating"));
                             map.put("my_favourite", jsonObject.optString("my_favourite"));
+                            map.put("min_price", jsonObject.optString("min_price"));
+                            map.put("max_price", jsonObject.optString("max_price"));
+                            map.put("premium", jsonObject.optString("premium"));
 
                             Adapter adapter=new Adapter();
                             expListView.setAdapter(adapter);
@@ -377,20 +342,11 @@ public class Listing extends Fragment {
 
     public class Viewholder{
         ImageView imgFav,stars;
-//        MaterialFavoriteButton imgFav;
-        TextView address,name,totlareview,area,keyword,totlaUsers;
-
-        ImageView callNow1;
-        LinearLayout liner,linerLayoutOffer;
+        TextView address,name,price,area,keyword,totlaUsers,distance;
+        LinearLayout priceLayout;
         MaterialRatingBar rating;
-//        NetworkImageView imgaeView;
         RoundedImageView imgaeView;
-        CardView cardView;
-     //   ShimmerTextView offersText;
-     //   Shimmer shimmer;
-        ImageView img1,img2,img3,img4,img5;
-        LinearLayout footer_layout;
-
+        LinearLayout linerColor;
     }
     class Adapter extends BaseAdapter {
 
@@ -400,9 +356,9 @@ public class Listing extends Fragment {
         Adapter() {
             inflater = (LayoutInflater) getActivity().getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-//            if (inflater == null) {
-//                throw new AssertionError("LayoutInflater not found.");
-//            }
+            if (inflater == null) {
+                throw new AssertionError("LayoutInflater not found.");
+            }
         }
 
         @Override
@@ -438,8 +394,13 @@ public class Listing extends Fragment {
 //            viewholder.distance=convertView.findViewById(R.id.distance);
             viewholder.imgaeView=convertView.findViewById(R.id.imgaeView);
             viewholder.totlaUsers=convertView.findViewById(R.id.totlaUsers);
+            viewholder.price=convertView.findViewById(R.id.price);
+//            viewholder.stars=convertView.findViewById(R.id.stars);
+            viewholder.linerColor=convertView.findViewById(R.id.linerColor);
 //
             viewholder.keyword=convertView.findViewById(R.id.keyword);
+            viewholder.distance=convertView.findViewById(R.id.distance);
+            viewholder.priceLayout=convertView.findViewById(R.id.priceLayout);
 
             viewholder.name.setText(AllProducts.get(position).get("bussiness_name"));
             viewholder.area.setText(AllProducts.get(position).get("city_name"));
@@ -449,9 +410,18 @@ public class Listing extends Fragment {
                 viewholder.rating.setRating(Float.parseFloat(AllProducts.get(position).get("total_rating")));
             }
 
+            if (AllProducts.get(position).get("min_price").equals("")){
+                viewholder.priceLayout.setVisibility(View.GONE);
+            }
+            else{
+                viewholder.priceLayout.setVisibility(View.VISIBLE);
+                viewholder.price.setText("Price ₹ "+AllProducts.get(position).get("min_price"));
 
-//            ImageLoader imageLoader=AppController.getInstance().getImageLoader();
-//            viewholder.imgaeView.setImageUrl(AllProducts.get(position).get("image"),imageLoader);
+                if (!AllProducts.get(position).get("max_price").equals("")){
+                    viewholder.price.setText("Price ₹ "+AllProducts.get(position).get("min_price")+"-"+AllProducts.get(position).get("max_price"));
+                }
+
+            }
 
 
             Picasso.with(getActivity())
@@ -557,20 +527,22 @@ public class Listing extends Fragment {
                 e.printStackTrace();
             }
 //
-//            try {
-//                if (AllProducts.get(position).get("premium").equalsIgnoreCase("Yes")){
+            try {
+                if (AllProducts.get(position).get("premium").equalsIgnoreCase("Yes")){
 //                    viewholder.stars.setVisibility(View.VISIBLE);
+                    viewholder.linerColor.setVisibility(View.VISIBLE);
 //                    viewholder.cardView.setCardBackgroundColor(Color.parseColor("#FFFDF4BE"));
 //                    viewholder.callNow1.setVisibility(View.VISIBLE);
-//                }
-//                else if (AllProducts.get(position).get("premium").equalsIgnoreCase("No")){
+                }
+                else if (AllProducts.get(position).get("premium").equalsIgnoreCase("No")){
 //                    viewholder.stars.setVisibility(View.GONE);
+                    viewholder.linerColor.setVisibility(View.GONE);
 //                    viewholder.cardView.setCardBackgroundColor(Color.parseColor("#ffffff"));
 //                    viewholder.callNow1.setVisibility(View.GONE);
-//                }
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 //
 //
 //            try {
@@ -880,28 +852,35 @@ public class Listing extends Fragment {
 //        });
 
 
-        Log.d("fgdgdfgdfgdfg", String.valueOf(jsonArrayLocation));
-        dialog1.show();
-        AllProductsLocation.clear();
-        for (int i=0;i<jsonArrayLocation.length();i++){
-            JSONObject jsonObject= null;
-            try {
-                jsonObject = jsonArrayLocation.getJSONObject(i);
-            } catch (JSONException e) {
-                e.printStackTrace();
+        try {
+            Log.d("fgdgdfgdfgdfg", String.valueOf(jsonArrayLocation));
+            dialog1.show();
+            AllProductsLocation.clear();
+            for (int i=0;i<jsonArrayLocation.length();i++){
+                JSONObject jsonObject= null;
+                try {
+                    jsonObject = jsonArrayLocation.getJSONObject(i);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                HashMap<String,String> map=new HashMap();
+                map.put("location_id",jsonObject.optString("location_id"));
+                map.put("location",jsonObject.optString("location_name"));
+
+
+                AdapterLocation  adapter=new AdapterLocation ();
+                lvExp.setAdapter(adapter);
+                AllProductsLocation.add(map);
+
             }
+        } catch (Exception e) {
 
-            HashMap<String,String> map=new HashMap();
-            map.put("location_id",jsonObject.optString("location_id"));
-            map.put("location",jsonObject.optString("location_name"));
+            dialog1.dismiss();
 
-
-            AdapterLocation  adapter=new AdapterLocation ();
-            lvExp.setAdapter(adapter);
-            AllProductsLocation.add(map);
-
+            Toast.makeText(getActivity(), "There are no Area Here.", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
         }
-
 
 
 //        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
@@ -975,6 +954,81 @@ public class Listing extends Fragment {
     }
 
 
+
+    private void popNearMe() {
+
+        dialog1 = new Dialog(getActivity());
+        dialog1.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog1.setContentView(R.layout.alertdialog_near_me);
+        dialog1.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog1.show();
+
+
+
+
+        final RadioButton radio1 = (RadioButton) dialog1.findViewById(R.id.radio1);
+        final RadioButton radio2 = (RadioButton) dialog1.findViewById(R.id.radio2);
+        final RadioButton radio3 = (RadioButton) dialog1.findViewById(R.id.radio3);
+        final RadioButton radio4 = (RadioButton) dialog1.findViewById(R.id.radio4);
+
+        radio1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                nearMeValue="1";
+                dialog1.dismiss();
+
+
+                openFragmentForListing(nearMeValue);
+            }
+        });
+        radio2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                nearMeValue="3";
+                dialog1.dismiss();
+                openFragmentForListing(nearMeValue);
+            }
+        });
+
+
+        radio3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                nearMeValue="5";
+                dialog1.dismiss();
+                openFragmentForListing(nearMeValue);
+            }
+        });
+
+        radio4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                nearMeValue="all";
+                dialog1.dismiss();
+                openFragmentForListing(nearMeValue);
+            }
+        });
+
+
+    }
+
+    private void openFragmentForListing(String nearMeValue) {
+
+        Fragment fragment=new Listing();
+        FragmentManager manager=getActivity().getSupportFragmentManager();
+        Bundle bundle = new Bundle();
+        bundle.putString("id", getArguments().getString("id"));
+        bundle.putString("subcategory", getArguments().getString("subcategory"));
+        bundle.putString("value",value.toString());
+        bundle.putString("nearMe",nearMeValue.toString());
+
+        FragmentTransaction ft=manager.beginTransaction();
+        fragment.setArguments(bundle);
+        ft.replace(R.id.content_frame,fragment).addToBackStack(null).commit();
+
+    }
+
+
     class AdapterLocation extends BaseAdapter {
 
         LayoutInflater inflater;
@@ -1018,8 +1072,8 @@ public class Listing extends Fragment {
                 @Override
                 public void onClick(View view) {
 
-                    Log.d("sdfsdfsdfgsgs",AllProductsLocation.get(position).get("id"));
-                    data.add(AllProductsLocation.get(position).get("id"));
+                    Log.d("sdfsdfsdfgsgs",AllProductsLocation.get(position).get("location_id"));
+                    data.add(AllProductsLocation.get(position).get("location_id"));
                 }
             });
 
@@ -1029,21 +1083,17 @@ public class Listing extends Fragment {
 
                     value=data.toString().replace("[","").replace("]","").replace(" ","");
                     Log.d("fgdgdfgdfgdfgdfg",value.toString());
-                    Log.d("fgdgdfdfdfgdfgdfgdfg",getArguments().getString("fragmentKey"));
+                   // Log.d("fgdgdfdfdfgdfgdfgdfg",getArguments().getString("fragmentKey"));
                     // listingDataOfCom(getArguments().getString("value"));
                     dialog1.dismiss();
 
                     Fragment fragment=new Listing();
                     FragmentManager manager=getActivity().getSupportFragmentManager();
                     Bundle bundle = new Bundle();
-
-
-                    bundle.putString("id", AllProducts.get(position).get("id0"));
-                    bundle.putString("subcategory", AllProducts.get(position).get("subcategory0"));
-
-
-
+                    bundle.putString("id", getArguments().getString("id"));
+                    bundle.putString("subcategory", getArguments().getString("subcategory"));
                     bundle.putString("value",value.toString());
+                    bundle.putString("nearMe","");
                     FragmentTransaction ft=manager.beginTransaction();
                     fragment.setArguments(bundle);
                     ft.replace(R.id.content_frame,fragment).addToBackStack(null).commit();

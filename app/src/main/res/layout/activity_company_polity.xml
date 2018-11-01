@@ -87,7 +87,7 @@
                         android:layout_height="wrap_content"
                         android:hint="Company Name *"
                         android:textColor="@color/white"
-                        android:inputType="textPersonName"/>
+                        android:inputType="textCapSentences"/>
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -96,7 +96,7 @@
                     android:id="@+id/checkBob"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Check N/A for GST"
+                    android:text="Check the Box for no GST."
                     android:layout_marginTop="10dp"
                     android:buttonTint="@color/white"
                     android:textColor="@color/white"/>
@@ -129,7 +129,7 @@
                         android:hint="Tax Address *"
 
                         android:textColor="@color/white"
-                        android:inputType="textPersonName"/>
+                        android:inputType="textCapSentences"/>
 
                 </android.support.design.widget.TextInputLayout>
 

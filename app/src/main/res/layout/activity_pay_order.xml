@@ -115,11 +115,10 @@
                     android:id="@+id/checkBob"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Check N/A for GST"
+                    android:text="Check the Box for no GST"
                     android:layout_marginTop="10dp"
                     android:buttonTint="@color/white"
                     android:textColor="@color/white"/>
-
 
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
@@ -164,6 +163,23 @@
                         android:hint="Email Id *"
                         android:textColor="@color/white"
                         android:inputType="textEmailAddress"/>
+
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:theme="@style/TextLabel">
+
+                    <EditText
+                        android:id="@+id/mobileNo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Mobile No *"
+                        android:maxLength="10"
+                        android:textColor="@color/white"
+                        android:inputType="phone"/>
 
                 </android.support.design.widget.TextInputLayout>
 

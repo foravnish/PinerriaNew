@@ -349,7 +349,11 @@ public class ProfilePage extends AppCompatActivity {
                         tve_location=findViewById(R.id.tve_location);
 
                         tve_user_id.setText(jsonObject.optString("id"));
-                        personName.setText(jsonObject.optString("name"));
+                        String upperString = jsonObject.optString("name").substring(0,1).toUpperCase() + jsonObject.optString("name").substring(1);
+                        personName.setText(upperString);
+
+                       // personName.setText(jsonObject.optString("name"));
+
                         mobileNo.setText("+91 "+jsonObject.optString("mobile"));
                         tve_gender.setText(jsonObject.optString("gender"));
                         tve_rod.setText(jsonObject.optString("created_date"));

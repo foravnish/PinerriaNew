@@ -22,9 +22,12 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.SwitchCompat;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -46,7 +49,9 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.squareup.okhttp.MediaType;
@@ -81,12 +86,14 @@ import pinerria.business.pinerrianew.Utils.JSONParser;
 import pinerria.business.pinerrianew.Utils.MyPrefrences;
 import pinerria.business.pinerrianew.Utils.Util;
 
+import static android.text.Html.fromHtml;
+
 public class AddProduct extends AppCompatActivity {
 
 //    ImageView regiImage;
     CircleImageView regiImage;
     Button postAdd;
-    EditText rePass,password,mobile,nameBusiness,mobileSecond,landline,email,address,zip,keyword,maxPrice,minPrice,newLocation;
+    EditText rePass,password,mobile,nameBusiness,mobileSecond,landline,email,address,zip,keyword,maxPrice,minPrice,newLocation,desc;
     TextInputLayout newLocation1;
     RadioGroup radioGroup;
 //    TextView forLogin,uploadImage;
@@ -125,9 +132,12 @@ public class AddProduct extends AppCompatActivity {
     String loc_id="";
     public double minPirce=0,maxPirce=0;
     TextView addLocation;
-
     View viewShow;
     LinearLayout linearShow;
+    SwitchCompat switchBusiness;
+    String val_mobile="Yes";
+    boolean flagLocation=false;
+    boolean isData=false;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -156,6 +166,8 @@ public class AddProduct extends AppCompatActivity {
         newLocation=findViewById(R.id.newLocation);
         viewShow=findViewById(R.id.viewShow);
         linearShow=findViewById(R.id.linearShow);
+        switchBusiness=findViewById(R.id.switchBusiness);
+        desc=findViewById(R.id.desc);
 
         //Toolbar mActionBarToolbar = (Toolbar)findViewById(R.id.toolbar);
         //setSupportActionBar(mActionBarToolbar);
@@ -182,13 +194,31 @@ public class AddProduct extends AppCompatActivity {
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dialog.setCancelable(false);
 
+        locationList();
+
        // categoryData();
 //        stateList("1");
 
       //  country();
 
 
-        locationList();
+        switchBusiness.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                // Toast.makeText(getActivity(), position+" "+b, Toast.LENGTH_SHORT).show();
+
+                if (b==true){
+                    val_mobile="Yes";
+                }
+                else if (b==false){
+                    val_mobile="No";
+                }
+            }
+        });
+
+
+
+
         Log.d("dfgdfgdfgdfgd",MyPrefrences.getCityID2(getApplicationContext()));
         addLocation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -209,7 +239,6 @@ public class AddProduct extends AppCompatActivity {
                     MyPrefrences.setIsPrice(getApplicationContext(),true);
 
                 }
-
                 else if(b==false){
                     flag="no";
                     maxPrice.setText("");
@@ -331,12 +360,19 @@ public class AddProduct extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
                 //if (!country.getSelectedItem().toString().equalsIgnoreCase("India")) {
-                idLocation=AllCity.get(i).get("id");
-
-//                    location.setSelection(i);
-
+                try {
+                    idLocation=AllCity.get(i).get("id");
                     Log.d("sdfsdfsdfsd",idLocation);
 
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                if (location.getSelectedItem().toString().equalsIgnoreCase("Add Location")){
+                    //Toast.makeText(getApplicationContext(), "add", Toast.LENGTH_SHORT).show();
+                    addLocationPop();
+                }
 
             }
 
@@ -402,15 +438,84 @@ public class AddProduct extends AppCompatActivity {
             }
         });
 
+
+
         postAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
+//                Log.d("dsfsfsdfsdfsfsfs",jsonObject.optString("image").toString());
+//
+//                String rep = jsonObject.optString("image").toString().replace("http://pinerria.com/assets/images/business/", "");
+//                Log.d("dfdgdfgdfgd", rep);
+
+
 
                 if (idLocation.equals("")) {
-                    Util.errorDialog(AddProduct.this, "Please Select Location");
-                } else {
 
+                    if (newLocation.getText().toString().equals("")) {
+                        Util.errorDialog(AddProduct.this, "Enter location");
+                    }
+                    else{
+
+                        idLocation=jsonObject.optString("location_id");
+                        if (validate()) {
+
+                            if (Home.business == true) {
+
+                                String path = null;
+                                String filename = null;
+
+                                try {
+                                    path = f.toString();
+                                    filename = path.substring(path.lastIndexOf("/") + 1);
+                                    Log.d("dsfdfsdfsfs", filename);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                if (filename == null) {
+//                                Util.errorDialog(AddProduct.this,"Please Select Image");
+
+
+                                    String rep = jsonObject.optString("image").toString().replace(Api.BASEURL_FOR_IMAGE, "");
+                                    Log.d("dfdgdfgdfgd", rep);
+
+                                    PostDataEdit2(rep, jsonObject.optString("id"));
+                                } else {
+                                    //Toast.makeText(AddProduct.this, "yes", Toast.LENGTH_SHORT).show();
+                                    PostDataEdit(path, filename, jsonObject.optString("id"));
+
+                                }
+                            } else if (Home.business == false) {
+                                String path = null;
+                                String filename = null;
+
+                                try {
+                                    path = f.toString();
+                                    filename = path.substring(path.lastIndexOf("/") + 1);
+                                    Log.d("dsfdfsdfsfs", filename);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                if (filename == null) {
+                                    Util.errorDialog(AddProduct.this, "Please select a Business Image.");
+                                } else {
+                                    //Toast.makeText(AddProduct.this, "yes", Toast.LENGTH_SHORT).show();
+                                    PostData(path, filename);
+
+                                }
+                            }
+
+
+                        }
+
+
+                    }
+                }
+                else {
+
+
+                   // idLocation=jsonObject.optString("location_id");
                     if (validate()) {
 
                         if (Home.business == true) {
@@ -429,7 +534,7 @@ public class AddProduct extends AppCompatActivity {
 //                                Util.errorDialog(AddProduct.this,"Please Select Image");
 
 
-                                String rep = jsonObject.optString("image").toString().replace("http://pinerria.com/pinerria/assets/images/business/", "");
+                                String rep = jsonObject.optString("image").toString().replace(Api.BASEURL_FOR_IMAGE, "");
                                 Log.d("dfdgdfgdfgd", rep);
 
                                 PostDataEdit2(rep, jsonObject.optString("id"));
@@ -462,7 +567,13 @@ public class AddProduct extends AppCompatActivity {
 
 
                     }
+
                 }
+
+
+
+
+
             }
 //                    }
 //                }
@@ -563,8 +674,6 @@ public class AddProduct extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Log.e("fgdfgdfgdf","Inside getParams");
 
-
-
                 // Posting parameters to login url
                 Map<String, String> params = new HashMap<>();
                 params.put("state_id", MyPrefrences.getState(getApplicationContext()));
@@ -593,9 +702,7 @@ public class AddProduct extends AppCompatActivity {
 
     }
 
-
     private void getFilledData() {
-
 
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
                 Api.userBusiness+"/"+ MyPrefrences.getUserID(getApplicationContext()), null, new Response.Listener<JSONObject>() {
@@ -617,7 +724,6 @@ public class AddProduct extends AppCompatActivity {
 
                             jsonObject=jsonArray.getJSONObject(0);
 
-
 //                            map=new HashMap();
 //                            map.put("id", jsonObject.optString("id"));
 //                            map.put("bussiness_name", jsonObject.optString("bussiness_name"));
@@ -632,8 +738,17 @@ public class AddProduct extends AppCompatActivity {
                         keyword.setText(jsonObject.optString("service_keyword"));
                         minPrice.setText(jsonObject.optString("min_price"));
                         maxPrice.setText(jsonObject.optString("max_price"));
+                        desc.setText(jsonObject.optString("desc"));
 
                         loc_id=jsonObject.optString("location_id");
+
+//                        newLocation1.setVisibility(View.VISIBLE);
+//                        linearShow.setVisibility(View.GONE);
+//                        viewShow.setVisibility(View.GONE);
+
+                        Log.d("dfdgdfgdfghdfhgdfh",jsonObject.optString("call_button"));
+
+                        newLocation.setText(jsonObject.optString("location_name"));
 
                         if (jsonObject.optString("min_price").equals("")) {
                             checkBobPrice.setChecked(false);
@@ -643,13 +758,69 @@ public class AddProduct extends AppCompatActivity {
                             checkBobPrice.setChecked(true);
                           //  flag="1";
                         }
+
+
+                        if (jsonObject.optString("call_button").equalsIgnoreCase("Yes")){
+                            switchBusiness.setChecked(true);
+                            val_mobile="Yes";
+
+                        }
+                        else if (jsonObject.optString("call_button").equalsIgnoreCase("No")){
+                            switchBusiness.setChecked(false);
+                            val_mobile="No";
+
+                        }
+
+
+//                        ImageLoader imageLoader=AppController.getInstance().getImageLoader();
+//                        regiImage.setImageUrl(jsonObject.optString("image").replace(" ","%20"),imageLoader);
+
                         Picasso.with(AddProduct.this)
                                 .load(jsonObject.optString("image").replace(" ","%20"))
                                 .fit()
                                 // .transform(transformation)
                                 .into(regiImage);
 
+
+
+                        if (isData==true) {
+                            for (int i = 0; i < AllCity.size(); i++) {
+                                Log.d("sdfsdgfsdgfsdfgsdg", AllCity.get(i).get("id"));
+
+                                Log.d("dfgdfgdfgdfgdgd", jsonObject.optString("location_id"));
+                                if (AllCity.get(i).get("id").equals(jsonObject.optString("location_id"))) {
+                                   // Toast.makeText(getApplicationContext(), "yes", Toast.LENGTH_SHORT).show();
+                                    flagLocation = true;
+                                    location.setSelection(i);
+                                    break;
+
+                                } else {
+                                    //  Toast.makeText(getApplicationContext(), "no", Toast.LENGTH_SHORT).show();
+                                    flagLocation = false;
+                                }
+
+                            }
+                        }else if (isData==false){
+
+                        }
+
+
+                        Log.d("gsdgfsdgdfgdfgddfgd", String.valueOf(flagLocation));
+
+
                     }
+
+                    if (flagLocation==false){
+                        newLocation1.setVisibility(View.VISIBLE);
+                        linearShow.setVisibility(View.GONE);
+                        viewShow.setVisibility(View.GONE);
+                    }
+                    else if (flagLocation==true){
+                        newLocation1.setVisibility(View.GONE);
+                        linearShow.setVisibility(View.VISIBLE);
+                        viewShow.setVisibility(View.VISIBLE);
+                    }
+
                     else{
                        // expListView.setVisibility(View.GONE);
                         // imageNoListing.setVisibility(View.VISIBLE);
@@ -696,12 +867,32 @@ public class AddProduct extends AppCompatActivity {
 
         if (TextUtils.isEmpty(nameBusiness.getText().toString()))
         {
-           Util.errorDialog(AddProduct.this,"Type Business Name");
+           Util.errorDialog(AddProduct.this,"Enter Business Name");
+            nameBusiness.requestFocus();
+            return false;
+        }
+        else if (TextUtils.isEmpty(keyword.getText().toString()))
+        {
+            Util.errorDialog(AddProduct.this,"Enter what your Business deals in.");
+            keyword.requestFocus();
+            return false;
+        }
+        else if (TextUtils.isEmpty(desc.getText().toString()))
+        {
+            Util.errorDialog(AddProduct.this,"Enter Description.");
+            desc.requestFocus();
             return false;
         }
         else if (TextUtils.isEmpty(mobile.getText().toString()))
         {
-            Util.errorDialog(AddProduct.this,"Type Mobile No");
+            Util.errorDialog(AddProduct.this,"Enter Mobile No");
+            mobile.requestFocus();
+            return false;
+        }
+        else if (mobile.getText().toString().length()<10)
+        {
+            Util.errorDialog(AddProduct.this,"Enter 10 digit Mobile No.");
+            mobile.requestFocus();
             return false;
         }
 //        else if (TextUtils.isEmpty(email.getText().toString()))
@@ -712,23 +903,23 @@ public class AddProduct extends AppCompatActivity {
 //        }
         else if (TextUtils.isEmpty(address.getText().toString()))
         {
-            Util.errorDialog(AddProduct.this,"Type Address");
+            Util.errorDialog(AddProduct.this,"Enter Address");
+            address.requestFocus();
             return false;
         }
+
 //        else if (TextUtils.isEmpty(zip.getText().toString()))
 //        {
 //            zip.setError("Oops! Pincode blank");
 //            zip.requestFocus();
 //            return false;
 //        }
-        else if (TextUtils.isEmpty(keyword.getText().toString()))
-        {
-            Util.errorDialog(AddProduct.this,"Type Keyword");
-            return false;
-        }
+
+
         if (checkBobPrice.isChecked()) {
         if (TextUtils.isEmpty(minPrice.getText().toString())) {
                 Util.errorDialog(AddProduct.this, "Please enter 'Starting Price'");
+                minPrice.requestFocus();
                 return false;
             }
         }
@@ -745,10 +936,9 @@ public class AddProduct extends AppCompatActivity {
 //            return false;
 //        }
 
-
-
         if (minPirce>=maxPirce){
             Util.errorDialog(AddProduct.this,"'Higher Range' must be greater than 'Starting Price'");
+            maxPrice.requestFocus();
             return false;
         }
 
@@ -944,21 +1134,19 @@ public class AddProduct extends AppCompatActivity {
 
                 if (json.optString("status").equalsIgnoreCase("success")) {
 
-                    Toast.makeText(getApplicationContext(), "Business Add Successfully...", Toast.LENGTH_LONG).show();
+                    Log.d("dsfdsgdgdfgdfgdfgdfgd", String.valueOf(json));
 
-                    Intent intent=new Intent(AddProduct.this,HomeAct.class);
-                    intent.putExtra("userType","my_product");
-                    startActivity(intent);
-                    overridePendingTransition(R.anim.fadein, R.anim.fadeout);
-                    finish();
+                    MyPrefrences.setBusinesID(getApplicationContext(),json.optString("message"));
 
+//                    Toast.makeText(getApplicationContext(), "Business Added Successfully. The changes will reflect after admin approval,", Toast.LENGTH_LONG).show();
 
+                    errorDialog(AddProduct.this,"Congrats!\nBusiness Added Successfully.\nThe changes will reflect after admin approval.\n" +
+                            "Once approved, you can also add ‘Photo Gallery’ by going to ‘Manage Gallery’ in the ‘Manage Business’ menu.");
                 } else {
                         Toast.makeText(getApplicationContext(), ""+json.optString("message"), Toast.LENGTH_LONG).show();
                 }
             }
         }
-
     }
 
     private JSONObject uploadImageFile(Context context, String value, String filepath1, String fileName1) {
@@ -994,9 +1182,11 @@ public class AddProduct extends AppCompatActivity {
                     .addFormDataPart("service_keyword", keyword.getText().toString())
                     .addFormDataPart("max_price", maxPrice.getText().toString())
                     .addFormDataPart("min_price", minPrice.getText().toString())
+                    .addFormDataPart("desc", desc.getText().toString())
                     .addFormDataPart("price_status", flag)
-                    .addFormDataPart("call_button_status", "1")
+                    .addFormDataPart("call_button_status", val_mobile)
                     .addFormDataPart("location_id", idLocation)
+
                     .addFormDataPart("image", fileName1, RequestBody.create(MEDIA_TYPE_PNG, sourceFile1))
                     .build();
 
@@ -1096,17 +1286,19 @@ public class AddProduct extends AppCompatActivity {
             Util.cancelPgDialog(dialog);
             if (json != null) {
 
-
                 if (json.optString("status").equalsIgnoreCase("success")) {
 
-                    Toast.makeText(getApplicationContext(), "Business Edit Successfully...", Toast.LENGTH_LONG).show();
+                    Log.d("dsfdsgdgdfgdfgdfgdfgd", String.valueOf(json));
 
-                    Intent intent=new Intent(AddProduct.this,HomeAct.class);
-                    intent.putExtra("userType","my_product");
-                    startActivity(intent);
-                    overridePendingTransition(R.anim.fadein, R.anim.fadeout);
-                    finish();
+//                    Toast.makeText(getApplicationContext(), "Business Edit Successfully. The changes will reflect after admin approval.", Toast.LENGTH_LONG).show();
 
+//                    Intent intent=new Intent(AddProduct.this,HomeAct.class);
+//                    intent.putExtra("userType","my_product");
+//                    startActivity(intent);
+//                    overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+//                    finish();
+
+                    errorDialog(AddProduct.this,"Business Edit Successfully. The changes will reflect after admin approval.");
 
                 } else {
                     Toast.makeText(getApplicationContext(), ""+json.optString("message"), Toast.LENGTH_LONG).show();
@@ -1151,15 +1343,18 @@ public class AddProduct extends AppCompatActivity {
                     .addFormDataPart("service_keyword", keyword.getText().toString())
                     .addFormDataPart("max_price", maxPrice.getText().toString())
                     .addFormDataPart("min_price", minPrice.getText().toString())
+                    .addFormDataPart("desc", desc.getText().toString())
                     .addFormDataPart("price_status", flag)
-                    .addFormDataPart("call_button_status", "1")
+                    .addFormDataPart("call_button_status", val_mobile)
                     .addFormDataPart("location_id", idLocation)
+                  //  .addFormDataPart("show_mobile", val_mobile)
                     .addFormDataPart("image", fileName1, RequestBody.create(MEDIA_TYPE_PNG, sourceFile1))
                     .build();
 
             Log.d("dfsdfdgdfgdfgdfg",MyPrefrences.getCityID2(getApplicationContext()));
             Log.d("dfsdfdgdfgdfgdfg",MyPrefrences.getState(getApplicationContext()));
             Log.d("dfgdfgdfgd",idLocation);
+            Log.d("gdfgdfgdfgdfgdfgdgdg",val_mobile);
 
 
 //            Log.d("fvfgdgdfhgghfhgdfh", amounts.getText().toString().replace("₹ ", ""));
@@ -1253,13 +1448,17 @@ public class AddProduct extends AppCompatActivity {
 
                 if (json.optString("status").equalsIgnoreCase("success")) {
 
-                    Toast.makeText(getApplicationContext(), "Business Edit Successfully...", Toast.LENGTH_LONG).show();
+                    Log.d("dsfdsgdgdfgdfgdfgdfgd", String.valueOf(json));
 
-                    Intent intent=new Intent(AddProduct.this,HomeAct.class);
-                    intent.putExtra("userType","my_product");
-                    startActivity(intent);
-                    overridePendingTransition(R.anim.fadein, R.anim.fadeout);
-                    finish();
+                    errorDialog(AddProduct.this,"Business Edit Successfully. The changes will reflect after admin approval.");
+
+//                    Toast.makeText(getApplicationContext(), "Business Edit Successfully. The changes will reflect after admin approval.", Toast.LENGTH_LONG).show();
+//
+//                    Intent intent=new Intent(AddProduct.this,HomeAct.class);
+//                    intent.putExtra("userType","my_product");
+//                    startActivity(intent);
+//                    overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+//                    finish();
 
 
                 } else {
@@ -1305,9 +1504,11 @@ public class AddProduct extends AppCompatActivity {
                     .addFormDataPart("service_keyword", keyword.getText().toString())
                     .addFormDataPart("max_price", maxPrice.getText().toString())
                     .addFormDataPart("min_price", minPrice.getText().toString())
+                    .addFormDataPart("desc", desc.getText().toString())
                     .addFormDataPart("price_status", flag)
-                    .addFormDataPart("call_button_status", "1")
+                    .addFormDataPart("call_button_status", val_mobile)
                     .addFormDataPart("location_id", idLocation)
+//                    .addFormDataPart("show_mobile", val_mobile)
                     .addFormDataPart("image", "")
                     .addFormDataPart("old_image", fileName1)
                     .build();
@@ -1316,6 +1517,7 @@ public class AddProduct extends AppCompatActivity {
             Log.d("dfsdfdgdfgdfgdfg",MyPrefrences.getState(getApplicationContext()));
             Log.d("dfgdfgdfgd",idLocation);
 
+            Log.d("gdfgdfgdfgdfgdfgdgdg",val_mobile);
 
 //            Log.d("fvfgdgdfhgghfhgdfh", amounts.getText().toString().replace("₹ ", ""));
 //            Log.d("fvfgdgdfhgdfhqwdfs",amounts.getText().toString().replace("₹ ", ""));
@@ -1388,7 +1590,6 @@ public class AddProduct extends AppCompatActivity {
 
                             map.put("id", jsonObject.optString("id"));
                             map.put("category", jsonObject.optString("category"));
-
 
                             CatList.add(jsonObject.optString("category"));
 
@@ -1743,7 +1944,6 @@ public class AddProduct extends AppCompatActivity {
 
     private void locationList() {
 
-
         Log.d("dfgdfgdfgdfgd",MyPrefrences.getCityID2(getApplicationContext()));
 
 //        Util.showPgDialog(dialog);
@@ -1756,8 +1956,8 @@ public class AddProduct extends AppCompatActivity {
                 Util.cancelPgDialog(dialog);
                 try {
 
-
                     if (response.getString("status").equalsIgnoreCase("success")){
+                        isData=true;
 
                         AllCity.clear();
                         cityList.clear();
@@ -1766,7 +1966,6 @@ public class AddProduct extends AppCompatActivity {
                         map2.put("id", "");
                         AllCity.add(map2);
                         cityList.add("Select Location");
-
 
 
                         JSONArray jsonArray=response.getJSONArray("message");
@@ -1789,9 +1988,27 @@ public class AddProduct extends AppCompatActivity {
 
                             AllCity.add(map);
 
-
-
                         }
+                        cityList.add("Add Location");
+                    }
+                    else{
+                        AllCity.clear();
+                        cityList.clear();
+
+                        HashMap<String, String> map2 = new HashMap<>();
+                        map2.put("id", "");
+                        AllCity.add(map2);
+                        cityList.add("Select Location");
+                        cityList.add("Add Location");
+
+                        HashMap<String,String> map=new HashMap<>();
+
+                        adapterCity = new ArrayAdapter(getApplicationContext(),R.layout.simple_spinner_item,cityList);
+                        adapterCity.setDropDownViewResource(R.layout.simple_spinner_dropdown_item);
+                        location.setAdapter(adapterCity);
+
+                        AllCity.add(map);
+                        isData= false;
                     }
 
                 } catch (JSONException e) {
@@ -1820,11 +2037,33 @@ public class AddProduct extends AppCompatActivity {
         jsonObjReq.setShouldCache(false);
         AppController.getInstance().addToRequestQueue(jsonObjReq);
 
-
-
     }
 
 
 
+    public static void errorDialog(final Context context, String message) {
+        final Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.alertdialogcustom2);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        TextView text = (TextView) dialog.findViewById(R.id.msg_txv);
+        text.setText(message);
+        Button ok = (Button) dialog.findViewById(R.id.btn_ok);
+        ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+
+                Intent intent=new Intent(context,HomeAct.class);
+                intent.putExtra("userType","my_product");
+                context.startActivity(intent);
+               // finish();
+
+
+            }
+        });
+        dialog.show();
+
+    }
 
 }

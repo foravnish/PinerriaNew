@@ -8,4 +8,9 @@ public class  UserDetails {
     public static String chatWith = "";
 
 
+    public static String mobileNo = "";
+    public static String name = "";
+    public static String chatId = "";
+
+
 }

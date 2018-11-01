@@ -14,18 +14,22 @@ public class MyPrefrences {
     static SharedPreferences isPrice;
     static SharedPreferences citySelection;
     public static SharedPreferences userIdPrefences;
+    public static SharedPreferences busiessIdPrefences;
     static SharedPreferences cataPrefences;
     static SharedPreferences subCataPrefences;
     static SharedPreferences username;
     static SharedPreferences emaildid;
+    static SharedPreferences TexAddress;
     static SharedPreferences Mobile;
     static SharedPreferences Notification;
     static SharedPreferences City;
     static SharedPreferences City2;
     static SharedPreferences StateId;
+    static SharedPreferences CompanyName;
     static SharedPreferences CityName;
     static SharedPreferences CityDialog;
     static SharedPreferences Image;
+    static SharedPreferences DateTime;
     public static SharedPreferences mySharedPreferencesToken;
     public static SharedPreferences PAYMENTID;
 
@@ -46,6 +50,7 @@ public class MyPrefrences {
     public static String CITYNAME = "CITYNAME";
     public static String CITYDIA = "CITYDIA";
     public static String IMAGE = "IMAGE";
+    public static String DATE = "DATE";
     public static String PUMTID = "PUMTID";
 
     public static void resetPrefrences(Context context) {
@@ -153,6 +158,21 @@ public class MyPrefrences {
         return userIdPrefences.getString(USER_ID,"");
     }
 
+
+    public static void setBusinesID(Context context, String is) {
+        busiessIdPrefences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = busiessIdPrefences.edit();
+        editor.putString("BUSINESS", is);
+        editor.commit();
+    }
+
+    public static String getBusinesID(Context context) {
+        busiessIdPrefences = PreferenceManager.getDefaultSharedPreferences(context);
+        return busiessIdPrefences.getString("BUSINESS","");
+    }
+
+
+
     public static void setCatID(Context context, String is) {
         cataPrefences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = cataPrefences.edit();
@@ -223,6 +243,20 @@ public class MyPrefrences {
     }
 
 
+    public static void setTexAddress(Context context, String is) {
+        TexAddress = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = TexAddress.edit();
+        editor.putString("TEXADDRESS", is);
+        editor.commit();
+    }
+
+    public static String getTexAddress(Context context) {
+        TexAddress = PreferenceManager.getDefaultSharedPreferences(context);
+        return TexAddress.getString("TEXADDRESS","");
+    }
+
+
+
     public static void setMobile(Context context, String is) {
         Mobile = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = Mobile.edit();
@@ -273,6 +307,19 @@ public class MyPrefrences {
         return StateId.getString(STATE,"");
     }
 
+    public static void setCompanyName(Context context, String is) {
+        CompanyName = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = CompanyName.edit();
+        editor.putString("COMPANY", is);
+        editor.commit();
+    }
+
+    public static String getCompanyName(Context context) {
+        CompanyName = PreferenceManager.getDefaultSharedPreferences(context);
+        return CompanyName.getString("COMPANY","");
+    }
+
+
 
     public static void setCityName(Context context, String is) {
         CityName = PreferenceManager.getDefaultSharedPreferences(context);
@@ -309,6 +356,22 @@ public class MyPrefrences {
         PAYMENTID = PreferenceManager.getDefaultSharedPreferences(context);
         return PAYMENTID.getString(PUMTID,"");
     }
+
+
+
+    public static void setDateTime(Context context, String is) {
+        DateTime = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = DateTime.edit();
+        editor.putString(DATE, is);
+        editor.commit();
+    }
+
+    public static String getDateTime(Context context) {
+        DateTime = PreferenceManager.getDefaultSharedPreferences(context);
+        return DateTime.getString(DATE,"");
+    }
+
+
 
 
 

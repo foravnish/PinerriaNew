@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,7 +51,7 @@ public class MessageFromAdmin extends Fragment {
     Dialog dialog;
     GridView grigView2;
     List<HashMap<String,String>> DataList;
-
+    ImageView imageNoListing;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -66,6 +67,7 @@ public class MessageFromAdmin extends Fragment {
         grigView2=view.findViewById(R.id.grigView);
         DataList = new ArrayList<>();
 
+        imageNoListing =  view.findViewById(R.id.imageNoListing);
 
         HomeAct.title.setText("Message From Admin");
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
@@ -84,11 +86,10 @@ public class MessageFromAdmin extends Fragment {
                     if (response.getString("status").equalsIgnoreCase("success")){
 
                         grigView2.setVisibility(View.VISIBLE);
-                        //  imageNoListing.setVisibility(View.GONE);
+                          imageNoListing.setVisibility(View.GONE);
                         JSONArray jsonArray=response.getJSONArray("message");
                         for (int i=0;i<jsonArray.length();i++){
                             JSONObject jsonObject=jsonArray.getJSONObject(i);
-
 
                             HashMap map=new HashMap();
                             map.put("id", jsonObject.optString("id"));
@@ -96,8 +97,8 @@ public class MessageFromAdmin extends Fragment {
                             map.put("description", jsonObject.optString("description"));
                             map.put("comment", jsonObject.optString("comment"));
                             map.put("created_date", jsonObject.optString("created_date"));
-
-
+                            map.put("subject_id", jsonObject.optString("subject_id"));
+                            map.put("res_status", jsonObject.optString("res_status"));
 
                             HelpAdapter adapter=new HelpAdapter();
                             grigView2.setAdapter(adapter);
@@ -106,7 +107,7 @@ public class MessageFromAdmin extends Fragment {
                     }
                     else{
                         grigView2.setVisibility(View.GONE);
-                        // imageNoListing.setVisibility(View.VISIBLE);
+                         imageNoListing.setVisibility(View.VISIBLE);
                         //  Toast.makeText(getActivity(), "No Record Found...", Toast.LENGTH_SHORT).show();
                     }
 
@@ -144,10 +145,14 @@ public class MessageFromAdmin extends Fragment {
 
     class HelpAdapter extends BaseAdapter {
         LayoutInflater inflater;
-        TextView id,receiver_id,queryFor,subject,message,send_date,messageTxt;
+        TextView id,receiver_id,queryFor,subject,message,send_date,messageTxt,status;
 
         HelpAdapter(){
+
             inflater=(LayoutInflater)getActivity().getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            if (inflater == null) {
+                throw new AssertionError("LayoutInflater not found.");
+            }
         }
         @Override
         public int getCount() {
@@ -167,7 +172,7 @@ public class MessageFromAdmin extends Fragment {
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
 
-            view=inflater.inflate(R.layout.custonlistview_enquiry,viewGroup,false);
+            view=inflater.inflate(R.layout.custon_mess_from_admin,viewGroup,false);
 
             send_date=view.findViewById(R.id.send_date);
             message=view.findViewById(R.id.message);
@@ -176,11 +181,13 @@ public class MessageFromAdmin extends Fragment {
             receiver_id=view.findViewById(R.id.receiver_id);
             id=view.findViewById(R.id.id);
             messageTxt=view.findViewById(R.id.messageTxt);
+            status=view.findViewById(R.id.status);
 
             send_date.setText("Date: "+DataList.get(i).get("created_date"));
             message.setText("Message: "+DataList.get(i).get("comment"));
             subject.setText("Subject: "+DataList.get(i).get("subject_id"));
-            queryFor.setText("Query for: "+DataList.get(i).get("description"));
+            queryFor.setText("Action Type: "+DataList.get(i).get("description"));
+            status.setText("Status: "+DataList.get(i).get("res_status"));
             //receiver_id.setText("To, "+DataList.get(i).get("receiver_id"));
             id.setText("Enquiry Id: "+DataList.get(i).get("id"));
             messageTxt.setText("Message From Admin");

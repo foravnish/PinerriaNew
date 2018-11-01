@@ -4,12 +4,15 @@ package pinerria.business.pinerrianew.Fragments;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,6 +20,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,6 +30,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -33,6 +39,7 @@ import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
@@ -40,6 +47,8 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.jsibbold.zoomage.ZoomageView;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -47,6 +56,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.xml.sax.Parser;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -54,6 +64,7 @@ import java.util.Map;
 
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 import pinerria.business.pinerrianew.Activites.Chat;
+import pinerria.business.pinerrianew.Activites.ChatUSer;
 import pinerria.business.pinerrianew.Activites.HomeAct;
 import pinerria.business.pinerrianew.Activites.Login;
 import pinerria.business.pinerrianew.Activites.UserDetails;
@@ -75,12 +86,16 @@ public class Details extends Fragment {
         // Required empty public constructor
     }
 
+    private String pass="123456";
+    private String user;
+
+
     RecyclerView mRecyclerView;
     RecyclerView.LayoutManager mLayoutManager;
     Dialog dialog;
     List<HashMap<String,String>> AllBaner;
     RecyclerView.Adapter mAdapter;
-    TextView dealsIn,totlaUsers;
+    TextView dealsIn,totlaUsers,desc;
     NetworkImageView imageView;
     LinearLayout chat_now,call;
     TextView comName,nameUser,address,phone;
@@ -91,8 +106,14 @@ public class Details extends Fragment {
     CardView cardGallery;
     MaterialRatingBar rating;
     private DatabaseHelper db;
-
-
+    LinearLayout priceLayout;
+    TextView price;
+    JSONArray jsonArray;
+    public  static ViewPager viewpager;
+    public  static List<HashMap<String,String>> ImgData;
+    public  static CustomPagerAdapter customPagerAdapter;
+    public  static JSONObject jsonObject2;
+  //  public  static CircleIndicator indicator ;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -100,7 +121,6 @@ public class Details extends Fragment {
         View view= inflater.inflate(R.layout.fragment_details, container, false);
 
        // Log.d("sdfsdfdsgd",getArguments().getString("id"));
-
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view2);
         dealsIn = (TextView) view.findViewById(R.id.dealsIn);
@@ -112,17 +132,28 @@ public class Details extends Fragment {
         imgFav =  view.findViewById(R.id.imgFav);
         cardGallery =  view.findViewById(R.id.cardGallery);
         totlaUsers =  view.findViewById(R.id.totlaUsers);
+        desc =  view.findViewById(R.id.desc);
 
         comName =  view.findViewById(R.id.comName);
         nameUser =  view.findViewById(R.id.nameUser);
         address =  view.findViewById(R.id.address);
         phone =  view.findViewById(R.id.phone);
         rating=view.findViewById(R.id.rating);
+        price=view.findViewById(R.id.price);
+        priceLayout=view.findViewById(R.id.priceLayout);
 
 
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         mRecyclerView.setLayoutManager(mLayoutManager);
+
+        user=MyPrefrences.getMobile(getActivity());
+
+
+        //indicator = (CircleIndicator)dialog.findViewById(R.id.indicator);
+        ImgData =new ArrayList<>();
+        customPagerAdapter=new CustomPagerAdapter(getActivity());
+
 
       //  HomeAct.title.setText("Pinerria");
 
@@ -152,18 +183,48 @@ public class Details extends Fragment {
             comName =  view.findViewById(R.id.comName);
             nameUser =  view.findViewById(R.id.nameUser);
             address =  view.findViewById(R.id.address);
-            phone =  view.findViewById(R.id.phone);
+
+            Log.d("dfsdgsdfgsdfgsdfgds",jsonObject.optString("user_name"));
 
             comName.setText(jsonObject.optString("user_name"));
             nameUser.setText(jsonObject.optString("bussiness_name"));
-            address.setText(jsonObject.optString("address")+" "+jsonObject.optString("city_name")+" "+jsonObject.optString("state_name"));
-            phone.setText(jsonObject.optString("primary_mobile"));
+            address.setText(jsonObject.optString("address")+" "+jsonObject.optString("city_name"));
+//            phone.setText(jsonObject.optString("primary_mobile"));
+            phone.setText("Enabled");
 
-            totlaUsers.setText(" ("+jsonObject.optString("total_rating_user")+" Review's)");
+            totlaUsers.setText(" ("+jsonObject.optString("total_rating_user")+" Reviews)");
+            desc.setText(jsonObject.optString("desc"));
+
+
+//            if (jsonObject.optString("call_button").equals("Yes")){
+//                price.setVisibility(View.VISIBLE);
+//
+//            }
+//            else if (jsonObject.optString("call_button").equals("No")){
+//                price.setVisibility(View.GONE);
+//
+//            }
 
             if (!jsonObject.optString("total_rating").equals("")) {
                 rating.setRating(Float.parseFloat(jsonObject.optString("total_rating")));
             }
+
+//            rating.setRating(Float.parseFloat("3.5"));
+           // rating.setRating(3.5f);
+
+            if (jsonObject.optString("min_price").equals("")){
+                priceLayout.setVisibility(View.GONE);
+            }
+            else{
+                priceLayout.setVisibility(View.VISIBLE);
+                price.setText("Price ₹ "+jsonObject.optString("min_price"));
+
+                if (!jsonObject.optString("max_price").equals("")){
+                    price.setText("Price ₹ "+jsonObject.optString("min_price")+"-"+jsonObject.optString("max_price"));
+                }
+
+            }
+
 
 
             ViewGalleryApi(jsonObject.optString("user_id"));
@@ -179,7 +240,7 @@ public class Details extends Fragment {
             }
 
 
-            if (jsonObject.optString("call_button").equals("1")){
+            if (jsonObject.optString("call_button").equals("Yes")){
                 call.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -251,7 +312,7 @@ public class Details extends Fragment {
 
             }
 
-            else if (jsonObject.optString("call_button").equals("0")){
+            else if (jsonObject.optString("call_button").equals("No")){
                // call.setTextColor(Color.parseColor("#545454"));
                 phone.setText("N/A");
                 call.setOnClickListener(new View.OnClickListener() {
@@ -331,7 +392,6 @@ public class Details extends Fragment {
                     }
                     else{
 
-
                         Util.errorDialog(getActivity(),"Please Login First!");
                     }
                 }
@@ -344,17 +404,15 @@ public class Details extends Fragment {
                     Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
                     sharingIntent.setType("text/plain");
 //                String shareBody =comName.getText().toString()+ " "+phone.getText().toString();
-                    String shareBody ="Hi, \n" +
-                            "Please visit my business page on Pinerria app. Click on the link below. "+jsonObject.optString("business_name");
+                    String shareBody ="Hi, \n" + "Please visit my business page on Pinerria app. Click on the link below. "+jsonObject.optString("business_share_url");
+//                    String shareBody="http://www.google.com";
 
-                    sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Details");
+                    sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "My Business Page on Pinerria");
                     sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT,shareBody);
                     startActivity(Intent.createChooser(sharingIntent, "Share via"));
 
                 }
             });
-
-
 
             addReview.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -364,8 +422,9 @@ public class Details extends Fragment {
                         Fragment fragment = new WriteReview();
                         Bundle bundle = new Bundle();
                         bundle.putString("id", jsonObject.optString("id"));
+                        bundle.putString("user_id", jsonObject.optString("user_id"));
                         bundle.putString("company_name", jsonObject.optString("bussiness_name"));
-                        bundle.putString("address", jsonObject.optString("address")+" "+jsonObject.optString("city_name")+" "+jsonObject.optString("state_name"));
+                        bundle.putString("address", jsonObject.optString("address")+" "+jsonObject.optString("city_name"));
                         FragmentManager manager = getActivity().getSupportFragmentManager();
                         FragmentTransaction ft = manager.beginTransaction();
                         fragment.setArguments(bundle);
@@ -397,7 +456,7 @@ public class Details extends Fragment {
                         //Creating dialog box
                         AlertDialog alert = builder.create();
                         //Setting the title manually
-                        alert.setTitle("BizzCityInfo");
+                        alert.setTitle("Pinerria");
                         alert.show();
 
 
@@ -416,6 +475,8 @@ public class Details extends Fragment {
         }
 
 
+
+
         chat_now.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -430,10 +491,9 @@ public class Details extends Fragment {
 //                    startActivity(intent);
 
 
-                    UserDetails.chatWith = jsonObject.optString("primary_mobile");
-                    Intent intent=new Intent(getActivity(), Chat.class);
-                    intent.putExtra("name",jsonObject.optString("user_name"));
-                    startActivity(intent);
+                    LoginForChat();
+
+
 
                     Log.d("dfsdfsdfsdfgsdgdfgertg",jsonObject.optString("primary_mobile"));
 
@@ -464,12 +524,12 @@ public class Details extends Fragment {
                                     Intent intent=new Intent(getActivity(),HomeAct.class);
                                     intent.putExtra("userType","");
                                     startActivity(intent);
-                                   getActivity(). overridePendingTransition(R.anim.fadein, R.anim.fadeout);
-                                   getActivity(). finish();
+                                    getActivity(). overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+                                    getActivity(). finish();
 
                                 }
                             });
-                    AlertDialog alert = builder.create();
+                     AlertDialog alert = builder.create();
                     //Setting the title manually
                     alert.setTitle("Pinerria");
                     alert.show();
@@ -479,8 +539,6 @@ public class Details extends Fragment {
 
             }
         });
-
-
 
         return view;
 
@@ -628,23 +686,20 @@ public class Details extends Fragment {
 
                     if (response.getString("status").equalsIgnoreCase("success")){
                         cardGallery.setVisibility(View.VISIBLE);
-                        final JSONArray jsonArray=response.getJSONArray("message");
+                        jsonArray=response.getJSONArray("message");
                         for (int i=0;i<jsonArray.length();i++){
                             final JSONObject jsonObject1=jsonArray.getJSONObject(i);
-
 
                             HashMap<String,String> map=new HashMap<>();
                             map.put("id",jsonObject1.optString("id"));
                             map.put("image",jsonObject1.optString("image"));
-
+                            map.put("image2",jsonObject1.optString("image2"));
 
                             mAdapter = new HLVAdapter(getActivity());
 
                             mRecyclerView.setAdapter(mAdapter);
                             mAdapter.notifyDataSetChanged();
                             AllBaner.add(map);
-
-
                         }
                     }
                     else{
@@ -784,7 +839,7 @@ public class Details extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(HLVAdapter.ViewHolder viewHolder, int i) {
+        public void onBindViewHolder(HLVAdapter.ViewHolder viewHolder, final int i) {
 
 
 //            ImageLoader imageLoader = AppController.getInstance().getImageLoader();
@@ -799,6 +854,13 @@ public class Details extends Fragment {
 
             // final Typeface tvFont = Typeface.createFromAsset(getApplicationContext().getAssets(), "muli_bold.ttf");
 
+            viewHolder.imgThumbnail.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+//                    showFullImageDialog(getActivity(),AllBaner.get(i).get("image").replace(" ","%20"));
+                    showFullImageDialog(getActivity(), jsonArray.toString(),i, "Photo");
+                }
+            });
         }
 
         @Override
@@ -827,18 +889,270 @@ public class Details extends Fragment {
 
             @Override
             public void onClick(View view) {
-
-//
-
             }
-
             @Override
             public boolean onLongClick(View view) {
                 return false;
             }
 
-//
         }
+
+    }
+
+        public static void showFullImageDialog(Context context,String url, int pos,String titlename) {
+            final Dialog dialog = new Dialog(context, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+            //dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setContentView(R.layout.showfullimage);
+            ImageView back_img = (ImageView) dialog.findViewById(R.id.back_img);
+//          ImageView fact_image = (ImageView) dialog.findViewById(R.id.fact_image);
+            viewpager = (ViewPager) dialog.findViewById(R.id.viewpager);
+
+            Log.d("fgdfgsdfgdfgdfg",url);
+           // indicator = (CircleIndicator)dialog.findViewById(R.id.indicator);
+            ImgData =new ArrayList<>();
+            customPagerAdapter=new CustomPagerAdapter(context);
+            String Prev_Response=url;
+
+            try {
+               // jsonObject2=new JSONObject(Prev_Response);
+
+                JSONArray jsonArray=new JSONArray(Prev_Response);
+                for (int i=0;i<jsonArray.length();i++){
+                    JSONObject jsonObject1=jsonArray.getJSONObject(i);
+                    Log.d("gbfhfghfgh",jsonObject1.toString());
+                    HashMap<String,String> map=new HashMap<>();
+                    map.put("img",jsonObject1.optString("image2"));
+                    ImgData.add(map);
+                    viewpager.setAdapter(customPagerAdapter);
+                    viewpager.setCurrentItem(pos);
+                   // indicator.setViewPager(viewpager);
+                    //  indicator.setViewPager(viewPager);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+//        Util.showImage(context, imageurl, fact_image);
+//        PhotoViewAttacher photoViewAttacher = new PhotoViewAttacher(fact_image);
+//        //photoViewAttacher.onDrag(2,2);
+//        photoViewAttacher.update();
+            TextView title = (TextView) dialog.findViewById(R.id.title);
+            title.setText(titlename);
+
+            back_img.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.cancel();
+                }
+            });
+            dialog.show();
+        }
+
+
+
+    public static class CustomPagerAdapter extends PagerAdapter {
+        LayoutInflater layoutInflater;
+        Button download;
+        Context  context;
+        Drawable drawable;
+        byte[] BYTE;
+        ByteArrayOutputStream byteArrayOutputStream;
+        public CustomPagerAdapter(Context context) {
+            this.context=context;
+        }
+
+        @Override
+        public int getCount() {
+            return ImgData.size();
+        }
+
+        @Override
+        public boolean isViewFromObject(View view, Object object) {
+
+            return view==object;
+        }
+        @Override
+        public Object instantiateItem(ViewGroup container, final int position) {
+
+            //ZoomageView networkImageView;
+//            ImageView networkImageView;
+
+            layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View view = layoutInflater.inflate(R.layout.custom_photogallery2, container, false);
+            ZoomageView networkImageView = (ZoomageView) view.findViewById(R.id.networkImageView);
+
+            Log.d("fgdfgdfghsg",ImgData.get(position).get("img").toString());
+
+//            ImageLoader imageLoader=AppController.getInstance().getImageLoader();
+//            networkImageView.setImageUrl(ImgData.get(position).get("img"),imageLoader);
+
+//            Picasso.with(context).load(ImgData.get(position).get("img")).transform(new CropSquareTransformation()).into(networkImageView);
+            Picasso.with(context).load(ImgData.get(position).get("img")).into(networkImageView);
+//
+
+//            byteArrayOutputStream=new ByteArrayOutputStream();
+//
+////            drawable = context.getResources().getDrawable(R.drawable.sdf);
+////            Bitmap bitmap1 = ((BitmapDrawable)drawable).getBitmap();
+//
+//            BitmapFactory.Options options = new BitmapFactory.Options();
+//            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+//            Bitmap bitmap1 = BitmapFactory.decodeFile(ImgData.get(position).get("img"), options);
+//
+//            bitmap1.compress(Bitmap.CompressFormat.JPEG,40,byteArrayOutputStream);
+//            BYTE = byteArrayOutputStream.toByteArray();
+//            Bitmap bitmap2 = BitmapFactory.decodeByteArray(BYTE,0,BYTE.length);
+//            networkImageView.setImageBitmap(bitmap2);
+
+
+//            BitmapFactory.Options options = new BitmapFactory.Options();
+//            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+//            Bitmap bitmap = BitmapFactory.decodeFile(ImgData.get(position).get("img"), options);
+//
+//            CropSquareTransformation  ob=new CropSquareTransformation();
+//            //ob.transform(bitmap);
+//            networkImageView.setImageBitmap(ob.transform(bitmap));
+
+
+//            BitmapFactory.Options options = new BitmapFactory.Options();
+//            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+//            Bitmap bitmap = BitmapFactory.decodeFile(ImgData.get(position).get("img"), options);
+////
+//            int  size=Math.min(bitmap.getWidth(),bitmap.getHeight());
+//            int mwidth=(bitmap.getWidth()-size)/2;
+//            int mhieght=(bitmap.getHeight()-size)/2;
+//
+//            Bitmap bitmap1=Bitmap.createBitmap(bitmap,mwidth,mhieght,size,size);
+//            if (bitmap1!=bitmap){
+//                bitmap.recycle();
+//            }
+//            networkImageView.setImageBitmap(bitmap1);
+
+
+//            Bitmap scaledBitmap = scaleDown(bitmap, 200, true);
+//
+//            networkImageView.setImageBitmap(scaledBitmap);
+
+//            Picasso.with(context).load(ImgData.get(position).get("img")).resize(200, 100).centerCrop().into(networkImageView);
+
+//            Util.showImage(context, ImgData.get(position).get("img"), networkImageView);
+//            PhotoViewAttacher photoViewAttacher = new PhotoViewAttacher(networkImageView);
+//
+////            photoViewAttacher.onDrag(2,2);
+//            photoViewAttacher.update();
+
+
+//            networkImageView.setOnClickListener(new View.OnClickListener() {
+//                @O    verride
+//                public void onClick(View view) {
+//                    Log.d("gfhbgfgjhfgjfh",ImgData.get(position).get("img"));
+//
+////                    Util.showFullImageDialog(getActivity(), ImgData.get(position).get("img"), getArguments().getString("category"));
+//                    Util.showFullImageDialog(context, context.getArguments().getString("DataList"), getArguments().getString("category"));
+//
+//                }
+//            });
+            (container).addView(view);
+
+//            thread=new Thread(){
+//                @Override
+//                public void run() {
+//                    super.run();
+//                    try {
+//                        Thread.sleep(2000);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                    viewPager.setCurrentItem(2);
+//                }
+//            };
+//
+//            thread.start();
+//
+            return view;
+        }
+
+        public static Bitmap scaleDown(Bitmap realImage, float maxImageSize,
+                                       boolean filter) {
+            float ratio = Math.min(
+                    (float) maxImageSize / realImage.getWidth(),
+                    (float) maxImageSize / realImage.getHeight());
+            int width = Math.round((float) ratio * realImage.getWidth());
+            int height = Math.round((float) ratio * realImage.getHeight());
+
+            Bitmap newBitmap = Bitmap.createScaledBitmap(realImage, width,
+                    height, filter);
+            return newBitmap;
+        }
+
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            (container).removeView((LinearLayout) object);
+        }
+
+        @Override
+        public int getItemPosition(Object object) {
+            return super.POSITION_NONE;
+        }
+    }
+
+
+    private void LoginForChat() {
+
+//        String url = "https://chatapp-25d11.firebaseio.com/users.json";
+        String url = "https://pinerria-home-business.firebaseio.com/users.json";
+        final ProgressDialog pd = new ProgressDialog(getActivity());
+        pd.setMessage("Loading...");
+        pd.show();
+
+        StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>(){
+            @Override
+            public void onResponse(String s) {
+                Log.d("gfdgdfgdfgsdfgdf",s);
+                if(s.equals("null")){
+                    Toast.makeText(getActivity(), "user not found", Toast.LENGTH_LONG).show();
+                }
+                else{
+                    try {
+                        JSONObject obj = new JSONObject(s);
+
+                        if(!obj.has(user)){
+                            Toast.makeText(getActivity(), "user not found", Toast.LENGTH_LONG).show();
+                        }
+                        else if(obj.getJSONObject(user).getString("password").equals(pass)){
+                            UserDetails.username = user;
+                            UserDetails.password = pass;
+//                            startActivity(new Intent(getActivity(), ChatUSer.class));
+                            UserDetails.chatWith = jsonObject.optString("primary_mobile");
+                            Intent intent=new Intent(getActivity(),Chat.class);
+                            intent.putExtra("nameValue",jsonObject.optString("user_name"));
+                            intent.putExtra("id",jsonObject.optString("user_id"));
+                            intent.putExtra("value1","0");
+                            startActivity(intent);
+                        }
+                        else {
+                            Toast.makeText(getActivity(), "incorrect password", Toast.LENGTH_LONG).show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                pd.dismiss();
+            }
+        },new Response.ErrorListener(){
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                System.out.println("" + volleyError);
+                pd.dismiss();
+            }
+        });
+
+        RequestQueue rQueue = Volley.newRequestQueue(getActivity());
+        rQueue.add(request);
+
 
     }
 

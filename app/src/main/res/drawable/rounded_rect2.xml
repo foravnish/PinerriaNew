@@ -11,9 +11,6 @@
         android:startColor="#3aa1fa"
         android:type="linear" />
 
-    <!--If your shape requires only one solid color-->
-    <!--<solid
-        android:color="#FFFFFF" />-->
 
     <size
         android:width="52dp"

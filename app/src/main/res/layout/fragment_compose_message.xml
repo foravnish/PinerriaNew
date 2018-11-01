@@ -123,6 +123,7 @@
                     android:paddingLeft="10dp"
                     android:drawablePadding="10dp"
                     android:hint="Message"
+                    android:maxLength="300"
                     android:textColor="@color/white"
                     android:gravity="top"
                     android:singleLine="true"

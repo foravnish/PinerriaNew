@@ -111,13 +111,20 @@
                         android:id="@+id/salary"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_weight="0.5"
                         android:textSize="14dp"
                         android:singleLine="true"
                         android:gravity="left"
                         android:text="Bushiness"
                         android:textColor="@color/md_grey_900" />
 
+                        <ImageView
+                            android:id="@+id/stars"
+                            android:layout_width="0dp"
+                            android:layout_height="25dp"
+                            android:layout_weight="0.5"
+                            android:src="@drawable/star"
+                            android:visibility="visible" />
                     </LinearLayout>
 
                     <LinearLayout

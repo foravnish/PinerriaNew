@@ -1,8 +1,10 @@
 package pinerria.business.pinerrianew.Fragments;
 
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -23,11 +25,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,9 +42,12 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import pinerria.business.pinerrianew.Activites.AddGSTDetails;
 import pinerria.business.pinerrianew.Activites.HomeAct;
+import pinerria.business.pinerrianew.Activites.Login;
 import pinerria.business.pinerrianew.Activites.PayActivity;
 import pinerria.business.pinerrianew.R;
 import pinerria.business.pinerrianew.Utils.Api;
@@ -62,7 +71,7 @@ public class Packages extends Fragment {
     List<HashMap<String,String>> AllProducts ;
     Dialog dialog;
     HashMap<String,String> map;
-
+    JSONObject jsonObject2;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -99,9 +108,6 @@ public class Packages extends Fragment {
 //        });
 
 
-
-
-
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
                 Api.businessPackage+"/"+ MyPrefrences.getUserID(getActivity()), null, new Response.Listener<JSONObject>() {
 
@@ -136,7 +142,14 @@ public class Packages extends Fragment {
                             gridview.setAdapter(adapter);
                             AllProducts.add(map);
                         }
-                        userInfoAyyay=response.getJSONArray("userInfo");
+
+                        if (!response.getString("userInfo").equals("")) {
+                            userInfoAyyay = response.getJSONArray("userInfo");
+                            for ( int j=0;j<userInfoAyyay.length();j++) {
+                                jsonObject2 = userInfoAyyay.getJSONObject(j);
+                            }
+
+                        }
 
                     }
                     else{
@@ -175,19 +188,126 @@ public class Packages extends Fragment {
 
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
 
 
-                Intent intent=new Intent(getActivity(), PayActivity.class);
-                try {
-                    intent.putExtra("jsonArray",jsonArray.get(i).toString());
-                    intent.putExtra("userInfo",userInfoAyyay.get(0).toString());
-                } catch (JSONException e) {
-                    e.printStackTrace();
+
+
+                if (MyPrefrences.getUserLogin(getActivity())==true) {
+
+                    Util.showPgDialog(dialog);
+                    RequestQueue queue = Volley.newRequestQueue(getActivity());
+                    StringRequest strReq = new StringRequest(Request.Method.POST,
+                            Api.checkPrevoiusUserpackages, new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response2) {
+                            Util.cancelPgDialog(dialog);
+                            Log.e("dfsjfdfsdfgd", "Login Response: " + response2);
+
+                            try {
+                                JSONObject response=new JSONObject(response2);
+
+
+
+                                if (response.getString("status").equalsIgnoreCase("success")){
+
+
+                                    Util.errorDialog(getActivity(),""+response.getString("message"));
+
+                                }
+                                else{
+                                    if (jsonObject2.optString("company_name").equalsIgnoreCase("")){
+
+                                        Intent intent=new Intent(getActivity(),AddGSTDetails.class);
+                                        intent.putExtra("type","packageBefore");
+                                        intent.putExtra("amount","");
+                                        startActivity(intent);
+                                        getActivity().overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+                                    }
+                                    else{
+
+                                        Intent intent=new Intent(getActivity(), PayActivity.class);
+                                        try {
+                                            intent.putExtra("jsonArray",jsonArray.get(i).toString());
+                                            intent.putExtra("userInfo",userInfoAyyay.get(0).toString());
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                        startActivity(intent);
+                                        getActivity().overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+
+                                    }
+                                }
+
+
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Util.cancelPgDialog(dialog);
+                            Log.e("fdgdfgdfgd", "Login Error: " + error.getMessage());
+                            Toast.makeText(getActivity(),"Please Connect to the Internet or Wrong Password", Toast.LENGTH_LONG).show();
+                        }
+                    }){
+
+                        @Override
+                        protected Map<String, String> getParams() throws AuthFailureError {
+                            Log.e("fgdfgdfgdf","Inside getParams");
+
+                            // Posting parameters to login url
+                            Map<String, String> params = new HashMap<>();
+                            params.put("user_id", MyPrefrences.getUserID(getActivity()));
+
+                            return params;
+                        }
+
+//                        @Override
+//                        public Map<String, String> getHeaders() throws AuthFailureError {
+//                            Log.e("fdgdfgdfgdfg","Inside getHeaders()");
+//                            Map<String,String> headers=new HashMap<>();
+//                            headers.put("Content-Type","application/x-www-form-urlencoded");
+//                            return headers;
+//                        }
+                    };
+                    // Adding request to request queue
+                    queue.add(strReq);
+
+                    Log.d("fgdgdfgdfgdfgdgd",jsonObject2.optString("company_name"));
+
                 }
-                startActivity(intent);
-                getActivity().overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+                else{
 
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setMessage("Please Login to Purchase Package")
+                            .setCancelable(false)
+                            .setPositiveButton("Login", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+
+                                    Intent intent=new Intent(getActivity(),Login.class);
+                                    startActivity(intent);
+                                    getActivity().overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+                                    getActivity().finish();
+                                }
+                            })
+                            .setNegativeButton("Not Now", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    //  Action for 'NO' Button
+                                    dialog.cancel();
+
+
+                                }
+                            });
+                    AlertDialog alert = builder.create();
+                    //Setting the title manually
+                    alert.setTitle("Pinerria");
+                    alert.show();
+
+                }
 
             }
         });
@@ -215,9 +335,9 @@ public class Packages extends Fragment {
         Adapter() {
             inflater = (LayoutInflater) getActivity().getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-//            if (inflater == null) {
-//                throw new AssertionError("LayoutInflater not found.");
-//            }
+            if (inflater == null) {
+                throw new AssertionError("LayoutInflater not found.");
+            }
         }
 
         @Override

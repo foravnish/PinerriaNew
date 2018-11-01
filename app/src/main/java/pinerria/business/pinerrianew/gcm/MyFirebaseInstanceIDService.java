@@ -1,36 +1,48 @@
 package pinerria.business.pinerrianew.gcm;
 
-
-import android.content.Context;
-import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 
-
 import pinerria.business.pinerrianew.Utils.MyPrefrences;
 
 /**
- * Created by user on 11/2/2016.
+ * Created by Andriod Avnish on 06-Mar-18.
  */
 
 public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
-    private static final String TAG = "MyFirebaseIIDService";
-    Context context;
+    private static final String TAG = MyFirebaseInstanceIDService.class.getSimpleName();
 
     @Override
     public void onTokenRefresh() {
         super.onTokenRefresh();
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-        //Log.d(TAG, "Refreshed token: " + refreshedToken);
-        Log.d("sdfsdgfsgfs",refreshedToken);
-        MyPrefrences.setgcm_token(this,refreshedToken);
 
+        // Saving reg id to shared preferences
+        storeRegIdInPref(refreshedToken);
 
+        // sending reg id to your server
+        sendRegistrationToServer(refreshedToken);
 
+        // Notify UI that registration has completed, so the progress indicator can be hidden.
+//        Intent registrationComplete = new Intent(Bitmap.Config.REGISTRATION_COMPLETE);
+//        registrationComplete.putExtra("token", refreshedToken);
+//        LocalBroadcastManager.getInstance(this).sendBroadcast(registrationComplete);
+    }
 
+    private void sendRegistrationToServer(final String token) {
+        // sending gcm token to server
+        Log.e(TAG, "sendRegistrationToServer: " + token);
+    }
 
-        //Displaying token on logcat
+    private void storeRegIdInPref(String token) {
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString("regId", token);
+        Log.d("fgdgdfhgdf",token);
+        MyPrefrences.setgcm_token(getApplicationContext(),token);
+        editor.commit();
     }
 }

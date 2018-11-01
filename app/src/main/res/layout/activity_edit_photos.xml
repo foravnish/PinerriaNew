@@ -40,6 +40,7 @@
         android:layout_below="@+id/linear1"
         android:text="Note: Tap the photo little longer to delete"
         android:layout_marginLeft="10dp"
+        android:visibility="gone"
         android:layout_marginRight="10dp"
         android:layout_marginTop="5dp"
         android:textColor="@color/pink"
@@ -65,18 +66,17 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_marginRight="10dp"
-        android:src="@drawable/iamgeaddcam"
+        android:src="@drawable/picture"
         android:layout_marginBottom="55dp"
         android:tint="@color/white"
-        app:backgroundTint="@color/blue"
-        />
+        app:backgroundTint="@color/blue"/>
 
 
     <ImageView
         android:id="@+id/imageV1"
-        android:layout_width="80dp"
+        android:layout_width="0dp"
         android:visibility="gone"
-        android:layout_height="80dp"/>
+        android:layout_height="0dp"/>
 
 
     <!--<LinearLayout-->

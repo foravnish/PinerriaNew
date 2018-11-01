@@ -7,8 +7,12 @@ package pinerria.business.pinerrianew.Utils;
 public class Api {
 
 
+//    public static String BASEURL="http://pinerria.com/pinerria/api/";
+    public static String BASEURL="https://pinerria.com/api/";
+    public static String BASEURL_FOR_IMAGE="https://pinerria.com/assets/images/business/thumb/";
 
-    public static String BASEURL="http://pinerria.com/pinerria/api/";
+    public static String gethashCode="https://pinerria.com/getHashCode.php";
+
     public static String catToSubCat=BASEURL+"catToSubCat";
     public static String category=BASEURL+"category";
     public static String subCatByCatId=BASEURL+"subCatByCatId";
@@ -56,15 +60,21 @@ public class Api {
     public static String locationByCityId=BASEURL+"locationByCityId";
     public static String addLocation=BASEURL+"addLocation";
     public static String updateGSTDetails=BASEURL+"updateGSTDetails";
-
+    public static String updatePurchasedPackage=BASEURL+"updatePurchasedPackage";
+    public static String pinerriaInfo=BASEURL+"pinerriaInfo";
+    public static String generateHashKey  = BASEURL+"generateHashKey";
+    public static String myRating  = BASEURL+"myRating";
+    public static String updateMyRating  = BASEURL+"updateMyRating";
+    public static String myRecievedCall  = BASEURL+"myRecievedCall";
+    public static String myFavouriteBusiness  = BASEURL+"myFavouriteBusiness";
+    public static String checkPrevoiusUserpackages=BASEURL+"checkPrevoiusUserpackages";
+    public static String sendNotificationByUser=BASEURL+"sendNotificationByUser";
+    public static String userNotificationsList=BASEURL+"userNotificationsList";
 
 
     public static String URL_FETCH_MESSAGES=BASEURL+"myChatingHistory";
     public static String URL_SEND_MESSAGE=BASEURL+"saveChatData";
     public static String URL_STORE_TOKEN=BASEURL+"updateFcmId";
-
-
-
 
 
     public static String BASEURL3="http://bizzcityinfo.com/Api/index.php/main/";
@@ -94,13 +104,13 @@ public class Api {
     public static String homeBannerImage=BASEURL3+"homeBannerImage";
     public static String emergencyCategory=BASEURL+"emergencyCategory";
     public static String emergency=BASEURL+"emergency";
-    public static String myRating=BASEURL+"myRating";
+    //public static String myRating=BASEURL+"myRating";
     public static String ratingByCompany=BASEURL+"ratingByCompany";
     ///public static String city=BASEURL3+"city";
   //  public static String news=BASEURL+"news";
     public static String trendingCategory=BASEURL+"trendingCategory";
     public static String cityDetails=BASEURL+"cityDetails";
-    public static String editSubmitedRating=BASEURL+"editSubmitedRating";
+    //public static String editSubmitedRating=BASEURL+"editSubmitedRating";
     public static String deleteSubmitedRating=BASEURL+"deleteSubmitedRating";
     public static String profileIncorrectRqst=BASEURL+"profileIncorrectRqst";
     public static String buyerProfileDetails=BASEURL+"buyerProfileDetails";

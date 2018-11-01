@@ -3,6 +3,7 @@ package pinerria.business.pinerrianew.Fragments;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -52,11 +53,14 @@ import java.util.Map;
 import pinerria.business.pinerrianew.Activites.AddProduct;
 import pinerria.business.pinerrianew.Activites.HomeAct;
 import pinerria.business.pinerrianew.Activites.Login;
+import pinerria.business.pinerrianew.Activites.Splash;
 import pinerria.business.pinerrianew.R;
 import pinerria.business.pinerrianew.Utils.Api;
 import pinerria.business.pinerrianew.Utils.AppController;
 import pinerria.business.pinerrianew.Utils.MyPrefrences;
 import pinerria.business.pinerrianew.Utils.Util;
+
+import static android.text.Html.fromHtml;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -70,7 +74,7 @@ public class AddJobs extends Fragment {
 
     ImageView regiImage;
     Button submitJob;
-    EditText rePass,password,salary,heading,description;
+    EditText rePass,password,salary,heading,description,address;
     RadioGroup radioGroup;
     RadioButton radioButton;
     TextView forLogin,uploadImage;
@@ -98,6 +102,7 @@ public class AddJobs extends Fragment {
         submitJob=view.findViewById(R.id.submitJob);
         typeJobs=view.findViewById(R.id.typeJobs);
         experience=view.findViewById(R.id.experience);
+        address=view.findViewById(R.id.address);
 
 
         radioGroup = (RadioGroup) view.findViewById(R.id.radioGroup);
@@ -131,10 +136,7 @@ public class AddJobs extends Fragment {
             HomeAct.title.setText("Add Jobs");
         }
 
-
-
         if (MyPrefrences.getUserLogin(getActivity())==true) {
-
 
         }
         else{
@@ -203,7 +205,6 @@ public class AddJobs extends Fragment {
                // Toast.makeText(getActivity(),  val, Toast.LENGTH_SHORT).show();
 
                 if(validate()){
-
                     if (Home.jobs==true){
                         Log.d("fsddgdgfgfgdfgdfd","true");
 
@@ -213,7 +214,6 @@ public class AddJobs extends Fragment {
                         Log.d("fsddgdgfgfgdfgdfd","flase");
                         submitJobs(val,ValExp);
                     }
-
                 }
 
             }
@@ -241,13 +241,10 @@ public class AddJobs extends Fragment {
 
                     if (jsonObject.optString("status").equalsIgnoreCase("success")){
 
-                        Toast.makeText(getActivity(), ""+jsonObject.optString("message"), Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getActivity(), ""+jsonObject.optString("message"), Toast.LENGTH_SHORT).show();
+                        errorDialog(getActivity(),jsonObject.optString("message"));
 
-                        Fragment fragment = new MyJobs();
-                        FragmentManager manager = getFragmentManager();
-                        FragmentTransaction ft = manager.beginTransaction();
-                        ft.replace(R.id.content_frame, fragment).addToBackStack(null).commit();
-                        ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout,R.anim.frag_fade_right, R.anim.frag_fad_left);
+
 
                     }
                     else{
@@ -280,6 +277,7 @@ public class AddJobs extends Fragment {
                 params.put("full_part_time", value);
                 params.put("experience", valExp);
                 params.put("description", description.getText().toString());
+                params.put("address", address.getText().toString());
 
                 return params;
             }
@@ -321,6 +319,7 @@ public class AddJobs extends Fragment {
                         heading.setText(jsonObject.optString("heading"));
                         salary.setText(jsonObject.optString("salary"));
                         description.setText(jsonObject.optString("description"));
+                        address.setText(jsonObject.optString("address"));
 
                     }
 
@@ -360,7 +359,6 @@ public class AddJobs extends Fragment {
 
         Util.showPgDialog(dialog);
 
-
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 Api.addUserJob, new Response.Listener<String>() {
@@ -374,14 +372,14 @@ public class AddJobs extends Fragment {
                     JSONObject jsonObject=new JSONObject(response);
 
                     if (jsonObject.optString("status").equalsIgnoreCase("success")){
-//                        Util.errorDialog(getActivity(),jsonObject.optString("message"));
-                        Toast.makeText(getActivity(), ""+jsonObject.optString("message"), Toast.LENGTH_SHORT).show();
-
-                        Fragment fragment = new MyJobs();
-                        FragmentManager manager = getFragmentManager();
-                        FragmentTransaction ft = manager.beginTransaction();
-                        ft.replace(R.id.content_frame, fragment).addToBackStack(null).commit();
-                        ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout,R.anim.frag_fade_right, R.anim.frag_fad_left);
+                        errorDialog(getActivity(),jsonObject.optString("message"));
+//                        Toast.makeText(getActivity(), ""+jsonObject.optString("message"), Toast.LENGTH_SHORT).show();
+//
+//                        Fragment fragment = new MyJobs();
+//                        FragmentManager manager = getFragmentManager();
+//                        FragmentTransaction ft = manager.beginTransaction();
+//                        ft.replace(R.id.content_frame, fragment).addToBackStack(null).commit();
+//                        ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout,R.anim.frag_fade_right, R.anim.frag_fad_left);
 
                     }
                     else{
@@ -415,6 +413,7 @@ public class AddJobs extends Fragment {
                 params.put("full_part_time", value);
                 params.put("experience", valExp);
                 params.put("description", description.getText().toString());
+                params.put("address", address.getText().toString());
 
                 return params;
             }
@@ -437,20 +436,24 @@ public class AddJobs extends Fragment {
 
         if (TextUtils.isEmpty(heading.getText().toString()))
         {
-            Util.errorDialog(getActivity(),"Type Heading");
+            Util.errorDialog(getActivity(),"Enter Job Title.");
             return false;
         }
         else if (TextUtils.isEmpty(description.getText().toString()))
         {
-            Util.errorDialog(getActivity(),"Type Description");
+            Util.errorDialog(getActivity(),"Enter Description");
             return false;
         }
         else if (TextUtils.isEmpty(salary.getText().toString()))
         {
-            Util.errorDialog(getActivity(),"Type Salary");
+            Util.errorDialog(getActivity(),"Enter Salary");
             return false;
         }
-
+        else if (TextUtils.isEmpty(address.getText().toString()))
+        {
+            Util.errorDialog(getActivity(),"Enter Address");
+            return false;
+        }
 
 
 
@@ -458,6 +461,33 @@ public class AddJobs extends Fragment {
 
     }
 
+    public static void errorDialog(final Context context, String message) {
+        final Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.alertdialogcustom2);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        TextView text = (TextView) dialog.findViewById(R.id.msg_txv);
+        text.setText(fromHtml(message));
+        Button ok = (Button) dialog.findViewById(R.id.btn_ok);
+        ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
 
+                Intent intent=new Intent(context,HomeAct.class);
+                intent.putExtra("userType","jobs");
+                context.startActivity(intent);
+
+//                Fragment fragment = new MyJobs();
+//                FragmentManager manager = getFragmentManager();
+//                FragmentTransaction ft = manager.beginTransaction();
+//                ft.replace(R.id.content_frame, fragment).addToBackStack(null).commit();
+//                ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout,R.anim.frag_fade_right, R.anim.frag_fad_left);
+
+            }
+        });
+        dialog.show();
+
+    }
 
 }

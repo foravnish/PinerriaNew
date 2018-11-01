@@ -4,15 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/list_bg_color"
+    android:background="@color/white"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Fragments.Home">
 
     <RelativeLayout
         android:id="@+id/rela1"
         android:layout_width="match_parent"
-        android:layout_height="160dp"
-       >
+        android:layout_height="160dp">
 
 
         <android.support.v4.view.ViewPager
@@ -51,9 +50,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
             android:layout_marginBottom="5dp"
-            android:paddingTop="7dp"
-            android:layout_marginTop="15dp"
-            android:paddingBottom="5dp"
+            android:layout_marginTop="5dp"
             android:drawableLeft="@drawable/icon"
             android:drawablePadding="5dp"
             android:drawableTint="@color/pink"
@@ -114,8 +111,8 @@
             app:miniFabBackgroundTint="@color/pink"
             app:miniFabDrawableTint="@color/white"
             app:fabBackgroundTint="@color/pink"
-            app:miniFabTitleTextColor="@color/grayText"
-            />
+            app:miniFabTitleTextColor="@color/white"
+            app:miniFabTitleBackgroundTint="@color/pink"/>
 
 
     </RelativeLayout>

@@ -1,132 +1,335 @@
 package pinerria.business.pinerrianew.gcm;
 
+
+import android.app.ActivityManager;
+import android.app.AlarmManager;
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
+import android.app.TaskStackBuilder;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.media.RingtoneManager;
-import android.net.Uri;
+import android.content.pm.ServiceInfo;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Build;
+import android.os.SystemClock;
+import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
-import android.text.LoginFilter;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.firebase.client.Firebase;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.IOException;
+import java.net.URL;
+import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
+import pinerria.business.pinerrianew.Activites.Chat;
+import pinerria.business.pinerrianew.Activites.ChatUSer;
+import pinerria.business.pinerrianew.Activites.HomeAct;
+import pinerria.business.pinerrianew.Activites.UserDetails;
+import pinerria.business.pinerrianew.Fragments.Home;
 import pinerria.business.pinerrianew.R;
-import pinerria.business.pinerrianew.Utils.NotificationHandler;
-import pinerria.business.pinerrianew.Utils.Util;
+
 
 /**
- * Created by user on 11/2/2016.
+ * Created by Andriod Avnish on 06-Mar-18.
  */
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
-    Map<String, String> message;
+    private static final String TAG = MyFirebaseMessagingService.class.getSimpleName();
+
+    //  private NotificationUtils notificationUtils;
+
+    Bitmap image;
+    PendingIntent contentIntent;
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        super.onMessageReceived(remoteMessage);
-        //Log.e("message", ": " + remoteMessage.getData());
-
-        message = remoteMessage.getData();
-//        Log.d("fgdghbfdhdfghfgjh", String.valueOf(remoteMessage.getData()));
-        Log.d("fgdghbfdhdfghfgjh", remoteMessage.getData()+"");
-
-        //Toast.makeText(getApplicationContext(), ""+message, Toast.LENGTH_SHORT).show();
-       // sendNotification1(message.toString());
-        if (message.containsKey("type")) {
-            Log.d("gdfgdfgdfgdfghd","type");
-            //sendNotification(message);
-
-        }
-    }
+        Log.e(TAG, "Fromgdfhgdfghfgjf: " + remoteMessage.getMessageType());
+        Log.e(TAG, "Fromgdfhgdfghfgjf: " + remoteMessage.getData());
+        // Log.e(TAG, "Fromgdfhgdfghfgjf: " + remoteMessage.getNotification().getBody());
 
 
-    //This method is generating a notification and displaying the notification
+//        Map<String, String> data2 = remoteMessage.getData();
+//        String myCustomKey = data2.get("my_custom_key");
+//
+        Log.d("gdfgdfgdfgdfgdfgd", remoteMessage.getData().toString());
 
-    private void sendNotification(Map<String, String> msg) {
-        //Creating a broadcast intent
-        Intent pushNotification;
+        JSONObject jsonObject = new JSONObject(remoteMessage.getData());
 
-        //We will create this class to handle notifications
-        NotificationHandler notificationHandler = new NotificationHandler(getApplicationContext());
-        //If the app is in foreground
-        if (!NotificationHandler.isAppIsInBackground(getApplicationContext())) {
-            Log.d("fsdfsdfgsdgfsdg","true");
-            //Toast.makeText(this, "1", Toast.LENGTH_SHORT).show();
-            if (message.get("type").equalsIgnoreCase("send_message")
-                    && Util.ChatOn == 1 && message.get("user_id").equalsIgnoreCase(Util.Sender_ID)) {
-                //Toast.makeText(this, "2", Toast.LENGTH_SHORT).show();
-                pushNotification = new Intent(Util.Noti_Msg);
-                //Adding notification data to the intent
-                pushNotification.putExtra("message", message.get("message"));
-                pushNotification.putExtra("date_time", message.get("date_time"));
-                pushNotification.putExtra("sender_id", message.get("user_id"));
-                pushNotification.putExtra("sender_name", message.get("sender_name"));
-                pushNotification.putExtra("sender_image", message.get("sender_image"));
-                LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
-                //Log.e("on chat screen", ": ");
-            } else if (message.get("type").equalsIgnoreCase("get_request") && Util.ChatDtl_On == 1) {
-               // Toast.makeText(this, "3", Toast.LENGTH_SHORT).show();
-                pushNotification = new Intent(Util.Get_Rquest);
-                //Adding notification data to the intent
-                pushNotification.putExtra("message", message.get("message"));
-                pushNotification.putExtra("date_time", message.get("date_time"));
-                pushNotification.putExtra("sender_id", message.get("user_id"));
-                LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
-            } else {
-                Toast.makeText(this, "4", Toast.LENGTH_SHORT).show();
-                Util.Noti_Bg = 1;
-                Util.Sender_ID = message.get("user_id");
-                Util.Sender_Name = message.get("sender_name");
-                Util.Sender_Img = message.get("sender_image");
+        Log.d("dfgfdgdfgtrd", String.valueOf(jsonObject));
 
-                notificationHandler.showNotificationMessage(Util.Sender_Name, message.get("message"), message.get("type")
-                        , Integer.valueOf(message.get("user_id")));
+
+        //Todo notification
+
+        Log.d("bgdfgbfbdfgdfgdfgf", jsonObject.optString("status"));
+
+        if (!isAppIsInBackground(getApplicationContext())) {      //not in background
+            // app is in foreground, broadcast the push message
+
+
+            Log.d("bgdfgbfbdfgdfgdfgf", String.valueOf(HomeAct.chat_flag));
+
+
+            if (jsonObject.optString("status").equals("chat") && HomeAct.chat_flag==true) {
+                UserDetails.chatWith = jsonObject.optString("mobile_no");
+
+                Log.d("vgfvgdfgdfgdfgdfg","one");
+                NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+                inboxStyle.addLine(jsonObject.optString("body"));
+
+                //  LoginForChat();
+
+                Notification notification;
+                final NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
+                        getApplicationContext());
+//                Intent notificationIntent = new Intent(getApplicationContext(), Chat.class);
+//                notificationIntent.putExtra("nameValue",jsonObject.optString("name"));
+//                notificationIntent.putExtra("id",jsonObject.optString("receiver_id"));
+//                notificationIntent.putExtra("value1","notifiscr");
+
+                Intent notificationIntent = new Intent(getApplicationContext(), HomeAct.class);
+                notificationIntent.putExtra("userType", "chatscr");
+
+                UserDetails.mobileNo=jsonObject.optString("mobile_no");
+                UserDetails.name=jsonObject.optString("name");
+                UserDetails.chatId=jsonObject.optString("receiver_id");
+
+                PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, notificationIntent, 0);
+                notification = mBuilder.setSmallIcon(R.mipmap.noti_icon).setTicker("Pinerria").setWhen(0)
+                        .setAutoCancel(true)
+                        .setContentTitle(jsonObject.optString("title"))
+                        .setTicker("Pinerria")
+//                .setContentIntent(resultPendingIntent)
+                        .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
+//                        .setStyle(inboxStyle)
+                        .setStyle(new NotificationCompat.BigTextStyle().bigText(jsonObject.optString("body")))
+//                .setWhen(getTimeMilliSec(timeStamp))
+                        .setSmallIcon(R.mipmap.noti_icon)
+                        .setContentIntent(contentIntent)
+                        //  .setStyle(new NotificationCompat.BigPictureStyle().bigPicture(image))
+//                .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), icon))
+                        .setContentText(jsonObject.optString("body"))
+                        .build();
+
+                Random random = new Random();
+                NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                notificationManager.notify(random.nextInt(), notification);
             }
 
-            //Sending a broadcast to the chatroom to add the new message
+            else {
+                Log.d("vgfvgdfgdfgdfgdfg","two");
+                NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+                inboxStyle.addLine(jsonObject.optString("body"));
+                Notification notification;
+                final NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
+                        getApplicationContext());
 
-        } else {
-            Log.d("fsdfsdfgsdgfsdg","false");
-            //Log.e("App in Background", ": ");
-            //If app is in foreground displaying push notification
-            //Toast.makeText(this, "6", Toast.LENGTH_SHORT).show();
-            Util.Noti_Bg = 1;
-            Util.Sender_ID = message.get("user_id");
-            Util.Sender_Name = message.get("sender_name");
-            Util.Sender_Img = message.get("sender_image");
-            notificationHandler.showNotificationMessage(Util.Sender_Name, message.get("message"), message.get("type")
-                    , Integer.valueOf(message.get("user_id")));
-            // LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
+                Intent notificationIntent = new Intent(getApplicationContext(), HomeAct.class);
+                notificationIntent.putExtra("userType", "notification");
+                PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, notificationIntent, 0);
+                notification = mBuilder.setSmallIcon(R.mipmap.noti_icon).setTicker("Pinerria").setWhen(0)
+                        .setAutoCancel(true)
+                        .setContentTitle(jsonObject.optString("title"))
+                        .setTicker("Pineria")
+//                .setContentIntent(resultPendingIntent)
+                        .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
+//                        .setStyle(inboxStyle)
+                        .setStyle(new NotificationCompat.BigTextStyle().bigText(jsonObject.optString("body")))
+//                .setWhen(getTimeMilliSec(timeStamp))
+                        .setSmallIcon(R.mipmap.noti_icon)
+                        .setContentIntent(contentIntent)
+                        // .setStyle(new NotificationCompat.BigPictureStyle().bigPicture(image))
+//                .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), icon))
+                        .setContentText(jsonObject.optString("body"))
+                        .build();
+
+                Random random = new Random();
+                NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                notificationManager.notify(random.nextInt(), notification);
 
 
-            //sendNotification(title, message);
+            }
+
 
         }
+        else{         // in background
+            // If the app is in background, firebase itself handles the notification
+
+
+            Log.d("gsdfgdfgrfdfgdgdf1",jsonObject.optString("mobile_no"));       //  mobile no
+            Log.d("gsdfgdfgrfdfgdgdf2",jsonObject.optString("name"));            // name
+            Log.d("gsdfgdfgrfdfgdgdf3",jsonObject.optString("receiver_id"));     // user id of receiver
+
+            if (jsonObject.optString("status").equals("chat")) {
+                Log.d("vgfvgdfgdfgdfgdfg","three");
+                UserDetails.chatWith = jsonObject.optString("mobile_no");
+
+                NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+                inboxStyle.addLine(jsonObject.optString("body"));
+
+              //  LoginForChat();
+
+                Notification notification;
+                final NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
+                        getApplicationContext());
+//                Intent notificationIntent = new Intent(getApplicationContext(), Chat.class);
+//                notificationIntent.putExtra("nameValue",jsonObject.optString("name"));
+//                notificationIntent.putExtra("id",jsonObject.optString("receiver_id"));
+//                notificationIntent.putExtra("value1","notifiscr");
+
+                Intent notificationIntent = new Intent(getApplicationContext(), HomeAct.class);
+                notificationIntent.putExtra("userType", "chatscr");
+
+                UserDetails.mobileNo=jsonObject.optString("mobile_no");
+                UserDetails.name=jsonObject.optString("name");
+                UserDetails.chatId=jsonObject.optString("receiver_id");
+
+                PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, notificationIntent, 0);
+                notification = mBuilder.setSmallIcon(R.mipmap.noti_icon).setTicker("Pinerria").setWhen(0)
+                        .setAutoCancel(true)
+                        .setContentTitle(jsonObject.optString("title"))
+                        .setTicker("Pinerria")
+//                .setContentIntent(resultPendingIntent)
+                        .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
+//                        .setStyle(inboxStyle)
+                        .setStyle(new NotificationCompat.BigTextStyle().bigText(jsonObject.optString("body")))
+//                .setWhen(getTimeMilliSec(timeStamp))
+                        .setSmallIcon(R.mipmap.noti_icon)
+                        .setContentIntent(contentIntent)
+                       //  .setStyle(new NotificationCompat.BigPictureStyle().bigPicture(image))
+//                .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), icon))
+                        .setContentText(jsonObject.optString("body"))
+                        .build();
+
+                Random random = new Random();
+                NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                notificationManager.notify(random.nextInt(), notification);
+            }
+
+            else {
+                Log.d("vgfvgdfgdfgdfgdfg","four");
+                NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+                inboxStyle.addLine(jsonObject.optString("body"));
+                Notification notification;
+                final NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
+                        getApplicationContext());
+
+                Intent notificationIntent = new Intent(getApplicationContext(), HomeAct.class);
+                notificationIntent.putExtra("userType", "notification");
+                PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, notificationIntent, 0);
+                notification = mBuilder.setSmallIcon(R.mipmap.noti_icon).setTicker("Pinerria").setWhen(0)
+                        .setAutoCancel(true)
+                        .setContentTitle(jsonObject.optString("title"))
+                        .setTicker("Pineria")
+//                .setContentIntent(resultPendingIntent)
+                        .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
+//                        .setStyle(inboxStyle)
+                        .setStyle(new NotificationCompat.BigTextStyle().bigText(jsonObject.optString("body")))
+//                .setWhen(getTimeMilliSec(timeStamp))
+                        .setSmallIcon(R.mipmap.noti_icon)
+                        .setContentIntent(contentIntent)
+                        // .setStyle(new NotificationCompat.BigPictureStyle().bigPicture(image))
+//                .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), icon))
+                        .setContentText(jsonObject.optString("body"))
+                        .build();
+
+                Random random = new Random();
+                NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                notificationManager.notify(random.nextInt(), notification);
+
+
+            }
+
+        }
+
+//        if (jsonObject.optString("status").equals("chat")) {
+//
+//        }
+//
+//        else {
+//            NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+//            inboxStyle.addLine(jsonObject.optString("body"));
+//            Notification notification;
+//            final NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
+//                    getApplicationContext());
+//
+//            Intent notificationIntent = new Intent(getApplicationContext(), HomeAct.class);
+//            notificationIntent.putExtra("userType", "notification");
+//            PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, notificationIntent, 0);
+//            notification = mBuilder.setSmallIcon(R.mipmap.noti_icon).setTicker("Pinerria").setWhen(0)
+//                    .setAutoCancel(true)
+//                    .setContentTitle(jsonObject.optString("title"))
+//                    .setTicker("Pineria")
+////                .setContentIntent(resultPendingIntent)
+//                    .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
+////                    .setStyle(inboxStyle)
+//                    .setStyle(new NotificationCompat.BigTextStyle().bigText(jsonObject.optString("body")))
+////                .setWhen(getTimeMilliSec(timeStamp))
+//                    .setSmallIcon(R.mipmap.noti_icon)
+//                    .setContentIntent(contentIntent)
+//                    // .setStyle(new NotificationCompat.BigPictureStyle().bigPicture(image))
+////                .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), icon))
+//                    .setContentText(jsonObject.optString("body"))
+//                    .build();
+//
+//            Random random = new Random();
+//            NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+//            notificationManager.notify(random.nextInt(), notification);
+//
+//
+//        }
+
+
+
     }
 
 
-//    private void sendNotification1(String message) {
-//        Intent intent = new Intent(this, MainActivity.class);
-//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//        int requestCode = 0;
-//        PendingIntent pendingIntent = PendingIntent.getActivity(this, requestCode, intent, PendingIntent.FLAG_ONE_SHOT);
-//        Uri sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-//        NotificationCompat.Builder noBuilder = new NotificationCompat.Builder(this)
-//                .setSmallIcon(R.drawable.logo)
-//                .setContentText(message)
-//                .setAutoCancel(true)
-//                .setContentIntent(pendingIntent);
-//
-//        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-//        notificationManager.notify(0, noBuilder.build()); //0 = ID of notification
-//    }
+
+
+
+    public static boolean isAppIsInBackground(Context context) {
+        boolean isInBackground = true;
+        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT_WATCH) {
+            List<ActivityManager.RunningAppProcessInfo> runningProcesses = am.getRunningAppProcesses();
+            for (ActivityManager.RunningAppProcessInfo processInfo : runningProcesses) {
+                if (processInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
+                    for (String activeProcess : processInfo.pkgList) {
+                        if (activeProcess.equals(context.getPackageName())) {
+                            isInBackground = false;
+                        }
+                    }
+                }
+            }
+        } else {
+            List<ActivityManager.RunningTaskInfo> taskInfo = am.getRunningTasks(1);
+            ComponentName componentInfo = taskInfo.get(0).topActivity;
+            if (componentInfo.getPackageName().equals(context.getPackageName())) {
+                isInBackground = false;
+            }
+        }
+
+        return isInBackground;
+    }
+
 }

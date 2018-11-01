@@ -2,8 +2,10 @@ package pinerria.business.pinerrianew.Activites;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,11 +15,13 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -70,21 +74,23 @@ import pinerria.business.pinerrianew.Utils.AppController;
 import pinerria.business.pinerrianew.Utils.JSONParser;
 import pinerria.business.pinerrianew.Utils.MyPrefrences;
 import pinerria.business.pinerrianew.Utils.Util;
-import pinerria.business.pinerrianew.gcm.GCMRegistrationIntentService;
+
+import static android.text.Html.fromHtml;
+
 
 public class Registration extends AppCompatActivity {
 
     //    ImageView regiImage;
     // ImageView regiImage;
     Button registration;
-    EditText rePass,password,mobile,namePerson;
+    EditText rePass,password,mobile,namePerson,emailId;
     RadioGroup radioGroup;
     TextView forLogin,skip;
 
     private static final int REQUEST_PICK_IMAGE = 1002;
     Bitmap imageBitmap;
     File f=null;
-
+    public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 1;
     Dialog dialog, dialog4;
     Spinner country,state,city;
     List<HashMap<String,String>> AllStateList ;
@@ -101,12 +107,16 @@ public class Registration extends AppCompatActivity {
 
     List<String> keyData=new ArrayList<>();
     List<String> valData=new ArrayList<>();
+    String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+    JSONObject jsonObject1;
+    EditText otp_edit;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
 
         namePerson=(EditText) findViewById(R.id.namePerson);
+        emailId=(EditText) findViewById(R.id.emailId);
         mobile=findViewById(R.id.mobile);
         password=findViewById(R.id.password);
         rePass=findViewById(R.id.rePass);
@@ -155,6 +165,12 @@ public class Registration extends AppCompatActivity {
 //        }
 
 
+        if (checkAndRequestPermissions()) {
+            // carry on the normal flow, as the case of  permissions  granted.
+        }
+
+
+
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -172,8 +188,7 @@ public class Registration extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-
-
+                startActivity(new Intent(Registration.this,TermandConditions.class));
 
 
 //                Log.d("fgdgdfgdfgdfgdg", String.valueOf(checkBox.isChecked()));
@@ -249,21 +264,11 @@ public class Registration extends AppCompatActivity {
             public void onClick(View view) {
 
 
-                if (radioGroup.getCheckedRadioButtonId() == -1)
-                {
-                    Log.d("fgdgdfgdfgdfgdfgdfgd","yes");
-
-                    Util.errorDialog(Registration.this,"Please Select Gender");
-                }
-                else
-                {
-                    Log.d("fgdgdfgdfgdfgdfgdfgd","no");
-
                     int selectedId = radioGroup.getCheckedRadioButtonId();
                     final RadioButton radioButton = (RadioButton) findViewById(selectedId);
 
-                    if (checkBox.isChecked()==true){
-                        Log.d("fdgsdgsdfgsdfgsdgrfgds","yes");
+//                    if (checkBox.isChecked()==true){
+//                        Log.d("fdgsdgsdfgsdfgsdgrfgds","yes");
 
                         if(validate()){
 
@@ -272,58 +277,21 @@ public class Registration extends AppCompatActivity {
 //                        Util.errorDialog(Registration.this,"Please Select State");
 //                    }
 //                    else{
-                            if (cityString.equalsIgnoreCase("Select City")){
-                                Util.errorDialog(Registration.this,"Please Select City");
-                            }
-                            else{
-
-//                            String path= null;
-//                            String filename= null;
-//                            try {
-//                                path = f.toString();
-//                                filename = path.substring(path.lastIndexOf("/")+1);
-//                                Log.d("dsfdfsdfsfs",filename);
-//                            } catch (Exception e) {
-//                                e.printStackTrace();
-//                            }
-
-//                            if (filename==null){
-//                                Util.errorDialog(Registration.this,"Please Select Image");
-//                            }
-//                            else{
-//                                //Toast.makeText(AddProduct.this, "yes", Toast.LENGTH_SHORT).show();
-//                                PostData(radioButton.getText().toString(),path,filename,mobile.getText().toString());
-//                            }
 
                                 PostData(radioButton.getText().toString(),mobile.getText().toString());
 
                             }
 
 
-                        }
+//                }
 
-
-
-                }
-
-                    else{
-                        Log.d("fdgsdgsdfgsdfgsdgrfgds","not ");
-                        Util.errorDialog(Registration.this,"Please select i agree to T&C");
-                    }
-
-
-
-
-
-
-
-
-
+//                    else{
+//                        Log.d("fdgsdgsdfgsdfgsdgrfgds","not ");
+//                        Util.errorDialog(Registration.this,"Please indicate acceptance of Terms & Conditions");
 //                    }
 
 
 
-                }
 
             }
         });
@@ -348,36 +316,45 @@ public class Registration extends AppCompatActivity {
         });
     }
 
+    private boolean validate() {
 
-    private boolean validate(){
-
-        if (TextUtils.isEmpty(namePerson.getText().toString()))
-        {
-            Util.errorDialog(Registration.this,"Type Your Name");
+        if (TextUtils.isEmpty(namePerson.getText().toString())) {
+            Util.errorDialog(Registration.this, "Enter Your Name");
+            return false;
+        } else if (TextUtils.isEmpty(mobile.getText().toString())) {
+            Util.errorDialog(Registration.this, "Enter Mobile No.");
+            return false;
+        } else if (mobile.getText().toString().length() < 10) {
+            Util.errorDialog(Registration.this, "Enter 10 digit Mobile No.");
             return false;
         }
-        else if (TextUtils.isEmpty(mobile.getText().toString()))
-        {
-            Util.errorDialog(Registration.this,"Type Mobile No.");
+        else if (!TextUtils.isEmpty(emailId.getText().toString())) {
+            if (!emailId.getText().toString().trim().matches(emailPattern)) {
+                Util.errorDialog(Registration.this, "Enter valid Email Id.");
+                return false;
+            }
+        } if (TextUtils.isEmpty(password.getText().toString())) {
+            Util.errorDialog(Registration.this, "Enter Password.");
             return false;
-        }
-        else if (TextUtils.isEmpty(password.getText().toString()))
-        {
-            Util.errorDialog(Registration.this,"Type Password ");
+        } if (TextUtils.isEmpty(rePass.getText().toString())) {
+            Util.errorDialog(Registration.this, "Enter Confirm Password.");
             return false;
-        }
-        else if (TextUtils.isEmpty(rePass.getText().toString()))
-        {
-            Util.errorDialog(Registration.this,"Type Confirm Password");
-            return false;
-        }
-        else if (!rePass.getText().toString().equals(password.getText().toString())){
+        } if (!rePass.getText().toString().equals(password.getText().toString())) {
 //            Toast.makeText(getApplicationContext(), "Both Password should be match", Toast.LENGTH_SHORT).show();
-            Util.errorDialog(Registration.this,"Confirm Password not Match");
+            Util.errorDialog(Registration.this, "Confirm Password does not match.");
+            return false;
+        }  if (cityString.equalsIgnoreCase("Select City")) {
+            Util.errorDialog(Registration.this, "Please Select City.");
+            return false;
+        }  if (radioGroup.getCheckedRadioButtonId() == -1) {
+            Util.errorDialog(Registration.this, "Please Select Gender.");
+            return false;
+        }  if (checkBox.isChecked() == false) {
+            Util.errorDialog(Registration.this, "Please indicate acceptance of Terms & Conditions.");
             return false;
         }
 
-        return true;
+            return true;
 
     }
 
@@ -449,21 +426,16 @@ public class Registration extends AppCompatActivity {
             if (json != null) {
 
 
+                Log.d("fgdfgdfgdfgdfgdfg", String.valueOf(json));
                 if (json.optString("status").equalsIgnoreCase("success")) {
-
-
 
                     // Toast.makeText(getApplicationContext(), "Registration Successfully..", Toast.LENGTH_LONG).show();
 
                     otpVerfy(mob);
 
-
-
-
-
                 } else {
 //                    Toast.makeText(PostAdd.this, "Error " + json, Toast.LENGTH_LONG).show();
-                    Util.errorDialog(Registration.this, json.optString("message"));
+                    errorDialog(Registration.this, json.optString("message"));
                 }
             }
         }
@@ -479,8 +451,17 @@ public class Registration extends AppCompatActivity {
         dialog2.setContentView(R.layout.otp_dialog_verfy);
         //dialog2.setCancelable(false);
 
-        final EditText otp_edit= (EditText) dialog2.findViewById(R.id.otp_edit);
+        otp_edit= (EditText) dialog2.findViewById(R.id.otp_edit);
         TextView recieve= (TextView) dialog2.findViewById(R.id.recieve);
+        TextView reSend= (TextView) dialog2.findViewById(R.id.reSend);
+        reSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                resendOtp(mob);
+            }
+        });
+
         recieve.setText("Sent OTP on "+mob);
         Button submit2=(Button)dialog2.findViewById(R.id.submit2);
         submit2.setOnClickListener(new View.OnClickListener() {
@@ -494,7 +475,7 @@ public class Registration extends AppCompatActivity {
 
                 else {
 
-                    verifyOTP_API(mob,otp_edit.getText().toString());
+                    verifyOTP_API(mob,otp_edit.getText().toString(),dialog2);
 
                 }
             }
@@ -504,7 +485,7 @@ public class Registration extends AppCompatActivity {
 
     }
 
-    private void verifyOTP_API(final String mob, final String otp) {
+    private void verifyOTP_API(final String mob, final String otp, final Dialog dialogOTP) {
 
         Util.showPgDialog(dialog);
 
@@ -526,6 +507,8 @@ public class Registration extends AppCompatActivity {
 
 
 
+                        JSONArray jsonArray=jsonObject.getJSONArray("message");
+                        jsonObject1 = jsonArray.getJSONObject(0);
 
 
                         //TODO Registration for Firebase
@@ -543,19 +526,25 @@ public class Registration extends AppCompatActivity {
 
                                 Firebase reference = new Firebase("https://pinerria-home-business.firebaseio.com/users");
                                 Firebase reference2 = new Firebase("https://pinerria-home-business.firebaseio.com/users");
+                                Firebase reference3 = new Firebase("https://pinerria-home-business.firebaseio.com/users");
 
 
                                 if(s.equals("null")) {
 
-
-
                                     reference.child(mob).child("password").setValue(pass);
                                     reference2.child(mob).child("name").setValue(namePerson.getText().toString());
+                                    reference3.child(mob).child("userId").setValue(jsonObject1.optString("id").toString());
 
+                                    errorDialog(Registration.this,"Thanks for registering with Pinerria. You can now perform the following tasks:\n" +
+                                            "Add your business on Pinerria\n" +
+                                            "Make that Business as Premium\n"+
+                                            "Post a job\n"+
+                                            "Contact other sellers; and\n"+
+                                            "Give Review and Rating on other businesses.");
 
-                                    Toast.makeText(getApplicationContext(), "Registration Successfully... Please Login.", Toast.LENGTH_SHORT).show();
-                                    startActivity(new Intent(Registration.this,   Login.class));
-                                    finish();
+                                   // Toast.makeText(getApplicationContext(), "Registration Successfully... Please Login.", Toast.LENGTH_SHORT).show();
+//                                    startActivity(new Intent(Registration.this,   Login.class));
+//                                    finish();
 
                                 }
                                 else {
@@ -564,18 +553,19 @@ public class Registration extends AppCompatActivity {
 
                                         if (!obj.has(mob)) {
 
-
                                             reference.child(mob).child("password").setValue(pass);
                                             reference2.child(mob).child("name").setValue(namePerson.getText().toString());
+                                            reference3.child(mob).child("userId").setValue(jsonObject1.optString("id").toString());
 
+//                                            Toast.makeText(getApplicationContext(), "Registration successful.\nPlease Login.", Toast.LENGTH_SHORT).show();
 
+                                            errorDialog(Registration.this,"Registration successful.\nPlease Login.");
 
-                                            Toast.makeText(getApplicationContext(), "Registration Successfully... Please Login.", Toast.LENGTH_SHORT).show();
-                                            startActivity(new Intent(Registration.this,   Login.class));
-                                            finish();
+//                                            startActivity(new Intent(Registration.this,   Login.class));
+//                                            finish();
 
                                         } else {
-                                            Toast.makeText(Registration.this, "username already exists", Toast.LENGTH_LONG).show();
+                                            Toast.makeText(Registration.this, "User already exists", Toast.LENGTH_LONG).show();
                                         }
 
                                     } catch (JSONException e) {
@@ -598,24 +588,16 @@ public class Registration extends AppCompatActivity {
                         rQueue.add(request);
 
 
-
-
-
-
-
-
                     }
                     else{
+//                        dialogOTP.dismiss();
+                        Util.cancelPgDialog(dialog);
                         Toast.makeText(getApplicationContext(),jsonObject.getString("message") , Toast.LENGTH_SHORT).show();
                     }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
-
-
-
             }
         }, new Response.ErrorListener() {
             @Override
@@ -677,6 +659,7 @@ public class Registration extends AppCompatActivity {
                     .type(MultipartBuilder.FORM)
 
                     .addFormDataPart("name", namePerson.getText().toString())
+                    .addFormDataPart("emailId", emailId.getText().toString())
                     .addFormDataPart("mobile", mobile.getText().toString())
                     .addFormDataPart("gender", value)
                     .addFormDataPart("password", password.getText().toString())
@@ -691,7 +674,7 @@ public class Registration extends AppCompatActivity {
             Log.d("dfdsgsdgdfgdfh",idstate);
 
 
-
+            Log.d("gdfgsdfgsgsgsdg",emailId.getText().toString());
 
             com.squareup.okhttp.Request request = new com.squareup.okhttp.Request.Builder()
 //                     .url("http://divpreetsingh.info/app/ManiUploadsImageHere")
@@ -965,6 +948,166 @@ public class Registration extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(jsonObjReq);
 
 
+
+    }
+
+
+    private void resendOtp(final String mobile) {
+
+
+        Util.showPgDialog(dialog);
+
+        RequestQueue queue = Volley.newRequestQueue(Registration.this);
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                Api.forgetPassword, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Util.cancelPgDialog(dialog);
+                Log.e("dfsjfdfsdfgd", "Login Response: " + response);
+
+
+                try {
+                    JSONObject jsonObject=new JSONObject(response);
+                    // if (jsonObject.getString("status").equalsIgnoreCase("success")){
+
+                    if (jsonObject.optString("status").equals("success")) {
+
+
+
+                    }
+                    else{
+//                        Toast.makeText(getApplicationContext(),jsonObject.getString("message") , Toast.LENGTH_SHORT).show();
+                        Util.errorDialog(Registration.this,jsonObject.getString("message"));
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Util.cancelPgDialog(dialog);
+                Log.e("fdgdfgdfgd", "Login Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),"Please Connect to the Internet", Toast.LENGTH_LONG).show();
+            }
+        }){
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Log.e("fgdfgdfgdf","Inside getParams");
+
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<>();
+                params.put("mobile", mobile);
+
+
+                return params;
+            }
+
+//                        @Override
+//                        public Map<String, String> getHeaders() throws AuthFailureError {
+//                            Log.e("fdgdfgdfgdfg","Inside getHeaders()");
+//                            Map<String,String> headers=new HashMap<>();
+//                            headers.put("Content-Type","application/x-www-form-urlencoded");
+//                            return headers;
+//                        }
+        };
+        // Adding request to request queue
+        queue.add(strReq);
+
+
+
+
+    }
+
+
+
+    private  boolean checkAndRequestPermissions() {
+        int permissionSendMessage = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.SEND_SMS);
+
+        int receiveSMS = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.RECEIVE_SMS);
+
+        int readSMS = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_SMS);
+        List<String> listPermissionsNeeded = new ArrayList<>();
+
+        if (receiveSMS != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.RECEIVE_MMS);
+        }
+        if (readSMS != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.READ_SMS);
+        }
+        if (permissionSendMessage != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.SEND_SMS);
+        }
+        if (!listPermissionsNeeded.isEmpty()) {
+            ActivityCompat.requestPermissions(this,
+                    listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]),
+                    REQUEST_ID_MULTIPLE_PERMISSIONS);
+            return false;
+        }
+        return true;
+    }
+
+
+    @Override
+    public void onResume() {
+        LocalBroadcastManager.getInstance(this).
+                registerReceiver(receiver, new IntentFilter("otp"));
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver);
+    }
+
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equalsIgnoreCase("otp")) {
+                final String message = intent.getStringExtra("message");
+
+                Log.d("sgdfgdfgdfgdfd",message);
+                String upToNCharacters =message.substring(11, Math.min(message.length(),15));
+
+                Log.d("gsdfgsdfdgvd",upToNCharacters);
+//                otpString=message.substring(message.length()-8).replaceAll("\\s+","");
+                otp_edit.setText(upToNCharacters);
+            }
+        }
+    };
+
+
+
+    public static void errorDialog(final Context context, String message) {
+        final Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.alertdialogcustom2);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        TextView text = (TextView) dialog.findViewById(R.id.msg_txv);
+        text.setText(message);
+        Button ok = (Button) dialog.findViewById(R.id.btn_ok);
+        ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+
+                Intent intent=new Intent(context,Login.class);
+                context.startActivity(intent);
+                // finish();
+
+
+            }
+        });
+        dialog.show();
 
     }
 

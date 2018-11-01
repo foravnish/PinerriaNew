@@ -32,7 +32,7 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_gravity="left|center"
-                    android:src="@drawable/home1" />
+                    android:src="@mipmap/logo_app" />
 
                 <TextView
                     android:id="@+id/title"

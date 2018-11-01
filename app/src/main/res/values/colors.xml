@@ -19,9 +19,10 @@
     <color name="white">#ffffff</color>
     <color name="gray2">#cac9c9</color>
     <color name="green">#159401</color>
+    <color name="green2">#2fe90c</color>
     <color name="red">#ff0004</color>
     <color name="yellow">#fada14</color>
-    <color name="orange">#fd5501</color>
+    <color name="orange">#e63162</color>
     <color name="pink">#e63162</color>
     <!--<color name="pink">#fd2e7a</color>-->
     <color name="pink2">#f9e3e9</color>

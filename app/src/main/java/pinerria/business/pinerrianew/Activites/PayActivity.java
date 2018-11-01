@@ -27,15 +27,14 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.ebs.android.sdk.Config;
-import com.ebs.android.sdk.EBSPayment;
-import com.ebs.android.sdk.PaymentRequest;
+
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -55,10 +54,11 @@ public class PayActivity extends AppCompatActivity {
     private static final int ACC_ID = 27791;// Provided by EBS
     private static final String SECRET_KEY = "87a9449095742721db3814e444495e9b";// Provided by EBS
 
-    TextView pName,creditpoints,creditpoints2,price,buynow,discount,duration,price1,price2,price3,price4;
+    TextView pName,creditpoints,creditpoints2,price,discount,duration,price1,price2,price3,price4;
     Dialog dialog;
     JSONObject jsonObject;
     JSONObject jsonObject2;
+    Button buynow;
 
     ArrayList<HashMap<String, String>> custom_post_parameters;
 
@@ -76,6 +76,7 @@ public class PayActivity extends AppCompatActivity {
 
 
 
+
         pName=(TextView)findViewById(R.id.pName);
 //            creditpoints=(TextView)convertView.findViewById(R.id.creditpoints);
 //            creditpoints2=(TextView)convertView.findViewById(R.id.creditpoints2);
@@ -85,22 +86,21 @@ public class PayActivity extends AppCompatActivity {
         price3=(TextView)findViewById(R.id.price3);
         price4=(TextView)findViewById(R.id.price4);
 
-        buynow=(TextView) findViewById(R.id.buynow);
+        buynow=(Button) findViewById(R.id.buynow);
         duration=(TextView) findViewById(R.id.duration);
-        buynow=(TextView) findViewById(R.id.buynow);
+
 
 
         try {
             jsonObject=new JSONObject(getIntent().getStringExtra("jsonArray"));
 
             pName.setText(jsonObject.optString("package_name"));
-            price1.setText(jsonObject.optString("actual_value"));
+            price1.setText("₹ "+jsonObject.optString("actual_value"));
             price2.setText(jsonObject.optString("discount_percent")+" %");
-            price3.setText(jsonObject.optString("after_discount_price"));
+            price3.setText("₹ "+jsonObject.optString("after_discount_price"));
             price4.setText(jsonObject.optString("gst")+" %");
-            price.setText(jsonObject.optString("total_value"));
-            duration.setText(jsonObject.optString("duration")+" Months");
-
+            price.setText("₹ "+jsonObject.optString("total_value"));
+            duration.setText(jsonObject.optString("duration")+" Months Validity");
 
 
         } catch (JSONException e) {
@@ -110,11 +110,6 @@ public class PayActivity extends AppCompatActivity {
 
         try {
             jsonObject2=new JSONObject(getIntent().getStringExtra("userInfo"));
-
-
-
-
-
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -131,23 +126,52 @@ public class PayActivity extends AppCompatActivity {
 
                     double amount= Double.parseDouble(jsonObject.optString("total_value"));
 
+
 //                    callEbsKit(PayActivity.this, amount);
 
-                    if (jsonObject2.optString("company_name").equalsIgnoreCase("")){
-//                        Toast.makeText(getApplicationContext(), "blank", Toast.LENGTH_SHORT).show();
+//                    Long tsLong = System.currentTimeMillis()/1000;
+//                    String ts = tsLong.toString();
+//                    Log.d("TimeCurrent",ts);
+//                    MyPrefrences.setDateTime(getApplicationContext(),ts);
 
-                        Intent intent=new Intent(PayActivity.this,AddGSTDetails.class);
-                        startActivity(intent);
-                        overridePendingTransition(R.anim.fadein, R.anim.fadeout);
-                    }
-                    else{
-
-
-                        PurchasePackage(amount,jsonObject2.optString("company_name"),
-                                jsonObject2.optString("gst_number"),jsonObject2.optString("tax_address"),jsonObject2.optString("email_address"));
-                    }
+//                    PurchasePackage(amount,jsonObject2.optString("company_name"),
+//                            jsonObject2.optString("gst_number"),jsonObject2.optString("tax_address"),jsonObject2.optString("email_address"));
 
 
+                    Long tsLong = System.currentTimeMillis()/1000;
+                    String ts = tsLong.toString();
+                    Log.d("TimeCurrent",ts);
+                    MyPrefrences.setDateTime(getApplicationContext(),ts);
+
+                    PurchasePackage(amount,jsonObject2.optString("company_name"),
+                            jsonObject2.optString("gst_number"),jsonObject2.optString("tax_address"),jsonObject2.optString("email_address"));
+
+
+
+//                    if (jsonObject2.optString("company_name").equalsIgnoreCase("")){
+////                        Toast.makeText(getApplicationContext(), "blank", Toast.LENGTH_SHORT).show();
+//
+//                        Long tsLong = System.currentTimeMillis()/1000;
+//                        String ts = tsLong.toString();
+//                        Log.d("TimeCurrent",ts);
+//                        MyPrefrences.setDateTime(getApplicationContext(),ts);
+//
+//                        Intent intent=new Intent(PayActivity.this,AddGSTDetails.class);
+//                        intent.putExtra("type","packageBefore");
+//                        intent.putExtra("amount",amount+"");
+//                        startActivity(intent);
+//                        overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+//                    }
+//                    else{
+//
+//                        Long tsLong = System.currentTimeMillis()/1000;
+//                        String ts = tsLong.toString();
+//                        Log.d("TimeCurrent",ts);
+//                        MyPrefrences.setDateTime(getApplicationContext(),ts);
+//
+//                        PurchasePackage(amount,jsonObject2.optString("company_name"),
+//                                jsonObject2.optString("gst_number"),jsonObject2.optString("tax_address"),jsonObject2.optString("email_address"));
+//                    }
 
                 }
                 else{
@@ -157,7 +181,6 @@ public class PayActivity extends AppCompatActivity {
                             .setCancelable(false)
                             .setPositiveButton("Login", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
-
 
                                     Intent intent=new Intent(PayActivity.this,Login.class);
                                     startActivity(intent);
@@ -208,12 +231,30 @@ public class PayActivity extends AppCompatActivity {
 
                     if (jsonObject.optString("status").equals("success")) {
 
-                     //   callEbsKit(PayActivity.this, p_amt);
+//                        callEbsKit(PayActivity.this, p_amt);
+//                        callEbsKit(PayActivity.this, 1);
+
+                        Intent intent=new Intent(PayActivity.this,AddGSTDetails.class);
+                        intent.putExtra("type","package");
+                        intent.putExtra("amount",p_amt+"");
+                        startActivity(intent);
+                        overridePendingTransition(R.anim.fadein, R.anim.fadeout);
 
 
                     }
+                    else if  (jsonObject.optString("status").equals("failure")) {
+
+                            errorDialog(PayActivity.this,jsonObject.optString("message"));
+
+                    }
                     else{
-                        Util.errorDialog(PayActivity.this,jsonObject.optString("message"));
+                        Intent intent=new Intent(PayActivity.this,AddGSTDetails.class);
+                        intent.putExtra("type","package");
+                        intent.putExtra("amount",p_amt+"");
+                        startActivity(intent);
+                        overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+
+                    //    Util.errorDialog(PayActivity.this,jsonObject.optString("message"));
 
                         //Toast.makeText(getApplicationContext(),jsonObject.getString("message") , Toast.LENGTH_SHORT).show();
                     }
@@ -221,8 +262,6 @@ public class PayActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
-
 
 
             }
@@ -247,18 +286,29 @@ public class PayActivity extends AppCompatActivity {
                 params.put("actual_value", jsonObject.optString("actual_value"));
                 params.put("discount_percent", jsonObject.optString("discount_percent"));
                 params.put("after_discount_price", jsonObject.optString("after_discount_price"));
-                params.put("gst", jsonObject.optString("gst"));
+                if (jsonObject.optString("gst").equals("")){
+                    params.put("gst", "NA");
+
+                    Log.d("fsdfsdfsdfsdfsdfs","NA");
+                }
+                else{
+                    params.put("gst", jsonObject.optString("gst"));
+                    Log.d("fsdfsdfsdfsdfsdfs",jsonObject.optString("gst"));
+                }
+
                 params.put("total_amount", jsonObject.optString("total_value"));
                 params.put("user_id", MyPrefrences.getUserID(getApplicationContext()));
-                params.put("payment_id", "123");
-                params.put("transaction_id","456");
-                params.put("response","response");
+                params.put("payment_id", "N/A");
+                params.put("transaction_id","N/A");
+                params.put("response","N/A");
                 params.put("pay_amount", jsonObject.optString("total_value"));
-                params.put("payment_status", "success");
+                params.put("payment_status", "Pending");
                 params.put("company_name", com_name);
-                params.put("gst_number", gst);
+//                params.put("gst_number", gst);
+                params.put("gst_number", "NA");
                 params.put("tax_address", address);
-                params.put("user_email", email);
+                params.put("user_email", "no-email");
+                params.put("unique_number", MyPrefrences.getDateTime(getApplicationContext()));
 
 
                 return params;
@@ -301,134 +351,6 @@ public class PayActivity extends AppCompatActivity {
     }
 
 
-    private void callEbsKit(PayActivity buyProduct, double amount) {
-        /**
-         * Set Parameters Before Initializing the EBS Gateway, All mandatory
-         * values must be provided
-         */
-
-        /** Payment Amount Details */
-        // Total Amount
-
-        PaymentRequest.getInstance().setTransactionAmount(String.valueOf(amount));
-
-        /** Mandatory */
-
-        PaymentRequest.getInstance().setAccountId(ACC_ID);
-        PaymentRequest.getInstance().setSecureKey(SECRET_KEY);
-
-        // Reference No
-//        Random r = new Random();
-//        int i1 = r.nextInt(800 - 650) + 65;
-//        Log.d("fgsdgfsdghdfhd", String.valueOf(i1));
-
-        Random r = new Random();
-        int i1 = r.nextInt(800 - 650) + 65;
-        Log.d("fgsdgfsdghdfhd", String.valueOf(i1));
-        PaymentRequest.getInstance().setReferenceNo(String.valueOf(i1));
-        /** Mandatory */
-
-        // Email Id
-        //PaymentRequest.getInstance().setBillingEmail("test_tag@testmail.com");
-
-        PaymentRequest.getInstance().setBillingEmail("customerhelpdesk@pinerria.com");
-        /** Mandatory */
-
-        PaymentRequest.getInstance().setFailureid(String.valueOf(amount));
-
-        // PaymentRequest.getInstance().setFailuremessage(getResources().getString(R.string.payment_failure_message));
-        // System.out.println("FAILURE MESSAGE"+getResources().getString(R.string.payment_failure_message));
-
-        /** Mandatory */
-
-        // Currency
-        PaymentRequest.getInstance().setCurrency("INR");
-        /** Mandatory */
-
-        /** Optional */
-        // Your Reference No or Order Id for this transaction
-        PaymentRequest.getInstance().setTransactionDescription(
-                "Test Transaction");
-
-        /** Billing Details */
-        PaymentRequest.getInstance().setBillingName("Type");
-        /** Optional */
-        PaymentRequest.getInstance().setBillingAddress("North Mada Street");
-        /** Optional */
-        PaymentRequest.getInstance().setBillingCity("Chennai");
-        /** Optional */
-        PaymentRequest.getInstance().setBillingPostalCode("600019");
-        /** Optional */
-        PaymentRequest.getInstance().setBillingState("Tamilnadu");
-        /** Optional */
-        PaymentRequest.getInstance().setBillingCountry("IND");
-        /** Optional */
-        PaymentRequest.getInstance().setBillingPhone("01234567890");
-        /** Optional */
-
-        /** Shipping Details */
-        PaymentRequest.getInstance().setShippingName("Test_Name");
-        /** Optional */
-        PaymentRequest.getInstance().setShippingAddress("North Mada Street");
-        /** Optional */
-        PaymentRequest.getInstance().setShippingCity("Chennai");
-        /** Optional */
-        PaymentRequest.getInstance().setShippingPostalCode("600019");
-        /** Optional */
-        PaymentRequest.getInstance().setShippingState("Tamilnadu");
-        /** Optional */
-        PaymentRequest.getInstance().setShippingCountry("IND");
-        /** Optional */
-        PaymentRequest.getInstance().setShippingEmail("test@testmail.com");
-        /** Optional */
-        PaymentRequest.getInstance().setShippingPhone("01234567890");
-        /** Optional */
-
-        PaymentRequest.getInstance().setLogEnabled(String.valueOf(amount));
-
-
-        /**
-         * Payment option configuration
-         */
-
-        /** Optional */
-        PaymentRequest.getInstance().setHidePaymentOption(false);
-
-        /** Optional */
-        PaymentRequest.getInstance().setHideCashCardOption(false);
-
-        /** Optional */
-        PaymentRequest.getInstance().setHideCreditCardOption(false);
-
-        /** Optional */
-        PaymentRequest.getInstance().setHideDebitCardOption(false);
-
-        /** Optional */
-        PaymentRequest.getInstance().setHideNetBankingOption(false);
-
-        /** Optional */
-        PaymentRequest.getInstance().setHideStoredCardOption(false);
-
-        /**
-         * Initialise parameters for dyanmic values sending from merchant
-         */
-
-        custom_post_parameters = new ArrayList<HashMap<String, String>>();
-        HashMap<String, String> hashpostvalues = new HashMap<String, String>();
-        hashpostvalues.put("account_details", "saving");
-        hashpostvalues.put("merchant_type", "gold");
-        custom_post_parameters.add(hashpostvalues);
-
-        PaymentRequest.getInstance()
-                .setCustomPostValues(custom_post_parameters);
-        /** Optional-Set dyanamic values */
-
-        // PaymentRequest.getInstance().setFailuremessage(getResources().getString(R.string.payment_failure_message));
-
-        EBSPayment.getInstance().init(PayActivity.this, ACC_ID, SECRET_KEY,
-                Config.Mode.ENV_LIVE, Config.Encryption.ALGORITHM_SHA512, "EBS");
-
-    }
 
 
 }

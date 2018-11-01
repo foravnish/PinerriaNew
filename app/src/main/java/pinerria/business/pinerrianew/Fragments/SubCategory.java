@@ -104,8 +104,6 @@ public class SubCategory extends Fragment {
     };
 
 
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -149,6 +147,8 @@ public class SubCategory extends Fragment {
                 Bundle bundle=new Bundle();
                 bundle.putString("id",AllProducts.get(i).get("id"));
                 bundle.putString("subcategory",AllProducts.get(i).get("subcategory"));
+                bundle.putString("value", "");
+                bundle.putString("nearMe","");
                 FragmentManager manager=getActivity().getSupportFragmentManager();
                 FragmentTransaction ft=manager.beginTransaction();
                 fragment.setArguments(bundle);
@@ -188,8 +188,6 @@ public class SubCategory extends Fragment {
                             indicator2.setViewPager(viewPager2);
                             // indicator2.setViewPager(viewPager2);
                             mCustomPagerAdapter2.notifyDataSetChanged();
-
-
 
                         }
 //                        final Handler handler = new Handler();
@@ -337,13 +335,12 @@ public class SubCategory extends Fragment {
         LayoutInflater inflater;
 
 
-
         Adapter() {
             inflater = (LayoutInflater) getActivity().getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-//            if (inflater == null) {
-//                throw new AssertionError("LayoutInflater not found.");
-//            }
+            if (inflater == null) {
+                throw new AssertionError("LayoutInflater not found.");
+            }
         }
 
         @Override

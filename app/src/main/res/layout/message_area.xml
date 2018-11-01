@@ -14,6 +14,7 @@
         android:textColor="@color/black"
         android:layout_marginLeft="10dp"
         android:hint="Write a message..."
+        android:inputType="textCapSentences"
         android:background="@color/white"
         android:id="@+id/messageArea"
         android:maxHeight="80dp" />

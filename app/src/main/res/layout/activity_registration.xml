@@ -36,7 +36,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="REGISTER"
+                            android:text="USER REGISTRATION"
                             android:gravity="left"
                             android:textStyle="bold"
                             android:textSize="18dp"
@@ -113,8 +113,24 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="Mobile *"
+                                android:maxLength="10"
                                 android:textColor="@color/white"
                                 android:inputType="phone"/>
+
+                        </android.support.design.widget.TextInputLayout>
+
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:theme="@style/TextLabel">
+
+                            <EditText
+                                android:id="@+id/emailId"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Email Id (Optional)"
+                                android:textColor="@color/white"
+                                android:inputType="textEmailAddress"/>
 
                         </android.support.design.widget.TextInputLayout>
 
@@ -261,7 +277,8 @@
                             android:layout_marginTop="5dp"
                             android:buttonTint="@color/gray5"
                             android:textColor="@color/gray5"
-                            android:text="I agree to "/>
+                            android:checked="false"
+                            android:text=" I agree to the Terms &amp; Conditions"/>
 
                         <Button
                             android:id="@+id/registration"

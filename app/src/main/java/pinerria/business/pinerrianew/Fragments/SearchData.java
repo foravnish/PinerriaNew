@@ -99,6 +99,8 @@ public class SearchData extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putString("id", query);
                 bundle.putString("subcategory", query);
+                bundle.putString("value", "");
+                bundle.putString("nearMe","");
                 FragmentManager manager = getActivity().getSupportFragmentManager();
                 FragmentTransaction ft = manager.beginTransaction();
                 fragment.setArguments(bundle);
@@ -127,6 +129,8 @@ public class SearchData extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putString("id", String.valueOf(adapterView.getItemAtPosition(i)));
                 bundle.putString("subcategory", String.valueOf(adapterView.getItemAtPosition(i)));
+                bundle.putString("value", "");
+                bundle.putString("nearMe","");
                 FragmentManager manager = getActivity().getSupportFragmentManager();
                 FragmentTransaction ft = manager.beginTransaction();
                 fragment.setArguments(bundle);

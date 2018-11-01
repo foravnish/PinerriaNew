@@ -3,6 +3,7 @@ package pinerria.business.pinerrianew.Fragments;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -18,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,9 +44,11 @@ import java.util.HashMap;
 
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 import pinerria.business.pinerrianew.Activites.AddProduct;
+import pinerria.business.pinerrianew.Activites.ChatUSer;
 import pinerria.business.pinerrianew.Activites.EditPhotos;
 import pinerria.business.pinerrianew.Activites.HomeAct;
 import pinerria.business.pinerrianew.Activites.Login;
+import pinerria.business.pinerrianew.Activites.UserDetails;
 import pinerria.business.pinerrianew.R;
 import pinerria.business.pinerrianew.Utils.Api;
 import pinerria.business.pinerrianew.Utils.AppController;
@@ -62,12 +66,15 @@ public class ManageBusiness extends Fragment {
     }
 
     TextView editPhoto,editBusiness,msgToAdmin;
-    TextView address,nameBusiness,subCat1,Catname,subCatName,keyword,myjobs,transcation,chat,area,totlaUsers,membership,membership2;
+    TextView price,nameBusiness,subCat1,Catname,subCatName,keyword,myjobs,transcation,chat,area,totlaUsers,membership,membership2;
     NetworkImageView subCatImage;
     Dialog dialog;
     MaterialRatingBar rating;
     SwitchCompat switchBusiness;
     JSONObject jsonObject;
+    private String pass="123456";
+    LinearLayout priceLayout;
+    String val;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -92,7 +99,8 @@ public class ManageBusiness extends Fragment {
         membership=view.findViewById(R.id.membership);
         membership2=view.findViewById(R.id.membership2);
         switchBusiness=view.findViewById(R.id.switchBusiness);
-
+        priceLayout=view.findViewById(R.id.priceLayout);
+        price=view.findViewById(R.id.price);
 
         HomeAct.title.setText("Manage Business");
 
@@ -151,7 +159,6 @@ public class ManageBusiness extends Fragment {
                                         //  Action for 'NO' Button
                                         //dialog.cancel();
 
-
                                         Intent intent=new Intent(getActivity(),HomeAct.class);
                                         intent.putExtra("userType","");
                                         startActivity(intent);
@@ -196,11 +203,10 @@ public class ManageBusiness extends Fragment {
             @Override
             public void onClick(View view) {
 
+                    LoginForChat();
 
             }
         });
-
-
 
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
                 Api.userBusiness+"/"+ MyPrefrences.getUserID(getActivity()), null, new Response.Listener<JSONObject>() {
@@ -217,11 +223,14 @@ public class ManageBusiness extends Fragment {
 
                     if (response.getString("status").equalsIgnoreCase("success")){
 
-
                         //  imageNoListing.setVisibility(View.GONE);
                         JSONArray jsonArray=response.getJSONArray("message");
 
+                        Log.d("sdfsdfsdfdfdf", String.valueOf(jsonArray));
+
                         jsonObject=jsonArray.getJSONObject(0);
+
+                        MyPrefrences.setBusinesID(getActivity(),jsonObject.optString("id"));
 
                         nameBusiness.setText(jsonObject.optString("bussiness_name"));
                         //Catname.setText(jsonObject.optString("category_id"));
@@ -234,15 +243,31 @@ public class ManageBusiness extends Fragment {
                             rating.setRating(Float.parseFloat(jsonObject.optString("total_rating")));
                         }
 
+                        if (jsonObject.optString("min_price").equals("")){
+                            priceLayout.setVisibility(View.GONE);
+                        }
+                        else{
+                            priceLayout.setVisibility(View.VISIBLE);
+                            price.setText("Price ₹ "+jsonObject.optString("min_price"));
+
+                            if (!jsonObject.optString("max_price").equals("")){
+                                price.setText("Price ₹ "+jsonObject.optString("min_price")+"-"+jsonObject.optString("max_price"));
+                            }
+
+                        }
+
                         ImageLoader imageLoader=AppController.getInstance().getImageLoader();
                         subCatImage.setImageUrl(jsonObject.optString("image"),imageLoader);
 
 
-                        if (jsonObject.optString("user_package").equalsIgnoreCase("N0")){
+                        String val = null;
+                        if (jsonObject.optString("user_package").equalsIgnoreCase("No")){
                             membership.setText("Regular");
+                             val="accept";
                             //membership2.setText("Upgrade to Premium");
                         }
-                        else {
+                        
+                        else if(val!="accept") {
 
                             JSONArray jsonArray1=jsonObject.getJSONArray("user_package");
                             JSONObject jsonObject2=jsonArray1.optJSONObject(0);
@@ -261,12 +286,12 @@ public class ManageBusiness extends Fragment {
 
 
 
-                        if (jsonObject.optString("call_button").equalsIgnoreCase("1")){
+                        if (jsonObject.optString("call_button").equalsIgnoreCase("Yes")){
                             Log.d("sdfsdfsdfsdfs","true");
                             switchBusiness.setChecked(true);
 
                         }
-                        else if (jsonObject.optString("call_button").equalsIgnoreCase("0")){
+                        else if (jsonObject.optString("call_button").equalsIgnoreCase("No")){
                             Log.d("sdfsdfsdfsdfs","false");
                             switchBusiness.setChecked(false);
                         }
@@ -279,7 +304,6 @@ public class ManageBusiness extends Fragment {
                                 changeStatusBusinessCall(jsonObject.optString("id"),b);
                             }
                         });
-
 
 
 //                        Picasso.with(getActivity())
@@ -331,17 +355,16 @@ public class ManageBusiness extends Fragment {
         return view;
     }
 
-    private void changeStatusBusinessCall(String id ,boolean b) {
+    private void changeStatusBusinessCall(final String id , boolean b) {
 
         Util.showPgDialog(dialog);
-        String val = null;
-        if (b==true){
-            val="1";
 
+        if (b==true){
+            val="Yes";
 
         }
         else if (b==false){
-            val="0";
+            val="No";
         }
 
         RequestQueue queue = Volley.newRequestQueue(getActivity());
@@ -351,6 +374,8 @@ public class ManageBusiness extends Fragment {
             public void onResponse(String response) {
                 Util.cancelPgDialog(dialog);
                 Log.e("statusjob", "Response: " + response);
+                Log.d("dfgfdgdfgdfg",id);
+                Log.d("dfgfdgdfgdfg",val);
 
             }
         }, new Response.ErrorListener() {
@@ -365,6 +390,57 @@ public class ManageBusiness extends Fragment {
         queue.add(strReq);
 
     }
+
+    private void LoginForChat() {
+
+//        String url = "https://chatapp-25d11.firebaseio.com/users.json";
+        String url = "https://pinerria-home-business.firebaseio.com/users.json";
+        final ProgressDialog pd = new ProgressDialog(getActivity());
+        pd.setMessage("Loading...");
+        pd.show();
+
+        StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>(){
+            @Override
+            public void onResponse(String s) {
+                if(s.equals("null")){
+                    Toast.makeText(getActivity(), "user not found", Toast.LENGTH_LONG).show();
+                }
+                else{
+                    try {
+                        JSONObject obj = new JSONObject(s);
+
+                        if(!obj.has(MyPrefrences.getMobile(getActivity()))){
+                            Toast.makeText(getActivity(), "user not found", Toast.LENGTH_LONG).show();
+                        }
+                        else if(obj.getJSONObject(MyPrefrences.getMobile(getActivity())).getString("password").equals(pass)){
+                            UserDetails.username = MyPrefrences.getMobile(getActivity());
+                            UserDetails.password = pass;
+                            startActivity(new Intent(getActivity(), ChatUSer.class));
+                        }
+                        else {
+                            Toast.makeText(getActivity(), "incorrect password", Toast.LENGTH_LONG).show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                pd.dismiss();
+            }
+        },new Response.ErrorListener(){
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                System.out.println("" + volleyError);
+                pd.dismiss();
+            }
+        });
+
+        RequestQueue rQueue = Volley.newRequestQueue(getActivity());
+        rQueue.add(request);
+
+
+    }
+
 
 
 

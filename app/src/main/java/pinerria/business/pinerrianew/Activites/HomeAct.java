@@ -13,6 +13,8 @@ import android.content.IntentFilter;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -38,6 +40,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
@@ -70,22 +73,34 @@ import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import pinerria.business.pinerrianew.Fragments.AddJobs;
 import pinerria.business.pinerrianew.Fragments.BannerRequest;
+import pinerria.business.pinerrianew.Fragments.CallHistory;
 import pinerria.business.pinerrianew.Fragments.ContactUs;
+import pinerria.business.pinerrianew.Fragments.Faqs;
 import pinerria.business.pinerrianew.Fragments.Home;
 import pinerria.business.pinerrianew.Fragments.Listing;
 import pinerria.business.pinerrianew.Fragments.ManageBusiness;
+import pinerria.business.pinerrianew.Fragments.MessageToAdmin;
+import pinerria.business.pinerrianew.Fragments.MyFavourate;
 import pinerria.business.pinerrianew.Fragments.MyJobs;
 import pinerria.business.pinerrianew.Fragments.MyProducts;
+import pinerria.business.pinerrianew.Fragments.Notifications;
 import pinerria.business.pinerrianew.Fragments.Packages;
 import pinerria.business.pinerrianew.Fragments.PayOrder;
+import pinerria.business.pinerrianew.Fragments.RatingView;
 import pinerria.business.pinerrianew.Fragments.SearchData;
+import pinerria.business.pinerrianew.Fragments.TermsCondition;
 import pinerria.business.pinerrianew.Fragments.Transcation;
 import pinerria.business.pinerrianew.Fragments.ViewJobs;
 import pinerria.business.pinerrianew.R;
@@ -95,7 +110,7 @@ import pinerria.business.pinerrianew.Utils.Api;
 import pinerria.business.pinerrianew.Utils.AppController;
 import pinerria.business.pinerrianew.Utils.MyPrefrences;
 
-import pinerria.business.pinerrianew.gcm.GCMRegistrationIntentService;
+
 
 public class HomeAct extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,GoogleApiClient.ConnectionCallbacks,
@@ -118,6 +133,7 @@ public class HomeAct extends AppCompatActivity
     SwitchCompat switchButton;
 //    LinearLayout gps;
     ImageView gps_button;
+    TextView gps_button2;
 
     private Location mylocation;
     private GoogleApiClient googleApiClient;
@@ -125,7 +141,9 @@ public class HomeAct extends AppCompatActivity
     private final static int REQUEST_ID_MULTIPLE_PERMISSIONS=0x2;
     public static  Double latitude=null,longitude=null;
 
-
+    String newVersion;
+    String currentVersion;
+    public  static boolean chat_flag;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -133,7 +151,7 @@ public class HomeAct extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
+        HomeAct.chat_flag=true;
 
         profile=findViewById(R.id.profile);
         home=findViewById(R.id.home);
@@ -161,11 +179,19 @@ public class HomeAct extends AppCompatActivity
         userImage=header.findViewById(R.id.userImage);
         //gps=header.findViewById(R.id.gps);
         gps_button=header.findViewById(R.id.gps_button);
+        gps_button2=header.findViewById(R.id.gps_button2);
 
+        try {
+            currentVersion = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        new FetchAppVersionFromGooglePlayStore().execute();
 
         db = new DatabaseHelper(HomeAct.this);
 
-        setmRegistrationBroadcastReceiver();
+       // setmRegistrationBroadcastReceiver();
 
         Log.d("dfdgdgfsdgdf",MyPrefrences.getCityName(getApplicationContext()));
 
@@ -181,8 +207,12 @@ public class HomeAct extends AppCompatActivity
 
 
 
+
         if (MyPrefrences.getUserLogin(getApplicationContext())==true){
-            nameUser.setText(MyPrefrences.getUSENAME(getApplicationContext()));
+            String upperString = MyPrefrences.getUSENAME(getApplicationContext()).substring(0,1).toUpperCase() + MyPrefrences.getUSENAME(getApplicationContext()).substring(1);
+            nameUser.setText(upperString);
+
+            //nameUser.setText(MyPrefrences.getUSENAME(getApplicationContext()));
             MobileNo.setText("+91 "+MyPrefrences.getMobile(getApplicationContext()));
             Picasso.with(getApplicationContext())
                     .load(MyPrefrences.getImage(getApplicationContext()).replace(" ","%20"))
@@ -234,6 +264,26 @@ public class HomeAct extends AppCompatActivity
             }
         });
 
+        gps_button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                setUpGClient();
+
+                Fragment fragment = new Home();
+                FragmentManager manager = getSupportFragmentManager();
+                FragmentTransaction ft = manager.beginTransaction();
+                ft.replace(R.id.content_frame, fragment).commit();
+
+
+                gps_button.setBackgroundResource(R.drawable.gps_on);
+                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                drawer.closeDrawer(GravityCompat.START);
+
+            }
+        });
+
 
 
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
@@ -253,8 +303,10 @@ public class HomeAct extends AppCompatActivity
                             Menu menu = navigationView.getMenu();
                             MenuItem nav_add_product = menu.findItem(R.id.nav_add_product);
                             MenuItem nav_manage_business = menu.findItem(R.id.nav_manage_business);
+                            MenuItem nav_call_his = menu.findItem(R.id.nav_call_his);
                             nav_add_product.setVisible(true);
                             nav_manage_business.setVisible(false);
+                            nav_call_his.setVisible(false);
 
                         }
                         else if (response.optString("business").equalsIgnoreCase("Yes")){
@@ -262,8 +314,10 @@ public class HomeAct extends AppCompatActivity
                             Menu menu = navigationView.getMenu();
                             MenuItem nav_add_product = menu.findItem(R.id.nav_add_product);
                             MenuItem nav_manage_business = menu.findItem(R.id.nav_manage_business);
+                            MenuItem nav_call_his = menu.findItem(R.id.nav_call_his);
                             nav_add_product.setVisible(false);
                             nav_manage_business.setVisible(true);
+                            nav_call_his.setVisible(true);
                         }
 
                         if (response.optString("job").equalsIgnoreCase("No")){
@@ -312,15 +366,16 @@ public class HomeAct extends AppCompatActivity
         jsonObjReq.setShouldCache(false);
         AppController.getInstance().addToRequestQueue(jsonObjReq);
 
-
-
         if (HomeAct.business==true ){
             Log.d("fsdfsfsfs","true");
             Menu menu = navigationView.getMenu();
             MenuItem nav_add_product = menu.findItem(R.id.nav_add_product);
             MenuItem nav_manage_business = menu.findItem(R.id.nav_manage_business);
+            MenuItem nav_call_his = menu.findItem(R.id.nav_call_his);
             nav_add_product.setVisible(false);
             nav_manage_business.setVisible(true);
+            nav_call_his.setVisible(true);
+
 
         }
         else if (HomeAct.business==false){
@@ -328,8 +383,10 @@ public class HomeAct extends AppCompatActivity
             Menu menu = navigationView.getMenu();
             MenuItem nav_add_product = menu.findItem(R.id.nav_add_product);
             MenuItem nav_manage_business = menu.findItem(R.id.nav_manage_business);
+            MenuItem nav_call_his = menu.findItem(R.id.nav_call_his);
             nav_add_product.setVisible(true);
             nav_manage_business.setVisible(false);
+            nav_call_his.setVisible(false);
         }
 
         if (HomeAct.jobs==true){
@@ -351,28 +408,40 @@ public class HomeAct extends AppCompatActivity
             nav_my_jobs.setVisible(false);
         }
 
+        Log.d("gfsdgdfgdfgdfgdf",getIntent().getStringExtra("userType"));
 
-        Fragment fragment = new Home();
-        FragmentManager manager = getSupportFragmentManager();
-        FragmentTransaction ft = manager.beginTransaction();
-        ft.replace(R.id.content_frame, fragment).commit();
-        ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout, R.anim.frag_fade_right, R.anim.frag_fad_left);
+        if (getIntent().getStringExtra("userType").equalsIgnoreCase("2")){
+            Fragment fragment = new Packages();
+            FragmentManager manager = getSupportFragmentManager();
+            FragmentTransaction ft = manager.beginTransaction();
+            ft.replace(R.id.content_frame, fragment).commit();
+            ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout, R.anim.frag_fade_right, R.anim.frag_fad_left);
+        }
+        else if (getIntent().getStringExtra("userType").equalsIgnoreCase("notification")){
+            Fragment fragment = new Notifications();
+            FragmentManager manager = getSupportFragmentManager();
+            FragmentTransaction ft = manager.beginTransaction();
+            ft.replace(R.id.content_frame, fragment).commit();
+            ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout, R.anim.frag_fade_right, R.anim.frag_fad_left);
+        }
 
-
-
-//        if (getIntent().getStringExtra("userType").equalsIgnoreCase("my_product")){
-//            Fragment fragment = new ManageBusiness();
-//            FragmentManager manager = getSupportFragmentManager();
-//            FragmentTransaction ft = manager.beginTransaction();
-//            ft.replace(R.id.content_frame, fragment).commit();
-//            ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout, R.anim.frag_fade_right, R.anim.frag_fad_left);
-//        }else {
-//            Fragment fragment = new Home();
-//            FragmentManager manager = getSupportFragmentManager();
-//            FragmentTransaction ft = manager.beginTransaction();
-//            ft.replace(R.id.content_frame, fragment).commit();
-//            ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout, R.anim.frag_fade_right, R.anim.frag_fad_left);
-//        }
+        else if (getIntent().getStringExtra("userType").equalsIgnoreCase("jobs")){
+            Fragment fragment = new MyJobs();
+            FragmentManager manager = getSupportFragmentManager();
+            FragmentTransaction ft = manager.beginTransaction();
+            ft.replace(R.id.content_frame, fragment).commit();
+            ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout, R.anim.frag_fade_right, R.anim.frag_fad_left);
+        }
+        else if (getIntent().getStringExtra("userType").equalsIgnoreCase("chatscr")){
+            LoginForChat2();
+        }
+        else {
+            Fragment fragment = new Home();
+            FragmentManager manager = getSupportFragmentManager();
+            FragmentTransaction ft = manager.beginTransaction();
+            ft.replace(R.id.content_frame, fragment).commit();
+            ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout, R.anim.frag_fade_right, R.anim.frag_fad_left);
+        }
 
         zoneName.setText(MyPrefrences.getCityName(getApplicationContext())+"  ▼");
         zoneName.setOnClickListener(new View.OnClickListener() {
@@ -382,8 +451,6 @@ public class HomeAct extends AppCompatActivity
                 startActivity(new Intent(HomeAct.this,SelectZone.class));
             }
         });
-
-
 
 
         profile.setOnClickListener(new View.OnClickListener() {
@@ -398,7 +465,7 @@ public class HomeAct extends AppCompatActivity
 
                 profile.startAnimation(myAnim);
 
-                Intent intent=new Intent(HomeAct.this,ProfilePage.class);
+                Intent intent=new Intent(HomeAct.this,AddProduct.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.fadein, R.anim.fadeout);
 
@@ -532,7 +599,7 @@ public class HomeAct extends AppCompatActivity
                 packageList.startAnimation(myAnim);
 
 
-                Fragment fragment = new Packages();
+                Fragment fragment = new Faqs();
                 FragmentManager manager = getSupportFragmentManager();
                 FragmentTransaction ft = manager.beginTransaction();
                 ft.replace(R.id.content_frame, fragment).commit();
@@ -557,6 +624,7 @@ public class HomeAct extends AppCompatActivity
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>(){
             @Override
             public void onResponse(String s) {
+                Log.d("gfdgdfgdfgsdfgdf",s);
                 if(s.equals("null")){
                     Toast.makeText(HomeAct.this, "user not found", Toast.LENGTH_LONG).show();
                 }
@@ -571,6 +639,63 @@ public class HomeAct extends AppCompatActivity
                             UserDetails.username = user;
                             UserDetails.password = pass;
                             startActivity(new Intent(HomeAct.this, ChatUSer.class));
+                        }
+                        else {
+                            Toast.makeText(HomeAct.this, "incorrect password", Toast.LENGTH_LONG).show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                pd.dismiss();
+            }
+        },new Response.ErrorListener(){
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                System.out.println("" + volleyError);
+                pd.dismiss();
+            }
+        });
+
+        RequestQueue rQueue = Volley.newRequestQueue(HomeAct.this);
+        rQueue.add(request);
+
+
+    }
+
+    private void LoginForChat2() {
+
+//        String url = "https://chatapp-25d11.firebaseio.com/users.json";
+        String url = "https://pinerria-home-business.firebaseio.com/users.json";
+        final ProgressDialog pd = new ProgressDialog(HomeAct.this);
+        pd.setMessage("Loading...");
+        pd.show();
+
+        StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>(){
+            @Override
+            public void onResponse(String s) {
+                Log.d("gfdgdfgdfgsdfgdf",s);
+                if(s.equals("null")){
+                    Toast.makeText(HomeAct.this, "user not found", Toast.LENGTH_LONG).show();
+                }
+                else{
+                    try {
+                        JSONObject obj = new JSONObject(s);
+
+                        if(!obj.has(user)){
+                            Toast.makeText(HomeAct.this, "user not found", Toast.LENGTH_LONG).show();
+                        }
+                        else if(obj.getJSONObject(user).getString("password").equals(pass)){
+                            UserDetails.username = user;
+                            UserDetails.password = pass;
+//                            startActivity(new Intent(getActivity(), ChatUSer.class));
+                            UserDetails.chatWith = UserDetails.mobileNo;
+                            Intent intent=new Intent(getApplicationContext(),Chat.class);
+                            intent.putExtra("nameValue",UserDetails.name);
+                            intent.putExtra("id",UserDetails.chatId);
+                            intent.putExtra("value1","0");
+                            startActivity(intent);
                         }
                         else {
                             Toast.makeText(HomeAct.this, "incorrect password", Toast.LENGTH_LONG).show();
@@ -629,22 +754,42 @@ public class HomeAct extends AppCompatActivity
 
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
 
-        EditText searchEditText = (EditText) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        final EditText searchEditText = (EditText) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
 
         SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchEditText.setTextColor(getResources().getColor(R.color.black));
         searchEditText.setHintTextColor(getResources().getColor(R.color.black));
+        searchView.setQueryHint("Search Business");
+
+
+        searchEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                searchEditText.setFocusable(true);
+                searchEditText.setFocusableInTouchMode(true);
+
+            }
+        });
+//        searchEditText.setFocusable(true);
+//        searchEditText.setFocusableInTouchMode(true);
+
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
 //                Toast.makeText(getApplicationContext(), query, Toast.LENGTH_SHORT).show();
 
+                Log.d("dfgdfgdfgdgd","true");
+
+                getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
                 Fragment fragment = new Listing();
                 Bundle bundle = new Bundle();
                 bundle.putString("id", query);
                 bundle.putString("subcategory", query);
+                bundle.putString("value", "");
+                bundle.putString("nearMe","");
                 FragmentManager manager = getSupportFragmentManager();
                 FragmentTransaction ft = manager.beginTransaction();
                 fragment.setArguments(bundle);
@@ -652,6 +797,12 @@ public class HomeAct extends AppCompatActivity
                 ft.replace(R.id.content_frame, fragment).addToBackStack(null).commit();
 
                 createNote(query.toString());
+
+                searchEditText.setFocusable(false);
+                searchEditText.setFocusableInTouchMode(false);
+
+
+
 
                 return true;
             }
@@ -686,20 +837,20 @@ public class HomeAct extends AppCompatActivity
     }
 
     //Registering receiver on activity resume
-    @Override
-    protected void onResume() {
-        super.onResume();
-        //Log.w("MainActivity", "onResume");
-        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
-                new IntentFilter(GCMRegistrationIntentService.REGISTRATION_SUCCESS));
-        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
-                new IntentFilter(GCMRegistrationIntentService.REGISTRATION_ERROR));
-
-//        if (InternetStatus.isConnectingToInternet(MainActivity.this)) {
-//            new GetFrequest().execute();
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        //Log.w("MainActivity", "onResume");
+//        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
+//                new IntentFilter(GCMRegistrationIntentService.REGISTRATION_SUCCESS));
+//        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
+//                new IntentFilter(GCMRegistrationIntentService.REGISTRATION_ERROR));
 //
-//        }
-    }
+////        if (InternetStatus.isConnectingToInternet(MainActivity.this)) {
+////            new GetFrequest().execute();
+////
+////        }
+//    }
     //Unregistering receiver on activity paused
     @Override
     protected void onPause() {
@@ -709,56 +860,56 @@ public class HomeAct extends AppCompatActivity
     }
 
 
-    private void setmRegistrationBroadcastReceiver() {
-        //Initializing our broadcast receiver
-        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
-
-            //When the broadcast received
-            //We are sending the broadcast from GCMRegistrationIntentService
-
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                //If the broadcast has received with success
-                //that means device is registered successfully
-                if (intent.getAction().equals(GCMRegistrationIntentService.REGISTRATION_SUCCESS)) {
-                    //Getting the registration token from the intent
-                    String token = intent.getStringExtra("token");
-                    //Displaying the token as toast
-                    //Toast.makeText(getApplicationContext(), "Registration token:" + token, Toast.LENGTH_LONG).show();
-
-                    //if the intent is not with success then displaying error messages
-                } else if (intent.getAction().equals(GCMRegistrationIntentService.REGISTRATION_ERROR)) {
-                    Toast.makeText(getApplicationContext(), "GCM registration error!", Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(getApplicationContext(), "Error occurred", Toast.LENGTH_LONG).show();
-                }
-            }
-        };
-
-        //Checking play service is available or not
-        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getApplicationContext());
-
-        //if play service is not available
-        if (ConnectionResult.SUCCESS != resultCode) {
-            //If play service is supported but not installed
-            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
-                //Displaying message that play service is not installed
-                Toast.makeText(getApplicationContext(), "Google Play Service is not install/enabled in this device!", Toast.LENGTH_LONG).show();
-                GooglePlayServicesUtil.showErrorNotification(resultCode, getApplicationContext());
-
-                //If play service is not supported
-                //Displaying an error message
-            } else {
-                Toast.makeText(getApplicationContext(), "This device does not support for Google Play Service!", Toast.LENGTH_LONG).show();
-            }
-
-            //If play service is available
-        } else {
-            //Starting intent to register device
-            Intent itent = new Intent(this, GCMRegistrationIntentService.class);
-            startService(itent);
-        }
-    }
+//    private void setmRegistrationBroadcastReceiver() {
+//        //Initializing our broadcast receiver
+//        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
+//
+//            //When the broadcast received
+//            //We are sending the broadcast from GCMRegistrationIntentService
+//
+//            @Override
+//            public void onReceive(Context context, Intent intent) {
+//                //If the broadcast has received with success
+//                //that means device is registered successfully
+//                if (intent.getAction().equals(GCMRegistrationIntentService.REGISTRATION_SUCCESS)) {
+//                    //Getting the registration token from the intent
+//                    String token = intent.getStringExtra("token");
+//                    //Displaying the token as toast
+//                    //Toast.makeText(getApplicationContext(), "Registration token:" + token, Toast.LENGTH_LONG).show();
+//
+//                    //if the intent is not with success then displaying error messages
+//                } else if (intent.getAction().equals(GCMRegistrationIntentService.REGISTRATION_ERROR)) {
+//                    Toast.makeText(getApplicationContext(), "GCM registration error!", Toast.LENGTH_LONG).show();
+//                } else {
+//                    Toast.makeText(getApplicationContext(), "Error occurred", Toast.LENGTH_LONG).show();
+//                }
+//            }
+//        };
+//
+//        //Checking play service is available or not
+//        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getApplicationContext());
+//
+//        //if play service is not available
+//        if (ConnectionResult.SUCCESS != resultCode) {
+//            //If play service is supported but not installed
+//            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
+//                //Displaying message that play service is not installed
+//                Toast.makeText(getApplicationContext(), "Google Play Service is not install/enabled in this device!", Toast.LENGTH_LONG).show();
+//                GooglePlayServicesUtil.showErrorNotification(resultCode, getApplicationContext());
+//
+//                //If play service is not supported
+//                //Displaying an error message
+//            } else {
+//                Toast.makeText(getApplicationContext(), "This device does not support for Google Play Service!", Toast.LENGTH_LONG).show();
+//            }
+//
+//            //If play service is available
+//        } else {
+//            //Starting intent to register device
+//            Intent itent = new Intent(this, GCMRegistrationIntentService.class);
+//            startService(itent);
+//        }
+//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -802,6 +953,14 @@ public class HomeAct extends AppCompatActivity
             ft.replace(R.id.content_frame, fragment).addToBackStack(null).commit();
             ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout,R.anim.frag_fade_right, R.anim.frag_fad_left);
 
+         } else if (id == R.id.nav_groupnotification) {
+
+            Fragment fragment = new Notifications();
+            FragmentManager manager = getSupportFragmentManager();
+            FragmentTransaction ft = manager.beginTransaction();
+            ft.replace(R.id.content_frame, fragment).addToBackStack(null).commit();
+            ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout,R.anim.frag_fade_right, R.anim.frag_fad_left);
+
 
         } else if (id == R.id.nav_add_product) {
 
@@ -812,6 +971,8 @@ public class HomeAct extends AppCompatActivity
         } else if (id == R.id.nav_gst_detail) {
 
             Intent intent=new Intent(HomeAct.this,AddGSTDetails.class);
+            intent.putExtra("type","no_package");
+            intent.putExtra("amount","");
             startActivity(intent);
             overridePendingTransition(R.anim.fadein, R.anim.fadeout);
 
@@ -858,8 +1019,32 @@ public class HomeAct extends AppCompatActivity
             ft.replace(R.id.content_frame, fragment).addToBackStack(null).commit();
             ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout,R.anim.frag_fade_right, R.anim.frag_fad_left);
 
-        } else if (id == R.id.nav_trans) {
+          } else if (id == R.id.nav_rating) {
 
+                    Fragment fragment = new RatingView();
+                    FragmentManager manager = getSupportFragmentManager();
+                    FragmentTransaction ft = manager.beginTransaction();
+                    ft.replace(R.id.content_frame, fragment).addToBackStack(null).commit();
+                    ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout,R.anim.frag_fade_right, R.anim.frag_fad_left);
+
+
+         } else if (id == R.id.nav_call_his) {
+
+                    Fragment fragment = new CallHistory();
+                    FragmentManager manager = getSupportFragmentManager();
+                    FragmentTransaction ft = manager.beginTransaction();
+                    ft.replace(R.id.content_frame, fragment).addToBackStack(null).commit();
+                    ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout,R.anim.frag_fade_right, R.anim.frag_fad_left);
+
+         } else if (id == R.id.nav_mass_to_admin) {
+
+                    Fragment fragment = new MessageToAdmin();
+                    FragmentManager manager = getSupportFragmentManager();
+                    FragmentTransaction ft = manager.beginTransaction();
+                    ft.replace(R.id.content_frame, fragment).addToBackStack(null).commit();
+                    ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout,R.anim.frag_fade_right, R.anim.frag_fad_left);
+
+        } else if (id == R.id.nav_trans) {
             Fragment fragment = new Transcation();
             FragmentManager manager = getSupportFragmentManager();
             FragmentTransaction ft = manager.beginTransaction();
@@ -867,12 +1052,30 @@ public class HomeAct extends AppCompatActivity
             ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout,R.anim.frag_fade_right, R.anim.frag_fad_left);
 
         } else if (id == R.id.nav_my_jobs) {
-
             Fragment fragment = new MyJobs();
             FragmentManager manager = getSupportFragmentManager();
             FragmentTransaction ft = manager.beginTransaction();
             ft.replace(R.id.content_frame, fragment).addToBackStack(null).commit();
             ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout,R.anim.frag_fade_right, R.anim.frag_fad_left);
+
+         } else if (id == R.id.nav_tnc) {
+                Fragment fragment = new TermsCondition();
+                FragmentManager manager = getSupportFragmentManager();
+                FragmentTransaction ft = manager.beginTransaction();
+                ft.replace(R.id.content_frame, fragment).addToBackStack(null).commit();
+                ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout,R.anim.frag_fade_right, R.anim.frag_fad_left);
+         } else if (id == R.id.nav_faqs) {
+                        Fragment fragment = new Faqs();
+                        FragmentManager manager = getSupportFragmentManager();
+                        FragmentTransaction ft = manager.beginTransaction();
+                        ft.replace(R.id.content_frame, fragment).addToBackStack(null).commit();
+                        ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout,R.anim.frag_fade_right, R.anim.frag_fad_left);
+          } else if (id == R.id.nav_about) {
+                                Fragment fragment = new AboutUs();
+                                FragmentManager manager = getSupportFragmentManager();
+                                FragmentTransaction ft = manager.beginTransaction();
+                                ft.replace(R.id.content_frame, fragment).addToBackStack(null).commit();
+                                ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout,R.anim.frag_fade_right, R.anim.frag_fad_left);
 
         } else if (id == R.id.nav_pay_order) {
 
@@ -882,14 +1085,18 @@ public class HomeAct extends AppCompatActivity
             ft.replace(R.id.content_frame, fragment).addToBackStack(null).commit();
             ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout,R.anim.frag_fade_right, R.anim.frag_fad_left);
 
-
          } else if (id == R.id.nav_contact) {
-
                         Fragment fragment = new ContactUs();
                         FragmentManager manager = getSupportFragmentManager();
                         FragmentTransaction ft = manager.beginTransaction();
                         ft.replace(R.id.content_frame, fragment).addToBackStack(null).commit();
                         ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout,R.anim.frag_fade_right, R.anim.frag_fad_left);
+              } else if (id == R.id.nav_my_fav) {
+                                    Fragment fragment = new MyFavourate();
+                                    FragmentManager manager = getSupportFragmentManager();
+                                    FragmentTransaction ft = manager.beginTransaction();
+                                    ft.replace(R.id.content_frame, fragment).addToBackStack(null).commit();
+                                    ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout,R.anim.frag_fade_right, R.anim.frag_fad_left);
 
         } else if (id == R.id.nav_logout) {
 
@@ -1057,5 +1264,124 @@ public class HomeAct extends AppCompatActivity
                 break;
         }
     }
+
+
+
+
+    private class FetchAppVersionFromGooglePlayStore extends AsyncTask<Void, String, String> {
+        @Override
+        protected String doInBackground(Void... voids) {
+
+            String newVersion = null;
+
+            try {
+                Document document = Jsoup.connect("https://play.google.com/store/apps/details?id="+HomeAct.this.getPackageName() + "&hl=en")
+                        .timeout(30000)
+                        .userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6")
+                        .referrer("http://www.google.com")
+                        .get();
+                if (document != null) {
+                    Elements element = document.getElementsContainingOwnText("Current Version");
+                    for (Element ele : element) {
+                        if (ele.siblingElements() != null) {
+                            Elements sibElemets = ele.siblingElements();
+                            for (Element sibElemet : sibElemets) {
+                                newVersion = sibElemet.text();
+                            }
+                        }
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return newVersion;
+
+        }
+
+
+        @Override
+        protected void onPostExecute(String onlineVersion) {
+            super.onPostExecute(onlineVersion);
+            Log.d("update", "Current version " + currentVersion + "playstore version " + onlineVersion);
+            if (onlineVersion != null && !onlineVersion.isEmpty()) {
+                if (Float.valueOf(currentVersion) < Float.valueOf(onlineVersion)) {
+                    //show dialog
+
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(HomeAct.this);
+
+                    alertDialogBuilder.setTitle(HomeAct.this.getString(R.string.app_name));
+                    alertDialogBuilder.setMessage("Your application update is available.");
+                    alertDialogBuilder.setCancelable(false);
+                    alertDialogBuilder.setPositiveButton("UPDATE NOW", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            HomeAct.this.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + getPackageName())));
+                            dialog.cancel();
+                        }
+                    });
+                    alertDialogBuilder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+
+                            dialog.dismiss();
+                        }
+                    });
+                    alertDialogBuilder.show();
+                }
+
+            }
+
+        }
+
+
+//    class FetchAppVersionFromGooglePlayStore extends AsyncTask<String, Void, String> {
+//
+//        protected String doInBackground(String... urls) {
+//            try {
+//                return
+//                        Jsoup.connect("https://play.google.com/store/apps/details?id=" + "pinerria.business.pinerrianew" + "&hl=en")
+//                                .timeout(10000)
+//                                .userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6")
+//                                .referrer("http://www.google.com")
+//                                .get()
+//                                .select("div[itemprop=softwareVersion]")
+//                                .first()
+//                                .ownText();
+//
+//            } catch (Exception e) {
+//                return "";
+//            }
+//        }
+//
+//        protected void onPostExecute(String string) {
+//            newVersion = string;
+//            Log.d("new Version", newVersion);
+//
+//            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(HomeAct.this);
+//
+//            alertDialogBuilder.setTitle(HomeAct.this.getString(R.string.app_name));
+//            alertDialogBuilder.setMessage("Your application update is available.");
+//            alertDialogBuilder.setCancelable(false);
+//            alertDialogBuilder.setPositiveButton("UPDATE NOW", new DialogInterface.OnClickListener() {
+//                public void onClick(DialogInterface dialog, int id) {
+//                    HomeAct.this.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + getPackageName())));
+//                    dialog.cancel();
+//                }
+//            });
+//            alertDialogBuilder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+//                @Override
+//                public void onClick(DialogInterface dialog, int which) {
+//
+//
+//                    dialog.dismiss();
+//                }
+//            });
+//            alertDialogBuilder.show();
+//        }
+
+
+    }
+
+
 
 }

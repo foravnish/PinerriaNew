@@ -12,7 +12,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
         android:elevation="5dp"
         android:theme="@style/ToolbarColoredBackArrow">
 
@@ -25,8 +24,7 @@
             android:layout_marginLeft="15dp"
             android:textColor="@color/white"
             android:textStyle="bold"
-            android:textSize="20dp"
-            >
+            android:textSize="20dp">
 
         </TextView>
 
@@ -156,6 +154,23 @@
 
             </android.support.design.widget.TextInputLayout>
 
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/TextLabel">
+
+                <EditText
+                    android:id="@+id/desc"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:hint="Description *"
+                    android:textColor="@color/gray5"
+                    android:gravity="top"
+                    android:maxLength="300"
+                    android:inputType="textCapSentences|textMultiLine"/>
+
+            </android.support.design.widget.TextInputLayout>
+
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -241,15 +256,13 @@
                 android:id="@+id/linearShow"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:weightSum="10"
                 android:orientation="horizontal">
 
             <Spinner
                 android:id="@+id/location"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="8"
-                android:layout_marginTop="20dp">
+                android:layout_marginTop="10dp">
 
             </Spinner>
 
@@ -260,6 +273,7 @@
                     android:layout_weight="2"
                     android:layout_gravity="center"
                     android:gravity="center"
+                    android:visibility="gone"
                     android:textColor="@color/white"
                     android:textSize="18dp"
                     android:text="Add "/>
@@ -308,6 +322,7 @@
                 android:layout_marginTop="10dp"
                 android:buttonTint="@color/white"
                 android:textColor="@color/white"/>
+
 
             <LinearLayout
                 android:id="@+id/linearPrice"
@@ -441,6 +456,36 @@
 
 
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/muli_bold"
+                    android:singleLine="true"
+                    android:text="Display my phone no. to buyers"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/switchBusiness"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="20dp"
+                    android:checked="true"
+                    app:theme="@style/Color1SwitchStyle"
+                    android:background="@drawable/strock_blue_switch"
+                    android:textColor="@color/p_black" />
+
+                <!--app:thumbTint="@color/blue"-->
+                <!--android:background="@color/white"-->
+            </LinearLayout>
 
 
             <LinearLayout
@@ -450,22 +495,6 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:orientation="horizontal">
-
-                <!--<TextView-->
-                <!--android:id="@+id/uploadImage"-->
-                <!--android:layout_width="0dp"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="Upload Image"-->
-                <!--android:layout_weight="1"-->
-                <!--android:background="@drawable/strock_simple"/>-->
-
-
-                <!--<ImageView-->
-                <!--android:id="@+id/regiImage"-->
-                <!--android:layout_width="0dp"-->
-                <!--android:layout_height="150dp"-->
-                <!--android:layout_weight="1"-->
-                <!--android:layout_marginLeft="20dp"/>-->
 
 
                 <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -479,11 +508,11 @@
                     app:civ_border_color="@color/pink"
                     android:layout_marginTop="10dp"
                     app:civ_circle_background_color="@color/pink"
-
                     android:background="#00ffffff"
                     app:civ_border_width="3dp" />
 
             </LinearLayout>
+
 
             <Button
                 android:id="@+id/postAdd"

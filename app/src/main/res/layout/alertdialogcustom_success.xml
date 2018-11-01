@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="350dp"
+    android:layout_height="wrap_content"
+    android:background="@color/pink"
+    android:orientation="vertical">
+
+
+
+    <LinearLayout
+        android:layout_width="330dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+    <TextView
+        android:id="@+id/btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_margin="10dp"
+        android:padding="10dp"
+        android:background="@drawable/strock_btn_login"
+        android:gravity="center"
+        android:text="Congratulations!"
+        android:textColor="@color/blue"
+        android:textSize="18dp"
+        android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/msg_txv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="10dp"
+                android:text="Your Payment Successfully Done !
+Your business listing and job listing will appear in premium slots now.
+
+Now you can also send a promo message to other users in your city, subject to admin approval.  Enter your promo text below:"
+                android:textColor="#fff"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+
+
+
+            <EditText
+                android:id="@+id/notificationMsg"
+                android:layout_width="match_parent"
+                android:layout_height="85dp"
+                android:textColorHint="#111"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:textColor="#111"
+                android:visibility="visible"
+                android:maxLength="200"
+                android:paddingLeft="5dp"
+                android:gravity="top"
+                android:background="@color/white"
+                android:hint="Enter text here (Up to 200 Characters)"/>
+
+            <Button
+                android:id="@+id/btn_ok"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:background="@drawable/strock_btn_login"
+                android:clickable="true"
+                android:text="OK"
+                android:layout_marginTop="20dp"
+
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp"
+                android:textAllCaps="false"
+                android:layout_marginBottom="10dp"
+                android:layout_gravity="center"
+                android:textColor="@color/blue"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
+
+
+</LinearLayout>
+</LinearLayout>

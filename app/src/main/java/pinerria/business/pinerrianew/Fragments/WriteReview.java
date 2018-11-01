@@ -1,19 +1,27 @@
 package pinerria.business.pinerrianew.Fragments;
 
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -43,6 +51,8 @@ import java.util.Map;
 
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 import pinerria.business.pinerrianew.Activites.HomeAct;
+import pinerria.business.pinerrianew.Activites.Login;
+import pinerria.business.pinerrianew.Activites.PayActivity;
 import pinerria.business.pinerrianew.R;
 import pinerria.business.pinerrianew.Utils.Api;
 import pinerria.business.pinerrianew.Utils.AppController;
@@ -75,7 +85,7 @@ public class WriteReview extends Fragment {
     FloatingActionButton fabButton;
     String value="";
     List<String> data=new ArrayList<>();
-
+    private boolean isReached = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -108,6 +118,7 @@ public class WriteReview extends Fragment {
         Util.showPgDialog(dialog);
 
         Log.d("sdfsdgsfgdfgd",getArguments().getString("id"));
+        Log.d("sdfsdgsfgdfgd",getArguments().getString("user_id"));
 
 //        if (MyPrefrences.getUserLogin(getActivity())==false){
 //            Toast.makeText(getActivity(), "login", Toast.LENGTH_SHORT).show();
@@ -132,68 +143,137 @@ public class WriteReview extends Fragment {
             }
         });
 
+//        editText.setOnKeyListener(new DialogInterface.OnKeyListener()
+//        {
+//            @Override
+//            public boolean onKey(DialogInterface dialogInterface, int i, KeyEvent keyEvent) {
+//                if (keyEvent.getAction() == KeyEvent.ACTION_DOWN)
+//                {
+//                    switch (i)
+//                    {
+//                        case KeyEvent.KEYCODE_DPAD_CENTER:
+//                        case KeyEvent.KEYCODE_ENTER:
+//                            addCourseFromTextBox();
+//                            return true;
+//                        default:
+//                            break;
+//                    }
+//                }
+//                return false;
+//            }
+//
+//
+//        });
+
+//        editText.addTextChangedListener(new TextWatcher(){
+//            @Override
+//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//                // if edittext has 10chars & this is not called yet, add new line
+//                if(editText.getText().length() == 10 && !isReached) {
+//                    editText.append("\n");
+//                    isReached = true;
+//                }
+//                // if edittext has less than 10chars & boolean has changed, reset
+//                if(editText.getText().length() < 10 && isReached) isReached = false;
+//            }
+//        });
+
+//        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+//
+//            @Override
+//            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+//                if (actionId == EditorInfo.IME_ACTION_DONE) {
+//                    // do something, e.g. set your TextView here via .setText()
+//                    InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+//                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+//                    return true;
+//                }
+//                return false;
+//            }
+//        });
+
         bubmitReview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                if (!rate.isEmpty()) {
-                    Util.showPgDialog(dialog);
-                    StringRequest postRequest = new StringRequest(Request.Method.POST, Api.userBusinessReviewSubmit,
-                            new Response.Listener<String>() {
-                                @Override
-                                public void onResponse(String response) {
-                                    // response
-                                    Log.d("Response", response);
-                                    Util.cancelPgDialog(dialog);
-                                    try {
-                                        JSONObject jsonObject = new JSONObject(response);
-                                        if (jsonObject.getString("status").equalsIgnoreCase("success")) {
+                if (getArguments().getString("user_id").equals(MyPrefrences.getUserID(getActivity()))){
+
+                    Util.errorDialog(getActivity(),"You can not give a Review and Rating for your own business.");
+                }
+                else {
+
+                    if (!rate.isEmpty()) {
+                        Util.showPgDialog(dialog);
+                        StringRequest postRequest = new StringRequest(Request.Method.POST, Api.userBusinessReviewSubmit,
+                                new Response.Listener<String>() {
+                                    @Override
+                                    public void onResponse(String response) {
+                                        // response
+                                        Log.d("Response", response);
+                                        Util.cancelPgDialog(dialog);
+                                        try {
+                                            JSONObject jsonObject = new JSONObject(response);
+                                            if (jsonObject.getString("status").equalsIgnoreCase("success")) {
 
 //                                            Toast.makeText(getActivity(), jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
-                                            errorDialog(jsonObject.getString("message"));
+                                                errorDialog(jsonObject.getString("message"));
 
+                                            } else {
 
-                                        } else {
-                                            Toast.makeText(getActivity(), jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                                                popUpForUpdateRating("You have already given Review and Rating to this business. Do you want to update?",jsonObject.getString("rating_id"));
+
+                                                //Toast.makeText(getActivity(), jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                                            }
+
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
                                         }
 
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
                                     }
+                                },
+                                new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        // error
+                                        Toast.makeText(getActivity(), "Error! Please connect to the Internet.", Toast.LENGTH_SHORT).show();
+                                        Util.cancelPgDialog(dialog);
+                                    }
+                                }
+                        ) {
 
-                                }
-                            },
-                            new Response.ErrorListener() {
-                                @Override
-                                public void onErrorResponse(VolleyError error) {
-                                    // error
-                                    Toast.makeText(getActivity(), "Error! Please connect to the Internet.", Toast.LENGTH_SHORT).show();
-                                    Util.cancelPgDialog(dialog);
-                                }
+
+                            @Override
+                            protected Map<String, String> getParams() {
+                                Map<String, String> params = new HashMap<String, String>();
+                                params.put("business_id", getArguments().getString("id"));
+                                params.put("review", editText.getText().toString());
+                                params.put("rating", rate);
+                                params.put("user_id", MyPrefrences.getUserID(getActivity()));
+                                Log.d("sdfsfsdfsdgfs", MyPrefrences.getUserID(getActivity()));
+                                Log.d("sdfsfsdfsdgfs", getArguments().getString("id"));
+
+                                return params;
                             }
-                    ) {
+                        };
+                        postRequest.setRetryPolicy(new DefaultRetryPolicy(27000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                        postRequest.setShouldCache(false);
+
+                        AppController.getInstance().addToRequestQueue(postRequest);
+                    } else {
+                        Toast.makeText(getActivity(), "Please give a Rating", Toast.LENGTH_SHORT).show();
+                    }
 
 
-                        @Override
-                        protected Map<String, String> getParams() {
-                            Map<String, String> params = new HashMap<String, String>();
-                            params.put("business_id", getArguments().getString("id"));
-                            params.put("review", editText.getText().toString());
-                            params.put("rating", rate);
-                            params.put("user_id", MyPrefrences.getUserID(getActivity()));
-                            Log.d("sdfsfsdfsdgfs", MyPrefrences.getUserID(getActivity()));
-                            Log.d("sdfsfsdfsdgfs", getArguments().getString("id"));
-
-                            return params;
-                        }
-                    };
-                    postRequest.setRetryPolicy(new DefaultRetryPolicy(27000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-                    postRequest.setShouldCache(false);
-
-                    AppController.getInstance().addToRequestQueue(postRequest);
-                }
-                else{
-                    Toast.makeText(getActivity(), "Please give review.", Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -215,6 +295,7 @@ public class WriteReview extends Fragment {
                     if (response.getString("status").equalsIgnoreCase("success")){
 
                         JSONArray jsonArray=response.getJSONArray("message");
+                        Log.d("dfgsdgdfgdfgdfgd", String.valueOf(jsonArray.length()));
                         for (int i=0;i<jsonArray.length();i++){
                             JSONObject jsonObject=jsonArray.getJSONObject(i);
 
@@ -230,9 +311,15 @@ public class WriteReview extends Fragment {
                             map.put("user_name",jsonObject.optString("user_name"));
                             map.put("created_date",jsonObject.optString("created_date"));
 
+
                             Adapter adapter=new Adapter();
                             expListView.setAdapter(adapter);
                             AllProducts.add(map);
+
+//                            if (jsonObject.optString("user_id").equals(MyPrefrences.getUserID(getActivity()))){
+//                                editText.setText(jsonObject.optString("review"));
+//                                rtbar.setRating(Float.parseFloat(jsonObject.optString("rating")));
+//                            }
                         }
                     }
                     else{
@@ -267,9 +354,107 @@ public class WriteReview extends Fragment {
         AppController.getInstance().addToRequestQueue(jsonObjReq);
 
 
-
-
         return view;
+    }
+
+    private void popUpForUpdateRating(String msg, final String r_id) {
+
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage(msg)
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog1, int id) {
+                        dialog1.cancel();
+
+
+
+                        Util.showPgDialog(dialog);
+                        StringRequest postRequest = new StringRequest(Request.Method.POST, Api.updateMyRating,
+                                new Response.Listener<String>() {
+                                    @Override
+                                    public void onResponse(String response) {
+                                        // response
+                                        Log.d("ResponseUpdate", response);
+                                        Util.cancelPgDialog(dialog);
+                                        try {
+                                            JSONObject jsonObject = new JSONObject(response);
+                                            if (jsonObject.getString("status").equalsIgnoreCase("success")) {
+
+//                                            Toast.makeText(getActivity(), jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                                                errorDialog("Rating Updated successfully.");
+
+                                            } else {
+                                                Toast.makeText(getActivity(), jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                                            }
+
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+
+                                    }
+                                },
+                                new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        // error
+                                        Toast.makeText(getActivity(), "Error! Please connect to the Internet.", Toast.LENGTH_SHORT).show();
+                                        Util.cancelPgDialog(dialog);
+                                    }
+                                }
+                        ) {
+
+
+                            @Override
+                            protected Map<String, String> getParams() {
+                                Map<String, String> params = new HashMap<String, String>();
+                                params.put("rating_id",r_id);
+                                params.put("user_id", MyPrefrences.getUserID(getActivity()));
+                                params.put("review",editText.getText().toString());
+                                params.put("rating", rate);
+
+                                Log.d("dfdgdfgdfgh1",r_id);
+                                Log.d("dfdgdfgdfgh2",MyPrefrences.getUserID(getActivity()));
+                                Log.d("dfdgdfgdfgh3",editText.getText().toString());
+                                Log.d("dfdgdfgdfgh4",rate);
+
+
+
+//                                params.put("business_id", getArguments().getString("id"));
+//                                params.put("review", editText.getText().toString());
+//                                params.put("rating", rate);
+//                                params.put("user_id", MyPrefrences.getUserID(getActivity()));
+
+                                return params;
+                            }
+                        };
+                        postRequest.setRetryPolicy(new DefaultRetryPolicy(27000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                        postRequest.setShouldCache(false);
+
+                        AppController.getInstance().addToRequestQueue(postRequest);
+
+
+
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog1, int id) {
+                        //  Action for 'NO' Button
+                        dialog1.cancel();
+
+
+//                                    Intent intent=new Intent(PayActivity.this,HomeAct.class);
+//                                    intent.putExtra("userType","");
+//                                    startActivity(intent);
+//                                    overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+//                                    finish();
+
+                    }
+                });
+        AlertDialog alert = builder.create();
+        //Setting the title manually
+        alert.setTitle("Review");
+        alert.show();
     }
 
     public class Viewholder{
@@ -278,7 +463,6 @@ public class WriteReview extends Fragment {
         LinearLayout liner;
         MaterialRatingBar rtbar2;
     }
-
 
     private void errorDialog(String res) {
 
@@ -295,15 +479,20 @@ public class WriteReview extends Fragment {
 
                 dialog.dismiss();
 
-                Fragment fragment=new WriteReview();
-                Bundle bundle=new Bundle();
-                bundle.putString("id",getArguments().getString("id"));
-                bundle.putString("company_name", comName.getText().toString());
-                bundle.putString("address", comAdd.getText().toString());
-                FragmentManager manager=getActivity().getSupportFragmentManager();
-                FragmentTransaction ft=manager.beginTransaction();
-                fragment.setArguments(bundle);
-                ft.replace(R.id.content_frame,fragment).addToBackStack(null).commit();
+                Intent intent=new Intent(getActivity(),HomeAct.class);
+                intent.putExtra("userType","");
+                startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+
+//                Fragment fragment=new WriteReview();
+//                Bundle bundle=new Bundle();
+//                bundle.putString("id",getArguments().getString("id"));
+//                bundle.putString("company_name", comName.getText().toString());
+//                bundle.putString("address", comAdd.getText().toString());
+//                FragmentManager manager=getActivity().getSupportFragmentManager();
+//                FragmentTransaction ft=manager.beginTransaction();
+//                fragment.setArguments(bundle);
+//                ft.replace(R.id.content_frame,fragment).addToBackStack(null).commit();
 
             }
         });
@@ -320,9 +509,9 @@ public class WriteReview extends Fragment {
         Adapter() {
             inflater = (LayoutInflater) getActivity().getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-//            if (inflater == null) {
-//                throw new AssertionError("LayoutInflater not found.");
-//            }
+            if (inflater == null) {
+                throw new AssertionError("LayoutInflater not found.");
+            }
         }
 
         @Override
@@ -341,7 +530,7 @@ public class WriteReview extends Fragment {
         }
 
         @Override
-        public View getView(final int position, View convertView, ViewGroup parent) {
+        public View getView(int position, View convertView, ViewGroup parent) {
 
             convertView=inflater.inflate(R.layout.list_view_rating,parent,false);
 
@@ -355,8 +544,10 @@ public class WriteReview extends Fragment {
             viewholder.date_txt=convertView.findViewById(R.id.date_txt);
 
 //            viewholder.comName.setText(AllProducts.get(position).get("uname"));
-            viewholder.comName.setText(AllProducts.get(position).get("user_name").substring(0,1).toUpperCase()+AllProducts.get(position).get("user_name").substring(1).toLowerCase());
-            viewholder.user_icon.setText(AllProducts.get(position).get("user_name"));
+            if (!AllProducts.get(position).get("user_name").equals("")) {
+                viewholder.comName.setText(AllProducts.get(position).get("user_name").substring(0, 1).toUpperCase() + AllProducts.get(position).get("user_name").substring(1).toUpperCase());
+            }
+            viewholder.user_icon.setText(AllProducts.get(position).get("user_name").toUpperCase());
 //            viewholder.c1_mobile1.setText(AllProducts.get(position).get("mobile"));
 //            String number;
 //            number="+91-XXXXXXX"+AllProducts.get(position).get("mobile").substring(AllProducts.get(position).get("mobile").length() - 3);

@@ -20,6 +20,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,6 +31,7 @@ import android.view.Window;
 import android.view.animation.AlphaAnimation;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -93,6 +95,7 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
 
     public  static boolean business;
     public  static boolean jobs;
+    public  static boolean packageData;
    // FabSpeedDial fab;
 
 
@@ -185,11 +188,11 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
                 }
                 else if (id==R.id.four){
 
-//                    Fragment fragment = new BannerRequest();
-//                    FragmentManager manager = getFragmentManager();
-//                    FragmentTransaction ft = manager.beginTransaction();
-//                    ft.replace(R.id.content_frame, fragment).addToBackStack(null).commit();
-//                    ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout,R.anim.frag_fade_right, R.anim.frag_fad_left);
+                    Fragment fragment = new Notifications();
+                    FragmentManager manager = getFragmentManager();
+                    FragmentTransaction ft = manager.beginTransaction();
+                    ft.replace(R.id.content_frame, fragment).addToBackStack(null).commit();
+                    ft.setCustomAnimations(R.anim.frag_fadein, R.anim.frag_fadeout,R.anim.frag_fade_right, R.anim.frag_fad_left);
                 }
 
                 return false;
@@ -235,6 +238,7 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
             }
         });
 
+        Log.d("sdfsdfsdfsdgsdg",MyPrefrences.getCityID(getActivity()));
 
         JsonObjectRequest jsonObjReq2 = new JsonObjectRequest(Request.Method.GET,
                 Api.banner+"/"+MyPrefrences.getCityID(getActivity())+"/555", null, new Response.Listener<JSONObject>() {
@@ -260,13 +264,13 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
                                 AllBaner.add(new Const(jsonObject.optString("id"), jsonObject.optString("title"), jsonObject.optString("image"), jsonObject.optString("url"), null, null, null,null,null,null));
                            // }
 
-                            mCustomPagerAdapter2=new CustomPagerAdapter2(getActivity());
-                            viewPager2.setAdapter(mCustomPagerAdapter2);
-                            indicator2.setViewPager(viewPager2);
-                           // indicator2.setViewPager(viewPager2);
-                            mCustomPagerAdapter2.notifyDataSetChanged();
-
-
+                            if (getActivity()!=null) {
+                                mCustomPagerAdapter2 = new CustomPagerAdapter2(getActivity());
+                                viewPager2.setAdapter(mCustomPagerAdapter2);
+                                indicator2.setViewPager(viewPager2);
+                                // indicator2.setViewPager(viewPager2);
+                                mCustomPagerAdapter2.notifyDataSetChanged();
+                            }
                         }
 //                        final Handler handler = new Handler();
 //
@@ -317,7 +321,6 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
         ///// End baner APi
 
 
-
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
                 Api.catToSubCat+"/"+ MyPrefrences.getUserID(getActivity()), null, new Response.Listener<JSONObject>() {
 
@@ -344,6 +347,15 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
                         else if (response.optString("job").equalsIgnoreCase("No")){
                             jobs =false;
                         }
+
+                        if (response.optString("package").equalsIgnoreCase("Yes")){
+                            packageData =true;
+                        }
+                        else if (response.optString("package").equalsIgnoreCase("No")){
+                            packageData =false;
+                        }
+
+
                         JSONArray jsonArray=response.getJSONArray("message");
                         for (int i=0;i<jsonArray.length();i++){
                             JSONObject jsonObject=jsonArray.getJSONObject(i);
@@ -434,6 +446,59 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
         // Adding request to request queue
         jsonObjReq.setShouldCache(false);
         AppController.getInstance().addToRequestQueue(jsonObjReq);
+
+
+
+
+
+
+//        view.setFocusableInTouchMode(true);
+//        view.requestFocus();
+//        view.setOnKeyListener(new View.OnKeyListener() {
+//            @Override
+//            public boolean onKey(View v, int keyCode, KeyEvent event) {
+//                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+//                    if (keyCode == KeyEvent.KEYCODE_BACK) {
+//
+//
+//                        Button Yes_action,No_action;
+//                        TextView heading;
+//                        dialog4 = new Dialog(getActivity());
+//                        dialog4.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//                        dialog4.setContentView(R.layout.update_state1);
+//
+//                        Yes_action=(Button)dialog4.findViewById(R.id.Yes_action);
+//                        No_action=(Button)dialog4.findViewById(R.id.No_action);
+//                        heading=(TextView)dialog4.findViewById(R.id.heading);
+//
+//
+//                        heading.setText("Are you sure you want to exit?");
+//                        Yes_action.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                                //System.exit(0);
+//                                //getActivity().finish();
+//                                getActivity().finishAffinity();
+//
+//                            }
+//                        });
+//
+//                        No_action.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                                dialog4.dismiss();
+//                            }
+//                        });
+//                        dialog4.show();
+////
+//
+//                        //Toast.makeText(getActivity(), "back", Toast.LENGTH_SHORT).show();
+//                        return true;
+//                    }
+//                }
+//                return false;
+//            }
+//        });
 
 
         return  view;
@@ -599,6 +664,8 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
                         Bundle bundle = new Bundle();
                         bundle.putString("id", AllProducts.get(position).get("id0"));
                         bundle.putString("subcategory", AllProducts.get(position).get("subcategory0"));
+                        bundle.putString("value", "");
+                        bundle.putString("nearMe","");
                         FragmentManager manager = getActivity().getSupportFragmentManager();
                         FragmentTransaction ft = manager.beginTransaction();
                         fragment.setArguments(bundle);
@@ -623,6 +690,8 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
                         Bundle bundle = new Bundle();
                         bundle.putString("id", AllProducts.get(position).get("id1"));
                         bundle.putString("subcategory", AllProducts.get(position).get("subcategory1"));
+                        bundle.putString("value", "");
+                        bundle.putString("nearMe","");
                         FragmentManager manager = getActivity().getSupportFragmentManager();
                         FragmentTransaction ft = manager.beginTransaction();
                         fragment.setArguments(bundle);
@@ -644,6 +713,8 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
                         Bundle bundle = new Bundle();
                         bundle.putString("id", AllProducts.get(position).get("id2"));
                         bundle.putString("subcategory", AllProducts.get(position).get("subcategory2"));
+                        bundle.putString("value", "");
+                        bundle.putString("nearMe","");
                         FragmentManager manager = getActivity().getSupportFragmentManager();
                         FragmentTransaction ft = manager.beginTransaction();
                         fragment.setArguments(bundle);
@@ -667,6 +738,8 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
                         Bundle bundle = new Bundle();
                         bundle.putString("id", AllProducts.get(position).get("id3"));
                         bundle.putString("subcategory", AllProducts.get(position).get("subcategory3"));
+                        bundle.putString("value", "");
+                        bundle.putString("nearMe","");
                         FragmentManager manager = getActivity().getSupportFragmentManager();
                         FragmentTransaction ft = manager.beginTransaction();
                         fragment.setArguments(bundle);
@@ -694,6 +767,11 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
         public CustomPagerAdapter2(Context context) {
             mContext = context;
             mLayoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            if (mLayoutInflater == null) {
+                throw new AssertionError("LayoutInflater not found.");
+            }
+
+
         }
 
         @Override
@@ -732,10 +810,9 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
                     else{
 //                        Toast.makeText(getActivity(), AllBaner.get(position).getOrgby().toString(), Toast.LENGTH_SHORT).show();
 
-
-                        Intent intent=new Intent(getActivity(), WebViewOpen.class);
-                        intent.putExtra("link",AllBaner.get(position).getPhoto().toString());
-                        startActivity(intent);
+                            Intent intent=new Intent(getActivity(), WebViewOpen.class);
+                            intent.putExtra("link",AllBaner.get(position).getPhoto().toString());
+                            startActivity(intent);
 
 //                        Fragment fragment=new WebViewOpen();
 //                        Bundle bundle=new Bundle();

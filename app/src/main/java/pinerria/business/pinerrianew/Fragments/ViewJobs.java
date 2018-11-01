@@ -168,9 +168,11 @@ public class ViewJobs extends Fragment {
                             map.put("experience", jsonObject.optString("experience"));
                             map.put("state_name", jsonObject.optString("state_name"));
                             map.put("city_name", jsonObject.optString("city_name"));
+                            map.put("address", jsonObject.optString("address"));
                             map.put("zone_name", jsonObject.optString("zone_name"));
                             map.put("user_name", jsonObject.optString("user_name"));
                             map.put("description", jsonObject.optString("description"));
+                            map.put("premium", jsonObject.optString("premium"));
 
 
                             Adapter adapter=new Adapter();
@@ -238,14 +240,14 @@ public class ViewJobs extends Fragment {
         LayoutInflater inflater;
 
         TextView full_part_time,salary,heading,date,jobId,contactUs,experience,address,description;
-
+        ImageView stars;
         Adapter() {
 
             inflater = (LayoutInflater) getActivity().getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-//            if (inflater == null) {
-//                throw new AssertionError("LayoutInflater not found.");
-//            }
+            if (inflater == null) {
+                throw new AssertionError("LayoutInflater not found.");
+            }
         }
 
         @Override
@@ -278,6 +280,7 @@ public class ViewJobs extends Fragment {
             contactUs=convertView.findViewById(R.id.contactUs);
             experience=convertView.findViewById(R.id.experience);
             address=convertView.findViewById(R.id.address);
+            stars=convertView.findViewById(R.id.stars);
 
             heading.setText(AllProducts.get(position).get("heading"));
             description.setText(AllProducts.get(position).get("description"));
@@ -290,13 +293,30 @@ public class ViewJobs extends Fragment {
             salary.setText(currency);
 
             experience.setText(AllProducts.get(position).get("experience"));
-            address.setText(AllProducts.get(position).get("city_name")+", "+AllProducts.get(position).get("state_name")+", "+AllProducts.get(position).get("zone_name")+", India");
+            address.setText(AllProducts.get(position).get("address")+", "+AllProducts.get(position).get("city_name"));
+//            address.setText(AllProducts.get(position).get("city_name")+", "+AllProducts.get(position).get("state_name")+", "+AllProducts.get(position).get("zone_name"));
             full_part_time.setText(AllProducts.get(position).get("full_part_time"));
             jobId.setText(AllProducts.get(position).get("user_name"));
             String year=AllProducts.get(position).get("created_date").substring(0,4);
             String month=AllProducts.get(position).get("created_date").substring(5,7);
             String day=AllProducts.get(position).get("created_date").substring(8,10);
             date.setText("Posted Date "+day+"-"+month+"-"+year);
+
+
+            try {
+                if (AllProducts.get(position).get("premium").equalsIgnoreCase("Yes")){
+                    stars.setVisibility(View.VISIBLE);
+//                    viewholder.cardView.setCardBackgroundColor(Color.parseColor("#FFFDF4BE"));
+//                    viewholder.callNow1.setVisibility(View.VISIBLE);
+                }
+                else if (AllProducts.get(position).get("premium").equalsIgnoreCase("No")){
+                    stars.setVisibility(View.GONE);
+//                    viewholder.cardView.setCardBackgroundColor(Color.parseColor("#ffffff"));
+//                    viewholder.callNow1.setVisibility(View.GONE);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
 
 
