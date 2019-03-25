@@ -122,7 +122,6 @@
                 android:fontFamily="@font/muli"
                 android:hint="Review Comments"
                 android:layout_margin="10dp"
-
                 android:gravity="top"
                 android:singleLine="true"
                 android:background="@drawable/strock_simple"

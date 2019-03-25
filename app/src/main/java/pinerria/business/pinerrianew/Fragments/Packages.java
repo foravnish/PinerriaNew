@@ -388,8 +388,16 @@ public class Packages extends Fragment {
             pName.setText(AllProducts.get(position).get("package_name"));
             labelTxt.setText(AllProducts.get(position).get("package_name"));
             price.setText(AllProducts.get(position).get("actual_value"));
-            duration.setText(AllProducts.get(position).get("duration")+" Months");
-            validate.setText(AllProducts.get(position).get("duration")+" Months");
+            if (AllProducts.get(position).get("duration").equalsIgnoreCase("1")){
+                duration.setText(AllProducts.get(position).get("duration")+" Month");
+                validate.setText(AllProducts.get(position).get("duration")+" Month");
+            }
+            else{
+                duration.setText(AllProducts.get(position).get("duration")+" Months");
+                validate.setText(AllProducts.get(position).get("duration")+" Months");
+            }
+
+
             discount.setText(AllProducts.get(position).get("discount_percent")+ "%");
 
 

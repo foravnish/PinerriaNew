@@ -100,7 +100,13 @@ public class PayActivity extends AppCompatActivity {
             price3.setText("₹ "+jsonObject.optString("after_discount_price"));
             price4.setText(jsonObject.optString("gst")+" %");
             price.setText("₹ "+jsonObject.optString("total_value"));
-            duration.setText(jsonObject.optString("duration")+" Months Validity");
+            if (jsonObject.optString("duration").equalsIgnoreCase("1")){
+                duration.setText(jsonObject.optString("duration")+" Month Validity");
+            }
+            else{
+                duration.setText(jsonObject.optString("duration")+" Months Validity");
+            }
+
 
 
         } catch (JSONException e) {

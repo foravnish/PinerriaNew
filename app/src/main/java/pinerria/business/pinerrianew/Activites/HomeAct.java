@@ -156,7 +156,6 @@ public class HomeAct extends AppCompatActivity
         profile=findViewById(R.id.profile);
         home=findViewById(R.id.home);
         chat=findViewById(R.id.chat);
-        //  inbosearchx=findViewById(R.id.inbosearchx);
         packageList=findViewById(R.id.packageList);
         title=findViewById(R.id.title);
         menuSearch=findViewById(R.id.menuSearch);
@@ -307,6 +306,7 @@ public class HomeAct extends AppCompatActivity
                             nav_add_product.setVisible(true);
                             nav_manage_business.setVisible(false);
                             nav_call_his.setVisible(false);
+                            profile.setText("Add Business");
 
                         }
                         else if (response.optString("business").equalsIgnoreCase("Yes")){
@@ -318,6 +318,8 @@ public class HomeAct extends AppCompatActivity
                             nav_add_product.setVisible(false);
                             nav_manage_business.setVisible(true);
                             nav_call_his.setVisible(true);
+
+                            profile.setText("Edit Business");
                         }
 
                         if (response.optString("job").equalsIgnoreCase("No")){
@@ -800,9 +802,6 @@ public class HomeAct extends AppCompatActivity
 
                 searchEditText.setFocusable(false);
                 searchEditText.setFocusableInTouchMode(false);
-
-
-
 
                 return true;
             }

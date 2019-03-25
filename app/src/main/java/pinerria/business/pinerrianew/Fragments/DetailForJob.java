@@ -133,54 +133,7 @@ public class DetailForJob extends Fragment {
                 @Override
                 public void onClick(View view) {
 
-                    if (MyPrefrences.getUserLogin(getActivity())==true) {
-
-                        UserDetails.chatWith = jsonObject.optString("mobile");
-                        Intent intent=new Intent(getActivity(), Chat.class);
-                        intent.putExtra("nameValue",jsonObject.optString("user_name"));
-                        intent.putExtra("id",jsonObject.optString("user_id"));
-                        intent.putExtra("value1","0");
-                        startActivity(intent);
-
-                        Log.d("dfsdfsdfsdfgsdgdfgertg",jsonObject.optString("mobile"));
-
-                    }
-                    else{
-
-                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                        builder.setMessage("Please Login to Chat")
-                                .setCancelable(false)
-                                .setPositiveButton("Login", new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-
-
-                                        Intent intent=new Intent(getActivity(),Login.class);
-                                        startActivity(intent);
-                                        getActivity().overridePendingTransition(R.anim.fadein, R.anim.fadeout);
-                                        getActivity().finish();
-                                    }
-                                })
-                                .setNegativeButton("Not Now", new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        //  Action for 'NO' Button
-                                        //dialog.cancel();
-
-
-                                        Intent intent=new Intent(getActivity(),HomeAct.class);
-                                        intent.putExtra("userType","");
-                                        startActivity(intent);
-                                        getActivity(). overridePendingTransition(R.anim.fadein, R.anim.fadeout);
-                                        getActivity(). finish();
-
-                                    }
-                                });
-                        AlertDialog alert = builder.create();
-                        //Setting the title manually
-                        alert.setTitle("Pinerria");
-                        alert.show();
-
-                    }
-
+                  callFeature();
 
                 }
             });
@@ -380,5 +333,81 @@ public class DetailForJob extends Fragment {
 
         return  view;
     }
+
+    private void callFeature() {
+
+        if (MyPrefrences.getUserLogin(getActivity())==true) {
+
+            UserDetails.chatWith = jsonObject.optString("mobile");
+            Intent intent=new Intent(getActivity(), Chat.class);
+            intent.putExtra("nameValue",jsonObject.optString("user_name"));
+            intent.putExtra("id",jsonObject.optString("user_id"));
+            intent.putExtra("value1","0");
+            startActivity(intent);
+
+            Log.d("mobileNo",jsonObject.optString("mobile"));
+
+        }
+        else{
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setMessage("Please Login to Chat")
+                    .setCancelable(false)
+                    .setPositiveButton("Login", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+
+
+                            Intent intent=new Intent(getActivity(),Login.class);
+                            startActivity(intent);
+                            getActivity().overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+                            getActivity().finish();
+                        }
+                    })
+                    .setNegativeButton("Not Now", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            //  Action for 'NO' Button
+                            //dialog.cancel();
+
+
+                            Intent intent=new Intent(getActivity(),HomeAct.class);
+                            intent.putExtra("userType","");
+                            startActivity(intent);
+                            getActivity(). overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+                            getActivity(). finish();
+
+                        }
+                    });
+            AlertDialog alert = builder.create();
+            //Setting the title manually
+            alert.setTitle("Pinerria");
+            alert.show();
+
+        }
+
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 1: {
+
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(getActivity(), "Permission granted", Toast.LENGTH_SHORT).show();
+                    callFeature();
+                } else {
+                    Toast.makeText(getActivity(), "Permission denied", Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
+    }
+
+
 
 }
