@@ -248,28 +248,28 @@ public class Details extends Fragment {
                         if (MyPrefrences.getUserLogin(getActivity())==true) {
 
                             maintainCallHistory(jsonObject.optString("id"),jsonObject.optString("primary_mobile"));
-                            try
-                            {
-                                if(Build.VERSION.SDK_INT > 22)
-                                {
-                                    if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                                        // TODO: Consider calling
-                                        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CALL_PHONE}, 101);
-                                        return;
-                                    }
-                                    Intent callIntent = new Intent(Intent.ACTION_CALL);
-                                    callIntent.setData(Uri.parse("tel:" + jsonObject.optString("primary_mobile")));
-                                    startActivity(callIntent);
-                                }
-                                else {
-                                    Intent callIntent = new Intent(Intent.ACTION_CALL);
-                                    callIntent.setData(Uri.parse("tel:" +jsonObject.optString("primary_mobile")));
-                                    startActivity(callIntent);
-                                }
-                            }
-                            catch (Exception ex)
-                            {ex.printStackTrace();
-                            }
+//                            try
+//                            {
+//                                if(Build.VERSION.SDK_INT > 22)
+//                                {
+//                                    if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+//                                        // TODO: Consider calling
+//                                        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CALL_PHONE}, 101);
+//                                        return;
+//                                    }
+//                                    Intent callIntent = new Intent(Intent.ACTION_CALL);
+//                                    callIntent.setData(Uri.parse("tel:" + jsonObject.optString("primary_mobile")));
+//                                    startActivity(callIntent);
+//                                }
+//                                else {
+//                                    Intent callIntent = new Intent(Intent.ACTION_CALL);
+//                                    callIntent.setData(Uri.parse("tel:" +jsonObject.optString("primary_mobile")));
+//                                    startActivity(callIntent);
+//                                }
+//                            }
+//                            catch (Exception ex)
+//                            {ex.printStackTrace();
+//                            }
                         }
                         else{
 
@@ -545,15 +545,19 @@ public class Details extends Fragment {
     }
 
     private void maintainCallHistory(final String b_id, final String mobileNo) {
-
+        Util.showPgDialog(dialog);
         StringRequest postRequest = new StringRequest(Request.Method.POST, Api.addBusinessCall,
                 new Response.Listener<String>()
                 {
                     @Override
                     public void onResponse(String response) {
+                        Util.cancelPgDialog(dialog);
                         // response
                         Log.d("ResponseCall", response);
                         Util.cancelPgDialog(dialog);
+                        Intent intent = new Intent(Intent.ACTION_DIAL);
+                        intent.setData(Uri.parse("tel:"+mobileNo));
+                        startActivity(intent);
                     }
                 },
                 new Response.ErrorListener()
@@ -858,7 +862,7 @@ public class Details extends Fragment {
                 @Override
                 public void onClick(View view) {
 //                    showFullImageDialog(getActivity(),AllBaner.get(i).get("image").replace(" ","%20"));
-                    showFullImageDialog(getActivity(), jsonArray.toString(),i, "Photo");
+                    showFullImageDialog(getActivity(), jsonArray.toString(),i, "Image");
                 }
             });
         }

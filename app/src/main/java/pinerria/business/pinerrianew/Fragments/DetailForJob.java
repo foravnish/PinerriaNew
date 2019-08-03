@@ -3,10 +3,12 @@ package pinerria.business.pinerrianew.Fragments;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,25 +20,34 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
+import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.NumberFormat;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import pinerria.business.pinerrianew.Activites.Chat;
 import pinerria.business.pinerrianew.Activites.HomeAct;
 import pinerria.business.pinerrianew.Activites.Login;
 import pinerria.business.pinerrianew.Activites.UserDetails;
 import pinerria.business.pinerrianew.R;
+import pinerria.business.pinerrianew.Utils.Api;
 import pinerria.business.pinerrianew.Utils.AppController;
 import pinerria.business.pinerrianew.Utils.MyPrefrences;
 import pinerria.business.pinerrianew.Utils.Util;
@@ -46,7 +57,7 @@ import pinerria.business.pinerrianew.Utils.Util;
  */
 public class DetailForJob extends Fragment {
 
-
+    Dialog dialog;
     public DetailForJob() {
         // Required empty public constructor
     }
@@ -76,6 +87,12 @@ public class DetailForJob extends Fragment {
         full_part_time=view.findViewById(R.id.full_part_time);
         date=view.findViewById(R.id.date);
         jobId=view.findViewById(R.id.jobId);
+
+        dialog=new Dialog(getActivity());
+        dialog.requestWindowFeature(
+                Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.setCancelable(false);
 
         Log.d("arraydfgdfgdfg",getArguments().getString("array").toString());
 
@@ -147,29 +164,29 @@ public class DetailForJob extends Fragment {
 
                         if (MyPrefrences.getUserLogin(getActivity())==true) {
 
-                            // maintainCallHistory(jsonObject.optString("id"),jsonObject.optString("primary_mobile"));
-                            try
-                            {
-                                if(Build.VERSION.SDK_INT > 22)
-                                {
-                                    if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                                        // TODO: Consider calling
-                                        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CALL_PHONE}, 101);
-                                        return;
-                                    }
-                                    Intent callIntent = new Intent(Intent.ACTION_CALL);
-                                    callIntent.setData(Uri.parse("tel:" + jsonObject.optString("mobile")));
-                                    startActivity(callIntent);
-                                }
-                                else {
-                                    Intent callIntent = new Intent(Intent.ACTION_CALL);
-                                    callIntent.setData(Uri.parse("tel:" +jsonObject.optString("mobile")));
-                                    startActivity(callIntent);
-                                }
-                            }
-                            catch (Exception ex)
-                            {ex.printStackTrace();
-                            }
+                             maintainCallHistory(jsonObject.optString("id"),jsonObject.optString("mobile"));
+//                            try
+//                            {
+//                                if(Build.VERSION.SDK_INT > 22)
+//                                {
+//                                    if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+//                                        // TODO: Consider calling
+//                                        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CALL_PHONE}, 101);
+//                                        return;
+//                                    }
+//                                    Intent callIntent = new Intent(Intent.ACTION_CALL);
+//                                    callIntent.setData(Uri.parse("tel:" + jsonObject.optString("mobile")));
+//                                    startActivity(callIntent);
+//                                }
+//                                else {
+//                                    Intent callIntent = new Intent(Intent.ACTION_CALL);
+//                                    callIntent.setData(Uri.parse("tel:" +jsonObject.optString("mobile")));
+//                                    startActivity(callIntent);
+//                                }
+//                            }
+//                            catch (Exception ex)
+//                            {ex.printStackTrace();
+//                            }
                         }
                         else{
 
@@ -408,6 +425,59 @@ public class DetailForJob extends Fragment {
         }
     }
 
+
+
+    private void maintainCallHistory(final String b_id, final String mobileNo) {
+        Util.showPgDialog(dialog);
+        StringRequest postRequest = new StringRequest(Request.Method.POST, Api.addBusinessCall,
+                new Response.Listener<String>()
+                {
+                    @Override
+                    public void onResponse(String response) {
+                        Util.cancelPgDialog(dialog);
+                        // response
+                        Log.d("ResponseCall", response);
+                        Util.cancelPgDialog(dialog);
+                        Intent intent = new Intent(Intent.ACTION_DIAL);
+                        intent.setData(Uri.parse("tel:"+mobileNo));
+                        startActivity(intent);
+                    }
+                },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error
+                        // Toast.makeText(getActivity(), "Error! Please connect to the Internet.", Toast.LENGTH_SHORT).show();
+                        Util.cancelPgDialog(dialog);
+                    }
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams()
+            {
+
+                Log.d("dfsdfgsdgdsfgdfg",MyPrefrences.getUserID(getActivity()));
+                Log.d("dfsdfgsdgdsfgdfg",b_id);
+                Log.d("dfsdfgsdgdsfgdfg",mobileNo);
+
+                Map<String, String>  params = new HashMap<String, String>();
+                params.put("user_id", MyPrefrences.getUserID(getActivity()));
+                params.put("business_id", b_id);
+                params.put("business_mobile", mobileNo);
+
+                return params;
+            }
+        };
+
+
+        postRequest.setRetryPolicy(new DefaultRetryPolicy(27000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        postRequest.setShouldCache(false);
+
+        AppController.getInstance().addToRequestQueue(postRequest);
+
+
+    }
 
 
 }
